@@ -2,23 +2,27 @@
   hlmBtn
   variant="ghost"
   [hlmDropdownMenuTrigger]="sidebarUserMenu"
-  class="flex items-center gap-1 w-full justify-start py-5"
+  class="flex items-center gap-1 w-full justify-start py-5 -ms-1 group/sidebar-user"
   align="end"
   side="right"
 >
-  <ng-icon name="lucideUserCircle2" size="35" />
+  <ng-icon
+    name="lucideUserCircle2"
+    size="30"
+    class="text-gray-500 transition-color duration-300 ease-in-out group-hover/sidebar-user:text-primary"
+  />
   <div class="flex flex-col items-start">
     <span class="text-gray-700 font-medium">{{ user()?.name }}</span>
-    <span class="text-gray-400 -mt-1.5">{{ translatedRole() }}</span>
+    <span class="text-gray-400 -mt-1">{{ translatedRole() }}</span>
   </div>
   <ng-icon name="lucideChevronsUpDown" size="20" class="ml-auto" />
 </button>
 
 <ng-template #sidebarUserMenu>
-  <hlm-dropdown-menu>
+  <hlm-dropdown-menu class="min-w-50">
     <hlm-dropdown-menu-group>
       <div class="flex items-center gap-2">
-        <ng-icon name="lucideUserCircle2" size="25" />
+        <ng-icon name="lucideUserCircle2" size="30" class="text-gray-500" />
         <div class="flex flex-col">
           <span class="text-gray-700 font-medium">{{ user()?.name }}</span>
           <span class="text-gray-600 -mt-1.5 text-sm">{{ translatedRole() }}</span>

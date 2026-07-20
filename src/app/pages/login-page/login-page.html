@@ -48,7 +48,7 @@
             <button
               hlmBtn
               type="submit"
-              [disabled]="loginForm.invalid && loginForm.touched"
+              [disabled]="(loginForm.invalid && loginForm.touched) || isSubmitting()"
               class="ps-8 self-center mt-auto"
               [class.pe-8]="!isSubmitting()"
               [class.pe-[10px]]="isSubmitting()"

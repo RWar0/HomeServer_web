@@ -2,7 +2,7 @@ import { SidebarSection } from '../core/types/sidebar.type';
 
 export const SIDEBAR_ITEMS: SidebarSection[] = [
   {
-    title: 'Aplikacja',
+    title: 'Podstawowe',
     items: [
       {
         title: 'Strona główna',

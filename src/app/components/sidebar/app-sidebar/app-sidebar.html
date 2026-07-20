@@ -4,6 +4,7 @@
       <h1 class="text-center text-secondary font-bold text-3xl -mb-3">Home Server</h1>
     </div>
     <div hlmSidebarContent>
+      <!-- Display all sections -->
       @for (section of _sections(); track section.title) {
         <div hlmSidebarGroup>
           <div hlmSidebarGroupLabel class="flex items-center gap-1">
@@ -14,26 +15,84 @@
           </div>
           <div hlmSidebarGroupContent>
             <ul hlmSidebarMenu>
+              <!-- Display all items in sections -->
               @for (item of section.items; track item.title) {
-                <li
-                  hlmSidebarMenuItem
-                  class="mb-1 group/sidebar-item hover:bg-gray-100 rounded-lg py-1 ps-2"
-                >
-                  <a
-                    hlmSidebarMenuButton
-                    routerLinkActive
-                    #rla="routerLinkActive"
-                    [routerLink]="item.url"
-                    class="flex items-center gap-1"
+                <!-- if section does not have sub-pages -->
+                @if (!item.subItems) {
+                  <li
+                    hlmSidebarMenuItem
+                    class="mb-1 group/sidebar-item hover:bg-gray-100 rounded-lg"
                   >
-                    <ng-icon
-                      [name]="item.icon"
-                      class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
-                      [class.text-primary]="rla.isActive"
-                    />
-                    <span>{{ item.title }}</span>
-                  </a>
-                </li>
+                    <a
+                      hlmSidebarMenuButton
+                      routerLinkActive
+                      #rla="routerLinkActive"
+                      [routerLink]="item.url"
+                      class="flex items-center gap-1"
+                    >
+                      @if (item.icon) {
+                        <ng-icon
+                          [name]="item.icon"
+                          class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                          [class.text-primary]="rla.isActive"
+                        />
+                      }
+                      <span [class.font-medium]="rla.isActive">{{ item.title }}</span>
+                    </a>
+                  </li>
+                  <!-- If item in section has sub-pages -->
+                } @else {
+                  <hlm-collapsible
+                    class="group/collapsible"
+                    [expanded]="activeCollapsible() === item.title"
+                    (expandedChange)="toggleCollapsible(item.title, $event)"
+                  >
+                    <li hlmSidebarMenuItem class="mb-1 rounded-lg">
+                      <button
+                        hlmCollapsibleTrigger
+                        hlmSidebarMenuButton
+                        class="flex w-full items-center justify-between py-3"
+                      >
+                        @if (item.icon) {
+                          <ng-icon
+                            [name]="item.icon"
+                            class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                          />
+                        }
+                        <span>{{ item.title }}</span>
+                        <ng-icon
+                          name="lucideChevronRight"
+                          class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"
+                          hlm
+                        />
+                      </button>
+                      <hlm-collapsible-content>
+                        <ul hlmSidebarMenuSub>
+                          @for (subItem of item.subItems; track subItem.title) {
+                            <li hlmSidebarMenuSubItem>
+                              <a
+                                hlmSidebarMenuButton
+                                routerLinkActive
+                                #rla="routerLinkActive"
+                                [routerLink]="[item.url, ...(subItem.url ? [subItem.url] : [])]"
+                                class="flex items-center gap-1"
+                              >
+                                @if (subItem.icon) {
+                                  <ng-icon
+                                    [name]="subItem.icon"
+                                    class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                                    [class.text-primary]="rla.isActive"
+                                  />
+                                }
+                                <span [class.font-medium]="rla.isActive">{{ subItem.title }}</span>
+                              </a>
+                            </li>
+                          }
+                        </ul>
+                      </hlm-collapsible-content>
+                    </li>
+                  </hlm-collapsible>
+                }
               }
             </ul>
           </div>

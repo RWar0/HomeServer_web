@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { HlmCard } from '@spartan-ng/helm/card';
 import { HlmFieldGroup, HlmField } from '../../../../libs/ui/field/src';
 import { HlmInput } from '../../../../libs/ui/input/src';
@@ -11,6 +11,7 @@ import { displayApiError } from '../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { ActivatedRoute } from '@angular/router';
 import { HlmSpinner } from '@spartan-ng/helm/spinner';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -38,7 +39,7 @@ export class LoginPage {
     password: ['', [Validators.required]],
   });
 
-  protected readonly isSubmitting = computed(() => this.loginForm.status === 'PENDING');
+  protected readonly isSubmitting = signal(false);
 
   constructor() {
     if (this.params['expired'] === 'true') {
@@ -53,19 +54,23 @@ export class LoginPage {
     }
 
     const credentials: LoginCredentials = this.loginForm.getRawValue();
+    this.isSubmitting.set(true);
 
-    this.authService.login(credentials).subscribe({
-      next: () => {
-        toast.success('Zalogowano pomyślnie!');
-      },
-      error: (err) => {
-        this.loginForm.patchValue({
-          password: '',
-        });
-        this.clearPassword();
-        displayApiError(err);
-      },
-    });
+    this.authService
+      .login(credentials)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: () => {
+          toast.success('Zalogowano pomyślnie!');
+        },
+        error: (err) => {
+          this.loginForm.patchValue({
+            password: '',
+          });
+          this.clearPassword();
+          displayApiError(err);
+        },
+      });
   }
 
   private clearPassword(): void {
