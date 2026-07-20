@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { HlmCard } from '@spartan-ng/helm/card';
 import { HlmFieldGroup, HlmField } from '../../../../libs/ui/field/src';
 import { HlmInput } from '../../../../libs/ui/input/src';
@@ -10,10 +10,20 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { displayApiError } from '../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { ActivatedRoute } from '@angular/router';
+import { HlmSpinner } from '@spartan-ng/helm/spinner';
 
 @Component({
   selector: 'app-login-page',
-  imports: [HlmCard, HlmFieldGroup, HlmField, HlmInput, HlmButton, ErrorLabel, ReactiveFormsModule],
+  imports: [
+    HlmCard,
+    HlmFieldGroup,
+    HlmField,
+    HlmInput,
+    HlmButton,
+    ErrorLabel,
+    ReactiveFormsModule,
+    HlmSpinner,
+  ],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
@@ -27,6 +37,8 @@ export class LoginPage {
     login: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
+
+  protected readonly isSubmitting = computed(() => this.loginForm.status === 'PENDING');
 
   constructor() {
     if (this.params['expired'] === 'true') {

@@ -1,0 +1,36 @@
+<button
+  hlmBtn
+  variant="ghost"
+  [hlmDropdownMenuTrigger]="sidebarUserMenu"
+  class="flex items-center gap-1 w-full justify-start py-5"
+  align="end"
+  side="right"
+>
+  <ng-icon name="lucideUserCircle2" size="35" />
+  <div class="flex flex-col items-start">
+    <span class="text-gray-700 font-medium">{{ user()?.name }}</span>
+    <span class="text-gray-400 -mt-1.5">{{ translatedRole() }}</span>
+  </div>
+  <ng-icon name="lucideChevronsUpDown" size="20" class="ml-auto" />
+</button>
+
+<ng-template #sidebarUserMenu>
+  <hlm-dropdown-menu>
+    <hlm-dropdown-menu-group>
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideUserCircle2" size="25" />
+        <div class="flex flex-col">
+          <span class="text-gray-700 font-medium">{{ user()?.name }}</span>
+          <span class="text-gray-600 -mt-1.5 text-sm">{{ translatedRole() }}</span>
+        </div>
+      </div>
+    </hlm-dropdown-menu-group>
+    <hlm-dropdown-menu-separator />
+    <hlm-dropdown-menu-group>
+      <button hlmDropdownMenuItem variant="destructive" (click)="logOut()">
+        <ng-icon name="lucideLogOut" />
+        Log out
+      </button>
+    </hlm-dropdown-menu-group>
+  </hlm-dropdown-menu>
+</ng-template>

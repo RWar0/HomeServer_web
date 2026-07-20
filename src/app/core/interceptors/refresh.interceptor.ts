@@ -12,8 +12,9 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
       const isLoginRequest = req.url.includes('/auth/login');
       const isRefreshRequest = req.url.includes('/auth/refresh');
       const isProfileRequest = req.url.includes('/users/my-profile');
+      const isLogoutRequest = req.url.includes('/auth/logout');
 
-      if (error.status !== 401 || isLoginRequest || isRefreshRequest || isProfileRequest) {
+      if (error.status !== 401 || isLoginRequest || isRefreshRequest || isProfileRequest || isLogoutRequest) {
         return throwError(() => error);
       }
 

@@ -1,4 +1,4 @@
-import { Role } from './role.model';
+import { Role } from '../types/role.type';
 
 export interface CurrentUser {
   name: string;

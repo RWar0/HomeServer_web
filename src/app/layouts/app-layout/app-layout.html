@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<app-sidebar>
+  <main hlmSidebarInset class="w-screen h-screen">
+    <header>
+      <button hlmSidebarTrigger class="p-0 absolute">
+        <span class="sr-only">Toggle sidebar</span>
+      </button>
+    </header>
+    <div class="bg-gray-50 h-screen">
+      <router-outlet />
+    </div>
+  </main>
+</app-sidebar>

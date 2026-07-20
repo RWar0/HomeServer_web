@@ -1,0 +1,48 @@
+<div hlmSidebarWrapper>
+  <hlm-sidebar>
+    <div hlmSidebarHeader>
+      <h1 class="text-center text-secondary font-bold text-3xl -mb-3">Home Server</h1>
+    </div>
+    <div hlmSidebarContent>
+      @for (section of _sections(); track section.title) {
+        <div hlmSidebarGroup>
+          <div hlmSidebarGroupLabel class="flex items-center gap-1">
+            @if (section.icon) {
+              <ng-icon [name]="section.icon" class="h-5 w-5 text-muted-foreground" />
+            }
+            <span class="text-muted-foreground font-medium text-sm">{{ section.title }}</span>
+          </div>
+          <div hlmSidebarGroupContent>
+            <ul hlmSidebarMenu>
+              @for (item of section.items; track item.title) {
+                <li
+                  hlmSidebarMenuItem
+                  class="mb-1 group/sidebar-item hover:bg-gray-100 rounded-lg py-1 ps-2"
+                >
+                  <a
+                    hlmSidebarMenuButton
+                    routerLinkActive
+                    #rla="routerLinkActive"
+                    [routerLink]="item.url"
+                    class="flex items-center gap-1"
+                  >
+                    <ng-icon
+                      [name]="item.icon"
+                      class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                      [class.text-primary]="rla.isActive"
+                    />
+                    <span>{{ item.title }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    </div>
+    <div hlmSidebarFooter>
+      <sidebar-user></sidebar-user>
+    </div>
+  </hlm-sidebar>
+  <ng-content />
+</div>

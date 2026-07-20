@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/dashboard-page/dashboard-page';
 import { LoginPage } from './pages/login-page/login-page';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { CalendarPage } from './pages/calendar-page/calendar-page';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardPage,
+      },
+      {
+        path: 'calendar',
+        component: CalendarPage,
       },
     ],
   },

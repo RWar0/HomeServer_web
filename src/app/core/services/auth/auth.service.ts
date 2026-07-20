@@ -21,11 +21,11 @@ export class AuthService extends BaseService {
   private readonly tokenService = inject(TokenService);
   private readonly userService = inject(UserService);
 
-  private readonly user = signal<CurrentUser | null>(null);
+  private readonly currentUser = signal<CurrentUser | null>(null);
 
-  readonly myUser = this.user.asReadonly();
+  readonly user = this.currentUser.asReadonly();
 
-  readonly isLoggedIn = computed(() => this.user() !== null);
+  readonly isLoggedIn = computed(() => this.currentUser() !== null);
 
   login(credentials: LoginCredentials): Observable<LoginResponse> {
     return this.apiService
@@ -39,7 +39,7 @@ export class AuthService extends BaseService {
         switchMap((response) =>
           this.userService.getMyProfile().pipe(
             tap((myUser) => {
-              this.user.set(myUser);
+              this.currentUser.set(myUser);
               this.router.navigate(['dashboard']);
             }),
             map(() => response),
@@ -63,7 +63,7 @@ export class AuthService extends BaseService {
         }),
         catchError((err) => {
           this.tokenService.clearToken();
-          this.user.set(null);
+          this.currentUser.set(null);
           if (!isInit) {
             this.router.navigate(['/login'], {
               queryParams: { expired: 'true' },
@@ -86,16 +86,18 @@ export class AuthService extends BaseService {
       )
       .pipe(
         tap(() => {
-          this.tokenService.clearToken();
-          this.user.set(null);
-          this.router.navigate(['/login']);
+          this.forceLogout();
+        }),
+        catchError(() => {
+          this.forceLogout();
+          return of({} as LogoutResponse);
         }),
       );
   }
 
   forceLogout(): void {
     this.tokenService.clearToken();
-    this.user.set(null);
+    this.currentUser.set(null);
     this.router.navigate(['/login']);
   }
 
@@ -103,11 +105,11 @@ export class AuthService extends BaseService {
     return this.refresh(true).pipe(
       switchMap(() => this.userService.getMyProfile()),
       tap((myUser) => {
-        this.user.set(myUser);
+        this.currentUser.set(myUser);
       }),
       catchError(() => {
         this.tokenService.clearToken();
-        this.user.set(null);
+        this.currentUser.set(null);
         return of(null);
       }),
     );
