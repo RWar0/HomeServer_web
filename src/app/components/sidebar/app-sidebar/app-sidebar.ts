@@ -1,11 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideCalendar,
   lucideChevronRight,
+  lucideFish,
   lucideHouse,
+  lucideList,
   lucideLockKeyholeOpen,
   lucideUsers,
 } from '@ng-icons/lucide';
@@ -36,6 +36,8 @@ import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
       lucideUsers,
       lucideLockKeyholeOpen,
       lucideChevronRight,
+      lucideFish,
+      lucideList,
     }),
   ],
 })

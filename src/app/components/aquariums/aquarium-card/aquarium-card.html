@@ -1,0 +1,51 @@
+<hlm-card class="shadow-md h-full flex flex-col">
+  <hlm-card-header class="-mb-3">
+    <h3 hlmCardTitle class="text-2xl text-secondary-darker text-shadow-sm text-shadow-violet-200">
+      Akwarium - {{ aquarium().name }}
+    </h3>
+    <div hlmCardAction>
+      <a hlmBtn variant="outline" [routerLink]="detailsLink()">Szczegóły</a>
+    </div>
+    <p hlmCardDescription>
+      Pojemność: <strong>{{ aquarium().volume }}L</strong>
+    </p>
+  </hlm-card-header>
+  <div hlmCardContent class="grid xl:grid-cols-5 gap-3 flex-1">
+    @if (aquarium().lastPhotoId) {
+      <img
+        [src]="aquarium().lastPhotoId"
+        alt="Zdjecie akwarium {{ aquarium().name }}"
+        class="xl:col-span-3 rounded-lg"
+      />
+    } @else {
+      <img
+        src="image_no_photo_added.png"
+        alt="Informacja o braku zdjęcia akwarium {{ aquarium().name }}"
+        class="xl:col-span-3 rounded-lg max-h-30 self-center mx-auto my-5"
+      />
+    }
+    <div class="bg-gray-50 rounded-lg px-2 py-2 xl:pt-0 xl:col-span-2 h-full">
+      <h3 class="font-medium text-lg -mb-3 mt-1">Informacje</h3>
+      <hlm-separator />
+      <h4 class="font-medium">Woda</h4>
+      <div class="flex align-center gap-2">
+        <p class="font-medium text-gray-600">Podmieniana:</p>
+        @if (aquarium().lastWaterChange) {
+          <p>{{ aquarium().lastWaterChange | date: 'shortDate' }}</p>
+        } @else {
+          <p>brak informacji</p>
+        }
+      </div>
+      <hlm-separator />
+      <h4 class="font-medium">Parametry</h4>
+      <div class="flex align-center gap-2">
+        <p class="font-medium text-gray-600">Sprawdzane:</p>
+        @if (aquarium().lastParametersCheck) {
+          <p>{{ aquarium().lastParametersCheck | date: 'shortDate' }}</p>
+        } @else {
+          <p>brak informacji</p>
+        }
+      </div>
+    </div>
+  </div>
+</hlm-card>

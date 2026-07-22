@@ -1,11 +1,13 @@
 <app-sidebar>
-  <main hlmSidebarInset class="w-screen h-screen">
-    <header>
-      <button hlmSidebarTrigger class="p-0 absolute">
+  <main hlmSidebarInset class="w-screen h-screen flex flex-col">
+    <header
+      class="md:hidden bg-primary/10 py-1 border-b border-b-primary/20 flex flex-row items-center"
+    >
+      <button hlmSidebarTrigger class="p-0">
         <span class="sr-only">Toggle sidebar</span>
       </button>
     </header>
-    <div class="bg-gray-50 h-screen">
+    <div class="bg-muted h-full">
       <router-outlet />
     </div>
   </main>

@@ -5,6 +5,7 @@ import { LoginPage } from './pages/login-page/login-page';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { CalendarPage } from './pages/calendar-page/calendar-page';
+import { AquariumListPage } from './pages/aquariums/aquarium-list-page/aquarium-list-page';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,10 @@ export const routes: Routes = [
       {
         path: 'calendar',
         component: CalendarPage,
+      },
+      {
+        path: 'aquariums',
+        component: AquariumListPage,
       },
     ],
   },

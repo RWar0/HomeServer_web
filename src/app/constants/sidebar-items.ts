@@ -14,6 +14,18 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
         url: '/calendar',
         icon: 'lucideCalendar',
       },
+      {
+        title: 'Akwaria',
+        url: '/aquariums',
+        icon: 'lucideFish',
+        subItems: [
+          {
+            title: 'Lista',
+            url: '',
+            icon: 'lucideList',
+          },
+        ],
+      },
     ],
   },
   // {
