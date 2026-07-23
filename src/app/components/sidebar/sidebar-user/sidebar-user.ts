@@ -23,8 +23,8 @@ export class SidebarUser {
 
   protected logOut() {
     this.authService.logout().subscribe({
-      next: () => {
-        toast.success('Wylogowano pomyślnie!');
+      next: (res) => {
+        toast.success(res.message);
       },
       error: (err) => {
         displayApiError(err);

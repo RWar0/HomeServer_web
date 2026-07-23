@@ -12,6 +12,7 @@ import { CurrentUser } from '../../models/user.model';
 import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { UserService } from '../users/user.service';
 import { displayApiError } from '../../helpers/error-handler';
+import { MessageResponse } from '../../models/message-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -83,9 +84,9 @@ export class AuthService extends BaseService {
       );
   }
 
-  logout(): Observable<LogoutResponse> {
+  logout(): Observable<MessageResponse> {
     return this.apiService
-      .post<LogoutResponse>(
+      .post<MessageResponse>(
         'auth/logout',
         {},
         {
@@ -96,9 +97,9 @@ export class AuthService extends BaseService {
         tap(() => {
           this.forceLogout();
         }),
-        catchError(() => {
+        catchError((err) => {
           this.forceLogout();
-          return of({} as LogoutResponse);
+          throw err;
         }),
       );
   }
