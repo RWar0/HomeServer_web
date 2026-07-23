@@ -3,6 +3,8 @@ export interface AquariumListItem {
   name: string;
   volume: number;
   lastPhotoId?: string;
+  lastWaterChange?: Date;
+  lastParametersCheck?: Date;
 }
 
 export interface CreateAquariumDto {

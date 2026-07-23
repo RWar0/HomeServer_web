@@ -48,6 +48,14 @@ export class AuthService extends BaseService {
       );
   }
 
+  hasRole(role: string): boolean {
+    return !!this.currentUser() && this.currentUser()!.role === role;
+  }
+
+  hasAnyRole(roles: string[]): boolean {
+    return !!this.currentUser() && roles.includes(this.currentUser()!.role);
+  }
+
   refresh(isInit: boolean = false): Observable<RefreshResponse> {
     return this.apiService
       .post<RefreshResponse>(

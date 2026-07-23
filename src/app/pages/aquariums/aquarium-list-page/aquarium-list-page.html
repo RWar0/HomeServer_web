@@ -1,7 +1,10 @@
 <header class="py-2 ps-5 pe-3 bg-white rounded-b-md border-b border-b-gray-300 flex">
   <h2 class="font-bold text-2xl text-primary">Aktualne akwaria</h2>
   <div class="ms-auto flex gap-2 align-center items-center">
-    <aquarium-create-dialog (refreshList)="refreshAquariums()" />
+    <aquarium-create-dialog
+      *appHasAnyRole="['Moderator', 'Admin']"
+      (refreshList)="refreshAquariums()"
+    />
     <button
       hlmBtn
       (click)="refreshAquariums()"

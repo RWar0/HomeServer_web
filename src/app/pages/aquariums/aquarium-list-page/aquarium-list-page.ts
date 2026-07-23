@@ -7,10 +7,18 @@ import { firstValueFrom } from 'rxjs';
 import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { AquariumCreateDialog } from '../../../components/aquariums/aquarium-create-dialog/aquarium-create-dialog';
+import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 
 @Component({
   selector: 'app-aquarium-list-page',
-  imports: [AquariumCard, HlmButtonImports, HlmTooltipImports, NgIcon, AquariumCreateDialog],
+  imports: [
+    AquariumCard,
+    HlmButtonImports,
+    HlmTooltipImports,
+    NgIcon,
+    AquariumCreateDialog,
+    HasRoleDirective,
+  ],
   templateUrl: './aquarium-list-page.html',
   styleUrl: './aquarium-list-page.css',
   viewProviders: [

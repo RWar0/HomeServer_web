@@ -1,5 +1,6 @@
 const statusTranslations: Record<string, string> = {
   Unauthorized: 'Brak autoryzacji!',
+  Forbidden: 'Brak uprawnień!',
   NoServerConnection: 'Brak polaczenia z serwerem',
   BadRequest: 'Niepoprawne dane!',
   'Bad Request': 'Niepoprawne dane!',

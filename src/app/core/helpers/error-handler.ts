@@ -1,6 +1,6 @@
 import { toast } from '@spartan-ng/brain/sonner';
 import { translateErrorStatusTitle } from './error-translator';
-interface CustomApiError {
+export interface CustomApiError {
   title: string;
   detail: string;
   status: number;
