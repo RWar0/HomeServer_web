@@ -23,4 +23,8 @@ export class AquariumService extends BaseService {
   updateAquarium(id: string, aquarium: CreateEditAquariumDto): Observable<MessageResponse> {
     return this.apiService.put<MessageResponse>(`aquariums/update/${id}`, aquarium);
   }
+
+  deleteAquarium(id: string): Observable<MessageResponse> {
+    return this.apiService.delete<MessageResponse>(`aquariums/${id}`);
+  }
 }

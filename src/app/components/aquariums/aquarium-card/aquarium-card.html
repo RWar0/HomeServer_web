@@ -27,7 +27,7 @@
           </hlm-dropdown-menu-group>
           <hlm-dropdown-menu-separator />
           <hlm-dropdown-menu-group>
-            <button hlmDropdownMenuItem variant="destructive">
+            <button hlmDropdownMenuItem variant="destructive" (click)="deleteDialogCmp.open()">
               <ng-icon name="lucideTrash2" />
               Usuń
             </button>
@@ -78,3 +78,9 @@
     </div>
   </div>
 </hlm-card>
+
+<delete-confirm-dialog
+  #deleteDialogCmp
+  (onConfirm)="deleteAquarium()"
+  [elementName]="'Akwarium ' + '\'' + aquarium().name + '\''"
+/>

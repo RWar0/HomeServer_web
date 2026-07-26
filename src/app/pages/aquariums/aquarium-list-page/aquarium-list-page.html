@@ -29,7 +29,12 @@
 
   <section class="grid lg:grid-cols-2 gap-3 p-2 items-stretch">
     @for (aquarium of aquariums.value(); track $index) {
-      <aquarium-card (editAquarium)="openEditDialog($event)" [aquarium]="aquarium" class="h-full" />
+      <aquarium-card
+        (refreshList)="refreshAquariums()"
+        (editAquarium)="openEditDialog($event)"
+        [aquarium]="aquarium"
+        class="h-full"
+      />
     }
   </section>
 </aquarium-create-edit-dialog>
