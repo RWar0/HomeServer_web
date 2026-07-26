@@ -1,4 +1,4 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, resource, signal, viewChild } from '@angular/core';
 import { AquariumCard } from '../../../components/aquariums/aquarium-card/aquarium-card';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -6,8 +6,9 @@ import { lucidePlus, lucideRefreshCcw } from '@ng-icons/lucide';
 import { firstValueFrom } from 'rxjs';
 import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
-import { AquariumCreateDialog } from '../../../components/aquariums/aquarium-create-dialog/aquarium-create-dialog';
 import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
+import { AquariumCreateEditDialog } from '../../../components/aquariums/aquarium-create-edit-dialog/aquarium-create-edit-dialog';
+import { HlmDialog } from '@spartan-ng/helm/dialog';
 
 @Component({
   selector: 'app-aquarium-list-page',
@@ -16,7 +17,7 @@ import { HasRoleDirective } from '../../../shared/directives/has-role.directive'
     HlmButtonImports,
     HlmTooltipImports,
     NgIcon,
-    AquariumCreateDialog,
+    AquariumCreateEditDialog,
     HasRoleDirective,
   ],
   templateUrl: './aquarium-list-page.html',
@@ -31,6 +32,9 @@ import { HasRoleDirective } from '../../../shared/directives/has-role.directive'
 export class AquariumListPage {
   private readonly aquariumService = inject(AquariumService);
 
+  protected readonly createEditDialog = viewChild.required(AquariumCreateEditDialog);
+  protected readonly selectedAquariumId = signal<string | null>(null);
+
   private readonly reload = signal(0);
 
   protected readonly aquariums = resource({
@@ -41,5 +45,15 @@ export class AquariumListPage {
 
   protected refreshAquariums(): void {
     this.reload.update((item) => item + 1);
+  }
+
+  protected openCreateDialog(): void {
+    this.selectedAquariumId.set(null);
+    this.createEditDialog()?.dialog().open();
+  }
+
+  protected openEditDialog(id: string): void {
+    this.selectedAquariumId.set(id);
+    this.createEditDialog()?.dialog().open();
   }
 }

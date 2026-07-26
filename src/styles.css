@@ -56,7 +56,7 @@
   --info-foreground: oklch(49.92% 0.08536 192.669);
   --info-foreground-dark: oklch(41.931% 0.07198 192.152);
   --success: oklch(87.256% 0.25824 142.979);
-  --success-foreground: oklch(37.349% 0.11871 141.954);
+  --success-foreground: oklch(57.28% 0.1932 142.134);
 }
 
 :root.dark {

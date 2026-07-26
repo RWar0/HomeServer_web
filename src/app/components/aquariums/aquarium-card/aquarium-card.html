@@ -4,7 +4,36 @@
       Akwarium - {{ aquarium().name }}
     </h3>
     <div hlmCardAction>
-      <a hlmBtn variant="outline" [routerLink]="detailsLink()">Szczegóły</a>
+      <button hlmBtn variant="outline" [hlmDropdownMenuTrigger]="aquariumMenu" align="end">
+        Opcje
+        <ng-icon name="lucideEllipsisVertical" />
+      </button>
+
+      <ng-template #aquariumMenu>
+        <hlm-dropdown-menu>
+          <hlm-dropdown-menu-group>
+            <button hlmDropdownMenuItem [routerLink]="detailsLink()" variant="primary">
+              <ng-icon name="lucideNotebookText" />
+              Szczegóły
+            </button>
+            <button
+              hlmDropdownMenuItem
+              (click)="editAquarium.emit(aquarium().id)"
+              variant="secondary"
+            >
+              <ng-icon name="lucideNotebookPen" />
+              Edytuj
+            </button>
+          </hlm-dropdown-menu-group>
+          <hlm-dropdown-menu-separator />
+          <hlm-dropdown-menu-group>
+            <button hlmDropdownMenuItem variant="destructive">
+              <ng-icon name="lucideTrash2" />
+              Usuń
+            </button>
+          </hlm-dropdown-menu-group>
+        </hlm-dropdown-menu>
+      </ng-template>
     </div>
     <p hlmCardDescription>
       Pojemność: <strong>{{ aquarium().volume }}L</strong>

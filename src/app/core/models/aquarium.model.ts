@@ -7,7 +7,7 @@ export interface AquariumListItem {
   lastParametersCheck?: Date;
 }
 
-export interface CreateAquariumDto {
+export interface CreateEditAquariumDto {
   name: string;
   volume: number;
   creationDate: string;

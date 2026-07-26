@@ -1,24 +1,35 @@
-<header class="py-2 ps-5 pe-3 bg-white rounded-b-md border-b border-b-gray-300 flex">
-  <h2 class="font-bold text-2xl text-primary">Aktualne akwaria</h2>
-  <div class="ms-auto flex gap-2 align-center items-center">
-    <aquarium-create-dialog
-      *appHasAnyRole="['Moderator', 'Admin']"
-      (refreshList)="refreshAquariums()"
-    />
-    <button
-      hlmBtn
-      (click)="refreshAquariums()"
-      variant="info"
-      hlmTooltip="Odswiez listę"
-      class="flex items-center justify-center"
-    >
-      <ng-icon name="lucideRefreshCcw" />
-    </button>
-  </div>
-</header>
+<aquarium-create-edit-dialog
+  *appHasAnyRole="['Moderator', 'Admin']"
+  [aquariumId]="selectedAquariumId()"
+  (refreshList)="refreshAquariums()"
+>
+  <header class="py-2 ps-5 pe-3 bg-white rounded-b-md border-b border-b-gray-300 flex">
+    <h2 class="font-bold text-2xl text-primary">Aktualne akwaria</h2>
+    <div class="ms-auto flex gap-2 align-center items-center">
+      <button
+        hlmBtn
+        variant="success"
+        hlmTooltip="Dodaj nowe akwarium"
+        class="flex items-center justify-center"
+        (click)="openCreateDialog()"
+      >
+        <ng-icon name="lucidePlus" />
+      </button>
+      <button
+        hlmBtn
+        (click)="refreshAquariums()"
+        variant="info"
+        hlmTooltip="Odswiez listę"
+        class="flex items-center justify-center"
+      >
+        <ng-icon name="lucideRefreshCcw" />
+      </button>
+    </div>
+  </header>
 
-<section class="grid lg:grid-cols-2 gap-3 p-2 items-stretch">
-  @for (aquarium of aquariums.value(); track $index) {
-    <aquarium-card [aquarium]="aquarium" class="h-full" />
-  }
-</section>
+  <section class="grid lg:grid-cols-2 gap-3 p-2 items-stretch">
+    @for (aquarium of aquariums.value(); track $index) {
+      <aquarium-card (editAquarium)="openEditDialog($event)" [aquarium]="aquarium" class="h-full" />
+    }
+  </section>
+</aquarium-create-edit-dialog>
