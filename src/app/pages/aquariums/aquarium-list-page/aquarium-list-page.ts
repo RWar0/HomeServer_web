@@ -8,7 +8,6 @@ import { AquariumService } from '../../../core/services/aquarium/aquarium.servic
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 import { AquariumCreateEditDialog } from '../../../components/aquariums/aquarium-create-edit-dialog/aquarium-create-edit-dialog';
-import { HlmDialog } from '@spartan-ng/helm/dialog';
 
 @Component({
   selector: 'app-aquarium-list-page',

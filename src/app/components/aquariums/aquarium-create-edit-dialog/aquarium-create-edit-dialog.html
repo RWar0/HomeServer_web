@@ -2,68 +2,89 @@
   <ng-content></ng-content>
 
   <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-sm md:w-md">
-    <form [formGroup]="createAquariumForm" (ngSubmit)="submitForm()">
+    @if (isLoadingData()) {
       <hlm-dialog-header>
         <h3 hlmDialogTitle>{{ aquariumId() ? 'Edytuj' : 'Utwórz' }} akwarium</h3>
         <p hlmDialogDescription>{{ aquariumId() ? 'Edytuj' : 'Wprowadź' }} dane akwarium</p>
       </hlm-dialog-header>
-      <hlm-field-group>
-        <hlm-field>
-          <label hlmFieldLabel for="name">Nazwa akwarium</label>
-          <input hlmInput id="name" autocomplete="off" formControlName="name" />
-          <error-label
-            [isDisabled]="
-              createAquariumForm.controls.name.invalid && createAquariumForm.controls.name.touched
-            "
-            message="Nazwa akwarium jest wymagana!"
-          ></error-label>
-        </hlm-field>
-        <hlm-field>
-          <label hlmFieldLabel for="volume">Pojemność (litry)</label>
-          <input hlmInput id="volume" type="number" formControlName="volume" />
-          <error-label
-            [isDisabled]="
-              createAquariumForm.controls.volume.invalid &&
-              createAquariumForm.controls.volume.touched
-            "
-            [message]="
-              createAquariumForm.controls.volume.errors?.['min']
-                ? 'Pojemność akwarium musi być dodatnia!'
-                : createAquariumForm.controls.volume.errors?.['max']
-                  ? 'Pojemność akwarium nie może przekraczać 100 000 litrów!'
-                  : 'Pojemność akwarium jest wymagana!'
-            "
-          ></error-label>
-        </hlm-field>
-        <hlm-field>
-          <label hlmFieldLabel for="creationDate">Data założenia</label>
-          <input hlmInput id="creationDate" formControlName="creationDate" type="date" />
-          <error-label
-            [isDisabled]="
-              createAquariumForm.controls.creationDate.invalid &&
-              createAquariumForm.controls.creationDate.touched
-            "
-            message="Data założenia akwarium jest wymagana!"
-          ></error-label>
-        </hlm-field>
-      </hlm-field-group>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
       <hlm-dialog-footer>
         <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
-        <button
-          hlmBtn
-          type="submit"
-          [disabled]="(createAquariumForm.invalid && createAquariumForm.touched) || isSubmitting()"
-          class="ps-8 self-center mt-auto"
-          variant="success"
-          [class.pe-8]="!isSubmitting()"
-          [class.pe-[10px]]="isSubmitting()"
-        >
+        <button hlmBtn disabled class="self-center mt-auto" variant="success">
           {{ aquariumId() ? 'Zapisz zmiany' : 'Utwórz' }}
           @if (isSubmitting()) {
             <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
           }
         </button>
       </hlm-dialog-footer>
-    </form>
+    } @else {
+      <form [formGroup]="createAquariumForm" (ngSubmit)="submitForm()">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>{{ aquariumId() ? 'Edytuj' : 'Utwórz' }} akwarium</h3>
+          <p hlmDialogDescription>{{ aquariumId() ? 'Edytuj' : 'Wprowadź' }} dane akwarium</p>
+        </hlm-dialog-header>
+        <hlm-field-group>
+          <hlm-field>
+            <label hlmFieldLabel for="name">Nazwa akwarium</label>
+            <input hlmInput id="name" autocomplete="off" formControlName="name" />
+            <error-label
+              [isDisabled]="
+                createAquariumForm.controls.name.invalid && createAquariumForm.controls.name.touched
+              "
+              message="Nazwa akwarium jest wymagana!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="volume">Pojemność (litry)</label>
+            <input hlmInput id="volume" type="number" formControlName="volume" />
+            <error-label
+              [isDisabled]="
+                createAquariumForm.controls.volume.invalid &&
+                createAquariumForm.controls.volume.touched
+              "
+              [message]="
+                createAquariumForm.controls.volume.errors?.['min']
+                  ? 'Pojemność akwarium musi być dodatnia!'
+                  : createAquariumForm.controls.volume.errors?.['max']
+                    ? 'Pojemność akwarium nie może przekraczać 100 000 litrów!'
+                    : 'Pojemność akwarium jest wymagana!'
+              "
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="creationDate">Data założenia</label>
+            <input hlmInput id="creationDate" formControlName="creationDate" type="date" />
+            <error-label
+              [isDisabled]="
+                createAquariumForm.controls.creationDate.invalid &&
+                createAquariumForm.controls.creationDate.touched
+              "
+              message="Data założenia akwarium jest wymagana!"
+            ></error-label>
+          </hlm-field>
+        </hlm-field-group>
+        <hlm-dialog-footer>
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <button
+            hlmBtn
+            type="submit"
+            [disabled]="
+              (createAquariumForm.invalid && createAquariumForm.touched) || isSubmitting()
+            "
+            class="ps-8 self-center mt-auto"
+            variant="success"
+            [class.pe-8]="!isSubmitting()"
+            [class.pe-[10px]]="isSubmitting()"
+          >
+            {{ aquariumId() ? 'Zapisz zmiany' : 'Utwórz' }}
+            @if (isSubmitting()) {
+              <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
+            }
+          </button>
+        </hlm-dialog-footer>
+      </form>
+    }
   </hlm-dialog-content>
 </hlm-dialog>
