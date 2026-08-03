@@ -8,10 +8,11 @@ import { finalize } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideUpload, lucideX } from '@ng-icons/lucide';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { FileImportDragdrop } from '../../common/file-import-dragdrop/file-import-dragdrop';
 
 @Component({
   selector: 'aquarium-upload-photo-dialog',
-  imports: [HlmDialogImports, HlmButtonImports, HlmTooltipImports, NgIcon],
+  imports: [HlmDialogImports, HlmButtonImports, HlmTooltipImports, FileImportDragdrop],
   templateUrl: './aquarium-upload-photo-dialog.html',
   styleUrl: './aquarium-upload-photo-dialog.css',
   providers: [provideIcons({ lucideUpload, lucideX })],
@@ -23,10 +24,8 @@ export class AquariumUploadPhotoDialog {
   readonly aquariumId = input.required<string>();
   readonly aquariumName = input.required<string>();
 
-  protected readonly isDragging = signal(false);
   protected readonly isUploading = signal(false);
   protected readonly selectedPhoto = signal<File | null>(null);
-  protected readonly photoPreview = signal<string | null>(null);
 
   openDialog(): void {
     this.dialog().open();
@@ -36,40 +35,15 @@ export class AquariumUploadPhotoDialog {
     this.dialog().close();
   }
 
-  protected onDragOver(event: DragEvent) {
-    event.preventDefault();
-    this.isDragging.set(true);
-  }
-
-  protected onDragLeave() {
-    this.isDragging.set(false);
-  }
-
-  protected onDrop(event: DragEvent) {
-    event.preventDefault();
-
-    this.isDragging.set(false);
-
-    const files = event.dataTransfer?.files;
-
-    if (!files || files.length === 0) {
-      return;
-    }
-
-    this.setFile(files[0]);
-  }
-
-  protected onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-
-    if (input.files && input.files.length > 0) {
-      this.setFile(input.files[0]);
-    }
-  }
-
   protected uploadPhoto(): void {
     if (!this.selectedPhoto()) {
       toast.error('Nie wybrano zdjęcia', { description: 'Wybierz zdjęcie przed dodaniem!' });
+      return;
+    }
+    if (!this.selectedPhoto()?.type.startsWith('image/')) {
+      toast.error('Niepoprawny typ pliku', {
+        description: 'Przesyłaj tylko zdjęcia (jpg, jpeg, png)',
+      });
       return;
     }
 
@@ -89,28 +63,5 @@ export class AquariumUploadPhotoDialog {
           displayApiError(err);
         },
       });
-  }
-
-  protected removePhoto(): void {
-    this.selectedPhoto.set(null);
-    this.photoPreview.set(null);
-  }
-
-  private setFile(file: File) {
-    if (!file.type.startsWith('image/')) {
-      toast.error('Niepoprawny format', { description: 'Można wybrać tylko zdjęcie!' });
-      return;
-    }
-
-    this.selectedPhoto.set(file);
-    this.generatePreview(file);
-  }
-
-  private generatePreview(file: File) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.photoPreview.set(e.target?.result as string);
-    };
-    reader.readAsDataURL(file);
   }
 }

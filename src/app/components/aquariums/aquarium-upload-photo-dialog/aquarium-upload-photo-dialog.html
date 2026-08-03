@@ -3,59 +3,11 @@
     <hlm-dialog-header class="mb-2">
       <h3 hlmDialogTitle>Dodaj zdjęcie do akwarium {{ aquariumName() }}</h3>
     </hlm-dialog-header>
-    @if (photoPreview()) {
-      <span class="font-semibold -mb-2">{{ selectedPhoto()?.name }}</span>
-
-      <div
-        class="relative flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition"
-      >
-        <div class="absolute right-1 -top-5 z-10 bg-background border-3 border-background">
-          <button
-            hlmBtn
-            hlmTooltip="Usuń zdjęcie"
-            (click)="removePhoto()"
-            variant="destructive"
-            size="icon"
-            class="rounded-full"
-          >
-            <ng-icon name="lucideX" class="text-bold" />
-          </button>
-        </div>
-
-        <img
-          class="max-h-64 w-full object-contain aspect-video"
-          [src]="photoPreview()"
-          alt="Podgląd zdjęcia do dodania"
-        />
-      </div>
-    } @else {
-      <div
-        class="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition"
-        [class.border-primary]="isDragging()"
-        [class.bg-muted]="isDragging()"
-        (dragover)="onDragOver($event)"
-        (dragleave)="onDragLeave()"
-        (drop)="onDrop($event)"
-      >
-        <div class="text-center">
-          <p class="text-lg font-medium">Przeciągnij zdjęcie tutaj</p>
-          <p class="text-sm text-muted-foreground">albo wybierz plik z komputera</p>
-        </div>
-
-        <label class="inline-flex">
-          <button hlmBtn variant="outline" type="button" (click)="fileInput.click()">
-            <ng-icon name="lucideUpload" /> Wybierz zdjęcie
-          </button>
-          <input
-            #fileInput
-            hidden
-            type="file"
-            accept="image/jpeg,image/jpg,image/png"
-            (change)="onFileSelected($event)"
-          />
-        </label>
-      </div>
-    }
+    <file-import-dragdrop
+      fileTypeName="zdjęcie"
+      acceptFormats="image/jpg,image/jpeg,image/png"
+      (selectedFile)="selectedPhoto.set($event)"
+    />
     <hlm-dialog-footer>
       <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
       <button hlmBtn (click)="uploadPhoto()" variant="success" [disabled]="!selectedPhoto()">
