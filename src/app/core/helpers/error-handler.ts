@@ -51,5 +51,24 @@ export function displayApiError(err: any, duration?: number) {
     return;
   }
 
+  if (err.name && err.name === 'HttpErrorResponse') {
+    if (err.status && err.status === 404) {
+      toast.error('Nie znaleziono strony!', {
+        description:
+          'Nie udało się wykonać podanej czynności, ponieważ podstrona akcji nie istnieje lub została usunięta.',
+        duration,
+      });
+      return;
+    }
+
+    if (err.status && err.status === 500) {
+      toast.error('Błąd serwera!', {
+        description: 'Nie udało się wykonać podanej czynności, ponieważ serwer napotkał błąd.',
+        duration,
+      });
+      return;
+    }
+  }
+
   toast.error(err.message, { duration });
 }

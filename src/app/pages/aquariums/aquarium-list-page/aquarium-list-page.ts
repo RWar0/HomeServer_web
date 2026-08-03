@@ -8,6 +8,7 @@ import { AquariumService } from '../../../core/services/aquarium/aquarium.servic
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 import { AquariumCreateEditDialog } from '../../../components/aquariums/aquarium-create-edit-dialog/aquarium-create-edit-dialog';
+import { RolesEnum } from '../../../core/enums/roles.enum';
 
 @Component({
   selector: 'app-aquarium-list-page',
@@ -33,8 +34,9 @@ export class AquariumListPage {
 
   protected readonly createEditDialog = viewChild.required(AquariumCreateEditDialog);
   protected readonly selectedAquariumId = signal<string | null>(null);
-
   private readonly reload = signal(0);
+
+  protected RolesEnum = RolesEnum;
 
   protected readonly aquariums = resource({
     params: () => this.reload(),

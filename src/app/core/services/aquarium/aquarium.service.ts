@@ -20,6 +20,12 @@ export class AquariumService extends BaseService {
     return this.apiService.get<CreateEditAquariumDto>(`aquariums/for-edit/${id}`);
   }
 
+  uploadPhoto(aquariumId: string, file: File): Observable<MessageResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.apiService.post<MessageResponse>(`aquariums/upload-photo/${aquariumId}`, formData);
+  }
+
   updateAquarium(id: string, aquarium: CreateEditAquariumDto): Observable<MessageResponse> {
     return this.apiService.put<MessageResponse>(`aquariums/update/${id}`, aquarium);
   }

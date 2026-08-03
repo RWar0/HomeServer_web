@@ -9,6 +9,7 @@ import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideEllipsisVertical,
+  lucideImagePlus,
   lucideNotebookPen,
   lucideNotebookText,
   lucideTrash2,
@@ -18,6 +19,9 @@ import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 import { DeleteConfirmDialog } from '../../common/delete-confirm-dialog/delete-confirm-dialog';
 import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
+import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
+import { RolesEnum } from '../../../core/enums/roles.enum';
+import { AquariumUploadPhotoDialog } from "../aquarium-upload-photo-dialog/aquarium-upload-photo-dialog";
 
 @Component({
   selector: 'aquarium-card',
@@ -31,7 +35,9 @@ import { toast } from '@spartan-ng/brain/sonner';
     NgIcon,
     HlmAlertDialogImports,
     DeleteConfirmDialog,
-  ],
+    HasRoleDirective,
+    AquariumUploadPhotoDialog
+],
   templateUrl: './aquarium-card.html',
   styleUrl: './aquarium-card.css',
   providers: provideIcons({
@@ -39,6 +45,7 @@ import { toast } from '@spartan-ng/brain/sonner';
     lucideNotebookText,
     lucideNotebookPen,
     lucideTrash2,
+    lucideImagePlus,
   }),
 })
 export class AquariumCard {
@@ -47,6 +54,7 @@ export class AquariumCard {
   readonly editAquarium = output<string>();
   readonly refreshList = output<void>();
   protected readonly detailsLink = computed(() => `details/${this.aquarium().id}`);
+  protected RolesEnum = RolesEnum;
 
   protected openEditAquariumDialog(): void {
     this.editAquarium.emit(this.aquarium().id);

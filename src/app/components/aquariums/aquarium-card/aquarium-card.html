@@ -16,7 +16,12 @@
               <ng-icon name="lucideNotebookText" />
               Szczegóły
             </button>
+            <button hlmDropdownMenuItem (click)="uploadPhotoDialog.openDialog()" variant="success">
+              <ng-icon name="lucideImagePlus" />
+              Dodaj zdjęcie
+            </button>
             <button
+              *appHasAnyRole="[RolesEnum.Moderator, RolesEnum.Admin]"
               hlmDropdownMenuItem
               (click)="editAquarium.emit(aquarium().id)"
               variant="secondary"
@@ -25,8 +30,8 @@
               Edytuj
             </button>
           </hlm-dropdown-menu-group>
-          <hlm-dropdown-menu-separator />
-          <hlm-dropdown-menu-group>
+          <hlm-dropdown-menu-group *appHasAnyRole="[RolesEnum.Admin]">
+            <hlm-dropdown-menu-separator />
             <button hlmDropdownMenuItem variant="destructive" (click)="deleteDialogCmp.open()">
               <ng-icon name="lucideTrash2" />
               Usuń
@@ -83,4 +88,10 @@
   #deleteDialogCmp
   (onConfirm)="deleteAquarium()"
   [elementName]="'Akwarium ' + '\'' + aquarium().name + '\''"
+/>
+
+<aquarium-upload-photo-dialog
+  #uploadPhotoDialog
+  [aquariumId]="aquarium().id"
+  [aquariumName]="aquarium().name"
 />
