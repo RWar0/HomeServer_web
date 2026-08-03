@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { HlmCard } from '@spartan-ng/helm/card';
 import { HlmFieldGroup, HlmField } from '../../../../libs/ui/field/src';
 import { HlmInput } from '../../../../libs/ui/input/src';
-import { HlmButton } from '@spartan-ng/helm/button';
 import { ErrorLabel } from '../../components/common/error-label/error-label';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginCredentials } from '../../core/models/auth.model';
@@ -10,8 +9,8 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { displayApiError } from '../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { ActivatedRoute } from '@angular/router';
-import { HlmSpinner } from '@spartan-ng/helm/spinner';
 import { finalize } from 'rxjs';
+import { SubmitButton } from '../../components/common/submit-button/submit-button';
 
 @Component({
   selector: 'app-login-page',
@@ -20,10 +19,9 @@ import { finalize } from 'rxjs';
     HlmFieldGroup,
     HlmField,
     HlmInput,
-    HlmButton,
     ErrorLabel,
     ReactiveFormsModule,
-    HlmSpinner,
+    SubmitButton,
   ],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',

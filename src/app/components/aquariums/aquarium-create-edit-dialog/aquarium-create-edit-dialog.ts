@@ -13,6 +13,7 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
 import { MessageResponse } from '../../../core/models/message-response.model';
 import { finalize } from 'rxjs';
+import { SubmitButton } from '../../common/submit-button/submit-button';
 
 @Component({
   selector: 'aquarium-create-edit-dialog',
@@ -25,6 +26,7 @@ import { finalize } from 'rxjs';
     ErrorLabel,
     ReactiveFormsModule,
     HlmSpinnerImports,
+    SubmitButton,
   ],
   templateUrl: './aquarium-create-edit-dialog.html',
   styleUrl: './aquarium-create-edit-dialog.css',

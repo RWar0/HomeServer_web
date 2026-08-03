@@ -10,9 +10,13 @@
     />
     <hlm-dialog-footer>
       <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
-      <button hlmBtn (click)="uploadPhoto()" variant="success" [disabled]="!selectedPhoto()">
-        Dodaj zdjęcie
-      </button>
+      <submit-button
+        buttonText="Dodaj zdjęcie"
+        [isSubmitting]="isSubmitting()"
+        [isDisabled]="!selectedPhoto() || isSubmitting()"
+        variant="success"
+        (click)="uploadPhoto()"
+      />
     </hlm-dialog-footer>
   </hlm-dialog-content>
 </hlm-dialog>

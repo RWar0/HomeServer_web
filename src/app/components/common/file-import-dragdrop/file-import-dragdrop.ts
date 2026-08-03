@@ -1,14 +1,14 @@
 import { Component, computed, input, output, signal } from '@angular/core';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideFilePlus2, lucideUpload } from '@ng-icons/lucide';
+import { lucideFilePlus2, lucideUpload, lucideX } from '@ng-icons/lucide';
 
 @Component({
   selector: 'file-import-dragdrop',
   imports: [HlmButtonImports, NgIcon],
   templateUrl: './file-import-dragdrop.html',
   styleUrl: './file-import-dragdrop.css',
-  providers: [provideIcons({ lucideUpload, lucideFilePlus2 })],
+  providers: [provideIcons({ lucideUpload, lucideFilePlus2, lucideX })],
 })
 export class FileImportDragdrop {
   readonly fileTypeName = input<string>('plik');

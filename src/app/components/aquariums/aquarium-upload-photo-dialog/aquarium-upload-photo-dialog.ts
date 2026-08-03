@@ -5,17 +5,21 @@ import { HlmDialog, HlmDialogImports } from '@spartan-ng/helm/dialog';
 import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
 import { displayApiError } from '../../../core/helpers/error-handler';
 import { finalize } from 'rxjs';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideUpload, lucideX } from '@ng-icons/lucide';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { FileImportDragdrop } from '../../common/file-import-dragdrop/file-import-dragdrop';
+import { SubmitButton } from '../../common/submit-button/submit-button';
 
 @Component({
   selector: 'aquarium-upload-photo-dialog',
-  imports: [HlmDialogImports, HlmButtonImports, HlmTooltipImports, FileImportDragdrop],
+  imports: [
+    HlmDialogImports,
+    HlmButtonImports,
+    HlmTooltipImports,
+    FileImportDragdrop,
+    SubmitButton,
+  ],
   templateUrl: './aquarium-upload-photo-dialog.html',
   styleUrl: './aquarium-upload-photo-dialog.css',
-  providers: [provideIcons({ lucideUpload, lucideX })],
 })
 export class AquariumUploadPhotoDialog {
   private readonly aquariumService = inject(AquariumService);
@@ -24,7 +28,7 @@ export class AquariumUploadPhotoDialog {
   readonly aquariumId = input.required<string>();
   readonly aquariumName = input.required<string>();
 
-  protected readonly isUploading = signal(false);
+  protected readonly isSubmitting = signal(false);
   protected readonly selectedPhoto = signal<File | null>(null);
 
   openDialog(): void {
@@ -47,12 +51,12 @@ export class AquariumUploadPhotoDialog {
       return;
     }
 
-    this.isUploading.set(true);
+    this.isSubmitting.set(true);
     this.aquariumService
       .uploadPhoto(this.aquariumId(), this.selectedPhoto()!)
       .pipe(
         finalize(() => {
-          this.isUploading.set(false);
+          this.isSubmitting.set(false);
         }),
       )
       .subscribe({

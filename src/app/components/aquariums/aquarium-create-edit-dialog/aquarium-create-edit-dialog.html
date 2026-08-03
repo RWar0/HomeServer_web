@@ -67,22 +67,14 @@
         </hlm-field-group>
         <hlm-dialog-footer>
           <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
-          <button
-            hlmBtn
-            type="submit"
-            [disabled]="
+          <submit-button
+            [buttonText]="aquariumId() ? 'Zapisz zmiany' : 'Utwórz'"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="
               (createAquariumForm.invalid && createAquariumForm.touched) || isSubmitting()
             "
-            class="ps-8 self-center mt-auto"
             variant="success"
-            [class.pe-8]="!isSubmitting()"
-            [class.pe-[10px]]="isSubmitting()"
-          >
-            {{ aquariumId() ? 'Zapisz zmiany' : 'Utwórz' }}
-            @if (isSubmitting()) {
-              <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
-            }
-          </button>
+          />
         </hlm-dialog-footer>
       </form>
     }
