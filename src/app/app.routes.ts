@@ -6,6 +6,8 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { CalendarPage } from './pages/calendar-page/calendar-page';
 import { AquariumListPage } from './pages/aquariums/aquarium-list-page/aquarium-list-page';
+import { AquariumDetailsPage } from './pages/aquariums/aquarium-details-page/aquarium-details-page';
+import { AquariumDetailsLayout } from './layouts/aquarium-details-layout/aquarium-details-layout';
 
 export const routes: Routes = [
   {
@@ -29,6 +31,16 @@ export const routes: Routes = [
       {
         path: 'aquariums',
         component: AquariumListPage,
+      },
+      {
+        path: 'aquariums/:aquariumId',
+        component: AquariumDetailsLayout,
+        children: [
+          {
+            path: '',
+            component: AquariumDetailsPage,
+          },
+        ],
       },
     ],
   },

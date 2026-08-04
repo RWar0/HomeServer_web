@@ -23,6 +23,7 @@ import { HasRoleDirective } from '../../../shared/directives/has-role.directive'
 import { RolesEnum } from '../../../core/enums/roles.enum';
 import { AquariumUploadPhotoDialog } from '../aquarium-upload-photo-dialog/aquarium-upload-photo-dialog';
 import { FilesService } from '../../../core/services/files/files.service';
+import { LabeledField } from "../../common/labeled-field/labeled-field";
 
 @Component({
   selector: 'aquarium-card',
@@ -38,7 +39,8 @@ import { FilesService } from '../../../core/services/files/files.service';
     DeleteConfirmDialog,
     HasRoleDirective,
     AquariumUploadPhotoDialog,
-  ],
+    LabeledField
+],
   templateUrl: './aquarium-card.html',
   styleUrl: './aquarium-card.css',
   providers: provideIcons({

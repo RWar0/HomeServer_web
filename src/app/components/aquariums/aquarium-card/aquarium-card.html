@@ -12,7 +12,7 @@
       <ng-template #aquariumMenu>
         <hlm-dropdown-menu>
           <hlm-dropdown-menu-group>
-            <button hlmDropdownMenuItem [routerLink]="detailsLink()" variant="primary">
+            <button hlmDropdownMenuItem [routerLink]="aquarium().id" variant="primary">
               <ng-icon name="lucideNotebookText" />
               Szczegóły
             </button>
@@ -62,24 +62,26 @@
       <h3 class="font-medium text-lg -mb-3 mt-1">Informacje</h3>
       <hlm-separator />
       <h4 class="font-medium">Woda</h4>
-      <div class="flex align-center gap-2">
-        <p class="font-medium text-gray-600">Podmieniana:</p>
-        @if (aquarium().lastWaterChange) {
-          <p>{{ aquarium().lastWaterChange | date: 'shortDate' }}</p>
-        } @else {
-          <p>brak informacji</p>
-        }
-      </div>
+      <labeled-field
+        label="Podmieniana"
+        [value]="
+          aquarium().lastWaterChange
+            ? (aquarium().lastWaterChange | date: 'shortDate')
+            : 'brak informacji'
+        "
+        labelColorClass="text-gray-600"
+      />
       <hlm-separator />
       <h4 class="font-medium">Parametry</h4>
-      <div class="flex align-center gap-2">
-        <p class="font-medium text-gray-600">Sprawdzane:</p>
-        @if (aquarium().lastParametersCheck) {
-          <p>{{ aquarium().lastParametersCheck | date: 'shortDate' }}</p>
-        } @else {
-          <p>brak informacji</p>
-        }
-      </div>
+      <labeled-field
+        label="Sprawdzane"
+        [value]="
+          aquarium().lastParametersCheck
+            ? (aquarium().lastParametersCheck | date: 'shortDate')
+            : 'brak informacji'
+        "
+        labelColorClass="text-gray-600"
+      />
     </div>
   </div>
 </hlm-card>

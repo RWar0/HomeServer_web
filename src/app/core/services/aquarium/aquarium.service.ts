@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AquariumListItem, CreateEditAquariumDto } from '../../models/aquarium.model';
+import {
+  AquariumDetailsDto,
+  AquariumListItem,
+  CreateEditAquariumDto,
+} from '../../models/aquarium.model';
 import { Observable } from 'rxjs';
 import { BaseService } from '../common/base.service';
 import { MessageResponse } from '../../models/message-response.model';
@@ -14,6 +18,10 @@ export class AquariumService extends BaseService {
 
   getAquariums(): Observable<AquariumListItem[]> {
     return this.apiService.get<AquariumListItem[]>('aquariums/list');
+  }
+
+  getAquariumDetails(id: string): Observable<AquariumDetailsDto> {
+    return this.apiService.get<AquariumDetailsDto>(`aquariums/${id}/details`);
   }
 
   getAquariumForEdit(id: string): Observable<CreateEditAquariumDto> {

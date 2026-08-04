@@ -4,7 +4,7 @@ import {
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withRouterConfig } from '@angular/router';
 import { LOCALE_ID } from '@angular/core';
 
 import { routes } from './app.routes';
@@ -25,7 +25,11 @@ export const appConfig: ApplicationConfig = {
       useValue: 'pl-PL',
     },
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withRouterConfig({ paramsInheritanceStrategy: 'always' }),
+    ),
     provideHttpClient(withInterceptors([authInterceptor, refreshInterceptor])),
     provideSpartanHlm(),
     provideAppInitializer(() => {

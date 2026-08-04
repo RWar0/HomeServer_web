@@ -12,3 +12,14 @@ export interface CreateEditAquariumDto {
   volume: number;
   creationDate: string;
 }
+
+export interface AquariumDetailsDto {
+  id: string;
+  name: string;
+  volume: number;
+  creationDate: Date;
+  photosCount: number;
+  lastPhotoId?: string;
+  lastWaterChange?: Date;
+  lastParametersCheck?: Date;
+}

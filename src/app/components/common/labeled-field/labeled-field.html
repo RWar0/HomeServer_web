@@ -1,0 +1,6 @@
+<div class="flex items-center">
+  <span [class]="labelWeightClass() + ' ' + labelColorClass() + ' ' + gapClass()"
+    >{{ label() }}:</span
+  >
+  <span> {{ value() ?? '' }} {{ value() && unit() ? unit() : '' }} </span>
+</div>

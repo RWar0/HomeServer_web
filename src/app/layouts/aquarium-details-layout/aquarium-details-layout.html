@@ -1,0 +1,16 @@
+<div class="">
+  <nav class="w-full bg-white flex px-2 py-2 gap-2 border-b">
+    <button
+      hlmBtn
+      variant="outline"
+      routerLinkActive="bg-primary/10"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLink="./"
+    >
+      Szczegóły
+    </button>
+  </nav>
+  <div class="mt-2">
+    <router-outlet></router-outlet>
+  </div>
+</div>
