@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, viewChild } from '@angular/core';
+import { Component, inject, input, output, signal, viewChild } from '@angular/core';
 import { toast } from '@spartan-ng/brain/sonner';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmDialog, HlmDialogImports } from '@spartan-ng/helm/dialog';
@@ -27,6 +27,8 @@ export class AquariumUploadPhotoDialog {
   readonly dialog = viewChild.required(HlmDialog);
   readonly aquariumId = input.required<string>();
   readonly aquariumName = input.required<string>();
+
+  public readonly refreshList = output<void>();
 
   protected readonly isSubmitting = signal(false);
   protected readonly selectedPhoto = signal<File | null>(null);
@@ -62,6 +64,8 @@ export class AquariumUploadPhotoDialog {
       .subscribe({
         next: () => {
           toast.success('Zdjęcie dodane pomyślnie');
+          this.refreshList.emit();
+          this.dialog().close();
         },
         error: (err) => {
           displayApiError(err);

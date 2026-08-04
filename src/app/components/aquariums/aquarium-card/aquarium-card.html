@@ -45,9 +45,9 @@
     </p>
   </hlm-card-header>
   <div hlmCardContent class="grid xl:grid-cols-5 gap-3 flex-1">
-    @if (aquarium().lastPhotoId) {
+    @if (aquarium().lastPhotoId && imagePreview()) {
       <img
-        [src]="aquarium().lastPhotoId"
+        [src]="imagePreview()"
         alt="Zdjecie akwarium {{ aquarium().name }}"
         class="xl:col-span-3 rounded-lg"
       />
@@ -94,4 +94,5 @@
   #uploadPhotoDialog
   [aquariumId]="aquarium().id"
   [aquariumName]="aquarium().name"
+  (refreshList)="refreshList.emit()"
 />

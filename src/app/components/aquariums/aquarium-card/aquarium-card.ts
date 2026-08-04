@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmSeparatorImports } from '@spartan-ng/helm/separator';
@@ -21,7 +21,8 @@ import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 import { RolesEnum } from '../../../core/enums/roles.enum';
-import { AquariumUploadPhotoDialog } from "../aquarium-upload-photo-dialog/aquarium-upload-photo-dialog";
+import { AquariumUploadPhotoDialog } from '../aquarium-upload-photo-dialog/aquarium-upload-photo-dialog';
+import { FilesService } from '../../../core/services/files/files.service';
 
 @Component({
   selector: 'aquarium-card',
@@ -36,8 +37,8 @@ import { AquariumUploadPhotoDialog } from "../aquarium-upload-photo-dialog/aquar
     HlmAlertDialogImports,
     DeleteConfirmDialog,
     HasRoleDirective,
-    AquariumUploadPhotoDialog
-],
+    AquariumUploadPhotoDialog,
+  ],
   templateUrl: './aquarium-card.html',
   styleUrl: './aquarium-card.css',
   providers: provideIcons({
@@ -50,11 +51,28 @@ import { AquariumUploadPhotoDialog } from "../aquarium-upload-photo-dialog/aquar
 })
 export class AquariumCard {
   private readonly aquariumService = inject(AquariumService);
+  private readonly filesService = inject(FilesService);
+
   readonly aquarium = input.required<AquariumListItem>();
+
   readonly editAquarium = output<string>();
   readonly refreshList = output<void>();
+
+  protected readonly imagePreview = signal<string | null>(null);
+
   protected readonly detailsLink = computed(() => `details/${this.aquarium().id}`);
   protected RolesEnum = RolesEnum;
+
+  constructor() {
+    effect(() => {
+      const photoId = this.aquarium().lastPhotoId;
+      if (photoId) {
+        this.filesService.getImageById(photoId).subscribe((blob) => {
+          this.imagePreview.set(URL.createObjectURL(blob));
+        });
+      }
+    });
+  }
 
   protected openEditAquariumDialog(): void {
     this.editAquarium.emit(this.aquarium().id);
