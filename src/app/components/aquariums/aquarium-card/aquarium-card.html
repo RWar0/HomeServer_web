@@ -49,16 +49,16 @@
       <img
         [src]="imagePreview()"
         alt="Zdjecie akwarium {{ aquarium().name }}"
-        class="xl:col-span-3 rounded-lg"
+        class="xl:col-span-3 rounded-lg max-h-100 h-full self-center mx-auto my-5 object-cover aspect-video shadow"
       />
     } @else {
       <img
         src="/image_no_photo_added.png"
         alt="Brak zdjęcia dla akwarium {{ aquarium().name }}"
-        class="xl:col-span-3 rounded-lg max-h-30 self-center mx-auto my-5"
+        class="xl:col-span-3 rounded-lg max-h-40 self-center mx-auto my-5 object-contain aspect-video"
       />
     }
-    <div class="bg-gray-50 rounded-lg px-2 py-2 xl:pt-0 xl:col-span-2 h-full">
+    <div class="bg-gray-50 rounded-lg px-2 py-2 xl:pt-0 xl:col-span-2 h-full shadow">
       <h3 class="font-medium text-lg -mb-3 mt-1">Informacje</h3>
       <hlm-separator />
       <h4 class="font-medium">Woda</h4>
