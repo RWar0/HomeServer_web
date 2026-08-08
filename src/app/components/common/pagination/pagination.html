@@ -1,0 +1,54 @@
+<div>
+  <nav hlmPagination class="items-start justify-start">
+    <ul hlmPaginationContent>
+      @if (getShowPrevious()) {
+        <li hlmPaginationItem>
+          <hlm-pagination-previous iconOnly="true" (click)="previous()" />
+        </li>
+      }
+      @for (pageItem of pagesToDisplay(); track $index) {
+        @if (pageItem === 'ellipsis') {
+          <li hlmPaginationItem>
+            <hlm-pagination-ellipsis />
+          </li>
+        } @else {
+          <li hlmPaginationItem>
+            <button
+              hlmPaginationLink
+              [isActive]="pageItem === paginationState().page"
+              (click)="changePage(pageItem)"
+            >
+              {{ pageItem }}
+            </button>
+          </li>
+        }
+      }
+
+      @if (getShowNext()) {
+        <li hlmPaginationItem>
+          <hlm-pagination-next iconOnly="true" (click)="next()" />
+        </li>
+      }
+    </ul>
+    <div class="ms-auto">
+      <hlm-select
+        [value]="paginationState().pageSize"
+        (valueChange)="changePageSize($event || 20)"
+        class="ml-auto"
+      >
+        <hlm-select-trigger class="w-fit">
+          <hlm-select-value />
+        </hlm-select-trigger>
+        <hlm-select-content *hlmSelectPortal>
+          <hlm-select-group>
+            @for (pageSize of pageSizes(); track pageSize) {
+              <hlm-select-item [value]="pageSize.toString()">
+                {{ pageSize }}
+              </hlm-select-item>
+            }
+          </hlm-select-group>
+        </hlm-select-content>
+      </hlm-select>
+    </div>
+  </nav>
+</div>

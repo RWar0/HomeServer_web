@@ -23,3 +23,18 @@ export interface AquariumDetailsDto {
   lastWaterChange?: Date;
   lastParametersCheck?: Date;
 }
+
+export interface AquariumPhotoDto {
+  id: string;
+  originalName: string;
+  createdBy: string;
+  createdAt: Date;
+}
+
+export interface AquariumPhotoWithMetadata {
+  id: string;
+  originalName: string;
+  createdBy: string;
+  createdAt: Date;
+  imageUrl: string | null;
+}

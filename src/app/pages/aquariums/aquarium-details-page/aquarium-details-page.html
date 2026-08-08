@@ -1,4 +1,4 @@
-<div class="m-2 lg:m-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+<div class="m-2 lg:m-3 grid grid-cols-1 lg:grid-cols-2 gap-2">
   <div class="p-2.5 bg-white rounded-md shadow-md">
     <h2 class="text-primary text-2xl font-bold">
       Informacje o akwarium {{ aquarium.value()?.name }}
@@ -13,6 +13,7 @@
       />
     </div>
   </div>
+
   <div class="p-2.5 bg-white rounded-md shadow-md">
     <h2 class="text-primary text-2xl font-bold">Podsumowanie danych o akwarium</h2>
     <div class="flex flex-col gap-1">
@@ -29,12 +30,12 @@
   </div>
 
   @if (aquarium.value()?.lastPhotoId) {
-    <div class="p-2.5 bg-white rounded-md shadow-md col-span-2">
+    <div class="p-2.5 bg-white rounded-md shadow-md lg:col-span-2">
       <h2 class="text-primary text-2xl font-bold">Ostatnie zdjęcie</h2>
       <img
         [src]="imagePreview()"
         alt="Zdjecie akwarium {{ aquarium.value()?.name }}"
-        class="rounded-lg w-fit self-center mx-auto mt-4 mb-2 object-cover aspect-video shadow"
+        class="rounded-lg w-full max-h-125 self-center mx-auto mt-4 mb-2 object-contain aspect-video shadow"
       />
     </div>
   }

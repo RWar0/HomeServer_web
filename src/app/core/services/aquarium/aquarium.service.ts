@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import {
   AquariumDetailsDto,
   AquariumListItem,
+  AquariumPhotoDto,
   CreateEditAquariumDto,
 } from '../../models/aquarium.model';
 import { Observable } from 'rxjs';
 import { BaseService } from '../common/base.service';
 import { MessageResponse } from '../../models/message-response.model';
+import { PageRequest, PageResponse } from '../../models/pagination.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +24,18 @@ export class AquariumService extends BaseService {
 
   getAquariumDetails(id: string): Observable<AquariumDetailsDto> {
     return this.apiService.get<AquariumDetailsDto>(`aquariums/${id}/details`);
+  }
+
+  getAquariumPhotos(
+    id: string,
+    pagination: PageRequest,
+  ): Observable<PageResponse<AquariumPhotoDto>> {
+    return this.apiService.get<PageResponse<AquariumPhotoDto>>(`aquariums/${id}/photos`, {
+      params: {
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+      },
+    });
   }
 
   getAquariumForEdit(id: string): Observable<CreateEditAquariumDto> {
@@ -41,5 +55,9 @@ export class AquariumService extends BaseService {
 
   deleteAquarium(id: string): Observable<MessageResponse> {
     return this.apiService.delete<MessageResponse>(`aquariums/${id}`);
+  }
+
+  deletePhoto(aquariumId: string, photoId: string): Observable<MessageResponse> {
+    return this.apiService.delete<MessageResponse>(`aquariums/${aquariumId}/photos/${photoId}`);
   }
 }

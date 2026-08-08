@@ -1,0 +1,19 @@
+<div class="m-2">
+  <pagination
+    [paginationState]="paginationStore.state"
+    (pageChange)="paginationStore.setPage($event)"
+    (pageSizeChange)="paginationStore.setPageSize($event)"
+  />
+
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-2">
+    @for (photo of photosResponse.value(); track photo.id) {
+      <aquarium-details-photo-card [photoData]="photo" (deletePhoto)="deletePhoto($event)" />
+    } @empty {
+      <p
+        class="flex items-center justify-center w-full h-full text-muted-foreground md:col-span-2 lg:col-span-3 xl:col-span-4 text-2xl font-medium"
+      >
+        Brak zdjęć!
+      </p>
+    }
+  </div>
+</div>

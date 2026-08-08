@@ -51,23 +51,38 @@ export function displayApiError(err: any, duration?: number) {
     return;
   }
 
-  if (err.name && err.name === 'HttpErrorResponse') {
-    if (err.status && err.status === 404) {
-      toast.error('Nie znaleziono strony!', {
-        description:
-          'Nie udało się wykonać podanej czynności, ponieważ podstrona akcji nie istnieje lub została usunięta.',
+  if (err.error instanceof Blob && err.error.type === 'application/problem+json') {
+    err.error.text().then((text: any) => {
+      const parsedError = JSON.parse(text);
+      toast.error(translateErrorStatusTitle(parsedError.title), {
+        description: parsedError.detail,
         duration,
       });
-      return;
-    }
+    });
+  }
 
-    if (err.status && err.status === 500) {
-      toast.error('Błąd serwera!', {
-        description: 'Nie udało się wykonać podanej czynności, ponieważ serwer napotkał błąd.',
-        duration,
-      });
-      return;
+  if (err.name && err.name === 'HttpErrorResponse' && err.status) {
+    switch (err.status) {
+      case 400:
+        toast.error('Błąd w trakcie czynności!', {
+          description: 'Nie udało się załadować zasobu, ponieważ serwer napotkał błąd.',
+          duration,
+        });
+        break;
+      case 404:
+        toast.error('Nie znaleziono strony!', {
+          description:
+            'Nie udało się wykonać podanej czynności, ponieważ podstrona akcji nie istnieje lub została usunięta.',
+          duration,
+        });
+        break;
+      default:
+        toast.error('Błąd serwera!', {
+          description: 'Nie udało się wykonać podanej czynności, ponieważ serwer napotkał błąd.',
+          duration,
+        });
     }
+    return;
   }
 
   toast.error(err.message, { duration });
