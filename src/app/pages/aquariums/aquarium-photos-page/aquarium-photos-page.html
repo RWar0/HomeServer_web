@@ -3,7 +3,14 @@
     [paginationState]="paginationStore.state"
     (pageChange)="paginationStore.setPage($event)"
     (pageSizeChange)="paginationStore.setPageSize($event)"
-  />
+  >
+    <div end class="ms-2">
+      <button hlmBtn variant="success" (click)="uploadPhotoDialog.openDialog()">
+        <ng-icon name="lucidePlus" />
+        Dodaj
+      </button>
+    </div>
+  </pagination>
 
   <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-2">
     @for (photo of photosResponse.value(); track photo.id) {
@@ -17,3 +24,10 @@
     }
   </div>
 </div>
+
+<aquarium-upload-photo-dialog
+  #uploadPhotoDialog
+  [aquariumId]="aquariumId()"
+  [aquariumName]="'Nazwa akwarium'"
+  (refreshList)="refreshSignal.update((value) => value + 1)"
+/>

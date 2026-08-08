@@ -1,5 +1,5 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { HlmNumberedPagination, HlmPaginationImports } from '@spartan-ng/helm/pagination';
+import { HlmPaginationImports } from '@spartan-ng/helm/pagination';
 import { PageMetadata } from '../../../core/models/pagination.model';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 

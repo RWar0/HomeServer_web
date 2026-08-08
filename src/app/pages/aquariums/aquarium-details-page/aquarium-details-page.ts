@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { LabeledField } from '../../../components/common/labeled-field/labeled-field';
 import { FilesService } from '../../../core/services/files/files.service';
+import { displayApiError } from '../../../core/helpers/error-handler';
 
 @Component({
   selector: 'app-aquarium-details-page',
@@ -30,8 +31,14 @@ export class AquariumDetailsPage {
     effect(() => {
       const photoId = this.aquarium.value()?.lastPhotoId;
       if (photoId) {
-        this.filesService.getImageById(photoId).subscribe((blob) => {
-          this.imagePreview.set(URL.createObjectURL(blob));
+        this.filesService.getImageById(photoId).subscribe({
+          next: (blob) => {
+            this.imagePreview.set(URL.createObjectURL(blob));
+          },
+          error: (err) => {
+            this.imagePreview.set(null);
+            displayApiError(err);
+          },
         });
       }
     });

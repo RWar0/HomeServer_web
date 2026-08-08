@@ -3,7 +3,9 @@ const statusTranslations: Record<string, string> = {
   Forbidden: 'Brak uprawnień!',
   NoServerConnection: 'Brak polaczenia z serwerem',
   BadRequest: 'Niepoprawne dane!',
+  NotFound: 'Nie znaleziono!',
   'Bad Request': 'Niepoprawne dane!',
+  'Not Found': 'Nie znaleziono!',
   'Internal Server Error': 'Błąd serwera!',
 };
 

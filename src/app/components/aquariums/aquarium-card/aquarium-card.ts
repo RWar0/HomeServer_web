@@ -23,7 +23,7 @@ import { HasRoleDirective } from '../../../shared/directives/has-role.directive'
 import { RolesEnum } from '../../../core/enums/roles.enum';
 import { AquariumUploadPhotoDialog } from '../aquarium-upload-photo-dialog/aquarium-upload-photo-dialog';
 import { FilesService } from '../../../core/services/files/files.service';
-import { LabeledField } from "../../common/labeled-field/labeled-field";
+import { LabeledField } from '../../common/labeled-field/labeled-field';
 
 @Component({
   selector: 'aquarium-card',
@@ -39,8 +39,8 @@ import { LabeledField } from "../../common/labeled-field/labeled-field";
     DeleteConfirmDialog,
     HasRoleDirective,
     AquariumUploadPhotoDialog,
-    LabeledField
-],
+    LabeledField,
+  ],
   templateUrl: './aquarium-card.html',
   styleUrl: './aquarium-card.css',
   providers: provideIcons({
@@ -69,8 +69,14 @@ export class AquariumCard {
     effect(() => {
       const photoId = this.aquarium().lastPhotoId;
       if (photoId) {
-        this.filesService.getImageById(photoId).subscribe((blob) => {
-          this.imagePreview.set(URL.createObjectURL(blob));
+        this.filesService.getImageById(photoId).subscribe({
+          next: (blob) => {
+            this.imagePreview.set(URL.createObjectURL(blob));
+          },
+          error: (err) => {
+            this.imagePreview.set(null);
+            displayApiError(err);
+          },
         });
       }
     });

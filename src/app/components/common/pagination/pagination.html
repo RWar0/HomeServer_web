@@ -1,5 +1,6 @@
 <div>
-  <nav hlmPagination class="items-start justify-start">
+  <nav hlmPagination class="items-center justify-start flex flex-wrap gap-y-2">
+    <ng-content select="[start]"></ng-content>
     <ul hlmPaginationContent>
       @if (getShowPrevious()) {
         <li hlmPaginationItem>
@@ -50,5 +51,6 @@
         </hlm-select-content>
       </hlm-select>
     </div>
+    <ng-content select="[end]"></ng-content>
   </nav>
 </div>

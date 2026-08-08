@@ -17,11 +17,22 @@ import { FilesService } from '../../../core/services/files/files.service';
 import { AquariumPhotoWithMetadata } from '../../../core/models/aquarium.model';
 import { AquariumDetailsPhotoCard } from '../../../components/aquariums/aquarium-details-photo-card/aquarium-details-photo-card';
 import { toast } from '@spartan-ng/brain/sonner';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus } from '@ng-icons/lucide';
+import { AquariumUploadPhotoDialog } from '../../../components/aquariums/aquarium-upload-photo-dialog/aquarium-upload-photo-dialog';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
-  providers: [PaginationStore],
+  providers: [PaginationStore, provideIcons({ lucidePlus })],
   selector: 'app-aquarium-photos-page',
-  imports: [HlmPaginationImports, Pagination, AquariumDetailsPhotoCard],
+  imports: [
+    HlmPaginationImports,
+    HlmButtonImports,
+    Pagination,
+    AquariumDetailsPhotoCard,
+    NgIcon,
+    AquariumUploadPhotoDialog,
+  ],
   templateUrl: './aquarium-photos-page.html',
   styleUrl: './aquarium-photos-page.css',
 })
