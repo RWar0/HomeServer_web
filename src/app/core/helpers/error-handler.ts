@@ -7,6 +7,17 @@ export interface CustomApiError {
   type: string;
 }
 
+/**
+ * Checks if the given error is an instance of CustomApiError.
+ *
+ * @param err - The error to check.
+ * @returns boolean - True if the error is an instance of CustomApiError, false otherwise.
+ *
+ * @example
+ * if (isCustomApiError(error)) {
+ *   // Error is an instance of CustomApiError
+ * }
+ */
 function isCustomApiError(err: any): err is CustomApiError {
   return (
     err !== null &&
@@ -18,6 +29,20 @@ function isCustomApiError(err: any): err is CustomApiError {
   );
 }
 
+/**
+ * Functions that displays API errors in toast messages.
+ *
+ * - It is recommended to use this function in the catchError operator.
+ *
+ * @param err - The error to display - error can be an instance of CustomApiError or an HttpErrorResponse.
+ * @param duration - Optional - The duration of the toast message.
+ *
+ * @example
+ * catchError((err) => {
+ *   displayApiError(err);
+ *   return of(null);
+ * })
+ */
 export function displayApiError(err: any, duration?: number) {
   const error = err.error;
 

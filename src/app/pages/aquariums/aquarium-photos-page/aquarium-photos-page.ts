@@ -21,6 +21,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
 import { AquariumUploadPhotoDialog } from '../../../components/aquariums/aquarium-upload-photo-dialog/aquarium-upload-photo-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { syncPaginationQueryParams } from '../../../core/helpers/pagination-query-sync';
 
 @Component({
   providers: [PaginationStore, provideIcons({ lucidePlus })],
@@ -46,6 +47,10 @@ export class AquariumPhotosPage {
   protected readonly aquariumId = input.required<string>();
 
   protected readonly refreshSignal = signal(0);
+
+  constructor() {
+    syncPaginationQueryParams();
+  }
 
   protected readonly photosMetadataResponse = resource({
     params: () => ({
