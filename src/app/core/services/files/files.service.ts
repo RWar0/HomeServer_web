@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class FilesService extends BaseService {
   getImageById(id: string): Observable<Blob> {
-    return this.apiService.get(`files/images/${id}`, {
+    return this.apiService.get(`files/image/${id}`, {
       responseType: 'blob',
     });
   }

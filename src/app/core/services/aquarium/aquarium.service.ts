@@ -39,7 +39,7 @@ export class AquariumService extends BaseService {
   }
 
   getAquariumForEdit(id: string): Observable<CreateEditAquariumDto> {
-    return this.apiService.get<CreateEditAquariumDto>(`aquariums/for-edit/${id}`);
+    return this.apiService.get<CreateEditAquariumDto>(`aquariums/${id}/for-edit`);
   }
 
   uploadPhoto(aquariumId: string, file: File): Observable<MessageResponse> {
@@ -50,7 +50,7 @@ export class AquariumService extends BaseService {
   }
 
   updateAquarium(id: string, aquarium: CreateEditAquariumDto): Observable<MessageResponse> {
-    return this.apiService.put<MessageResponse>(`aquariums/update/${id}`, aquarium);
+    return this.apiService.put<MessageResponse>(`aquariums/${id}`, aquarium);
   }
 
   deleteAquarium(id: string): Observable<MessageResponse> {
@@ -58,6 +58,6 @@ export class AquariumService extends BaseService {
   }
 
   deletePhoto(aquariumId: string, photoId: string): Observable<MessageResponse> {
-    return this.apiService.delete<MessageResponse>(`aquariums/${aquariumId}/photos/${photoId}`);
+    return this.apiService.delete<MessageResponse>(`aquariums/${aquariumId}/photo/${photoId}`);
   }
 }
