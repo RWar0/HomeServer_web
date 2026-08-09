@@ -40,7 +40,7 @@ export class AquariumDetailsPhotoCard {
   protected readonly RolesEnum = RolesEnum;
 
   protected redirectToView() {
-    this.router.navigate(['photo', this.photoData().id]);
+    this.router.navigate(['photo', this.photoData().id, { previousUrl: this.router.url }]);
   }
 
   protected deleteImage() {
@@ -53,7 +53,7 @@ export class AquariumDetailsPhotoCard {
       return;
     }
 
-    const dateStamp = this.datePipe.transform(this.photoData().createdAt, 'HHmmssSSSS_ddMMyyyy');
+    const dateStamp = this.datePipe.transform(new Date(), 'HHmmssSSSS_ddMMyyyy');
     const formattedName = this.photoData()
       .originalName.replaceAll(' ', '_')
       .replaceAll('/', '_')

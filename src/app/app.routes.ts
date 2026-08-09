@@ -9,6 +9,7 @@ import { AquariumListPage } from './pages/aquariums/aquarium-list-page/aquarium-
 import { AquariumDetailsPage } from './pages/aquariums/aquarium-details-page/aquarium-details-page';
 import { AquariumDetailsLayout } from './layouts/aquarium-details-layout/aquarium-details-layout';
 import { AquariumPhotosPage } from './pages/aquariums/aquarium-photos-page/aquarium-photos-page';
+import { PhotoPreview } from './pages/photos/photo-preview/photo-preview';
 
 export const routes: Routes = [
   {
@@ -46,6 +47,10 @@ export const routes: Routes = [
             component: AquariumPhotosPage,
           },
         ],
+      },
+      {
+        path: 'photo/:photoId',
+        component: PhotoPreview,
       },
     ],
   },

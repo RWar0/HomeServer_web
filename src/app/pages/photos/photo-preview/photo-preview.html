@@ -1,0 +1,31 @@
+<div class="relative w-full h-full overflow-hidden rounded-2xl bg-gray-100 p-3">
+  <nav class="flex gap-2 pb-4">
+    <button hlmBtn variant="secondary" size="sm" class="text-white" (click)="redirectToPrevious()">
+      <ng-icon name="lucideArrowLeft" />
+      Powrót
+    </button>
+    <button hlmBtn variant="default" size="sm" (click)="downloadImage()">
+      <ng-icon name="lucideDownload" />
+      Pobierz
+    </button>
+  </nav>
+  @if (imagePreview()) {
+    <img
+      alt="Zdjęcie"
+      [src]="imagePreview()"
+      class="w-[92%] h-[92%] mx-auto object-contain transition-opacity duration-300"
+      [class.opacity-0]="imageLoading()"
+    />
+    @if (imageLoading()) {
+      <div
+        class="absolute inset-8 rounded-2xl animate-pulse bg-gray-200 flex mt-8 border border-gray-300"
+      >
+        <hlm-spinner class="m-auto text-4xl text-primary" />
+      </div>
+    }
+  } @else {
+    <div class="flex items-center justify-center h-full text-gray-400">
+      <p>Zdjęcie nie zostało znalezione</p>
+    </div>
+  }
+</div>
