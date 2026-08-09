@@ -33,7 +33,7 @@
                       @if (item.icon) {
                         <ng-icon
                           [name]="item.icon"
-                          class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                          class="h-5 w-5 transition-all duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-[104%]"
                           [class.text-primary]="rla.isActive"
                         />
                       }
@@ -48,28 +48,30 @@
                     (expandedChange)="toggleCollapsible(item.title, $event)"
                   >
                     <li hlmSidebarMenuItem class="mb-1 rounded-lg">
+                      <!-- Dropdown button -->
                       <button
                         hlmCollapsibleTrigger
                         hlmSidebarMenuButton
-                        class="flex w-full items-center justify-between py-3"
+                        class="flex w-full items-center justify-between py-3 group/sidebar-item"
                       >
                         @if (item.icon) {
                           <ng-icon
                             [name]="item.icon"
-                            class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                            class="h-5 w-5 transition-all duration-200 ease-in-out group-hover/sidebar-item:text-secondary-darker/90 group-hover/sidebar-item:scale-[104%]"
                           />
                         }
                         <span>{{ item.title }}</span>
                         <ng-icon
                           name="lucideChevronRight"
-                          class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"
+                          class="ml-auto transition-all group-data-[state=open]/collapsible:rotate-90"
                           hlm
                         />
                       </button>
                       <hlm-collapsible-content>
+                        <!-- Dropdown content -->
                         <ul hlmSidebarMenuSub>
                           @for (subItem of item.subItems; track subItem.title) {
-                            <li hlmSidebarMenuSubItem>
+                            <li hlmSidebarMenuSubItem class="group/sidebar-item">
                               <a
                                 hlmSidebarMenuButton
                                 routerLinkActive
@@ -80,7 +82,7 @@
                                 @if (subItem.icon) {
                                   <ng-icon
                                     [name]="subItem.icon"
-                                    class="h-5 w-5 transition-transform duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-105"
+                                    class="h-5 w-5 transition-all duration-200 ease-in-out group-hover/sidebar-item:text-primary group-hover/sidebar-item:scale-[103%]"
                                     [class.text-primary]="rla.isActive"
                                   />
                                 }
