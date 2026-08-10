@@ -22,6 +22,7 @@ import { lucidePlus } from '@ng-icons/lucide';
 import { AquariumUploadPhotoDialog } from '../../../components/aquariums/aquarium-upload-photo-dialog/aquarium-upload-photo-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { syncPaginationQueryParams } from '../../../core/helpers/pagination-query-sync';
+import { emptyPaginatedResponse } from '../../../constants/empty-pagination-state';
 
 @Component({
   providers: [PaginationStore, provideIcons({ lucidePlus })],
@@ -67,10 +68,7 @@ export class AquariumPhotosPage {
             this.paginationStore.reset();
             displayApiError(imagesMetadataErr);
             this.appRef.tick();
-            return of({
-              data: [],
-              pagination: { totalCount: 0, pageSize: 10, pageIndex: 1, totalPages: 1 },
-            });
+            return of(emptyPaginatedResponse<AquariumPhotoWithMetadata>());
           }),
         ),
       ),

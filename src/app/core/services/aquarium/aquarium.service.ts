@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { BaseService } from '../common/base.service';
 import { MessageResponse } from '../../models/message-response.model';
 import { PageRequest, PageResponse } from '../../models/pagination.model';
+import { AquariumWaterChangeListItem } from '../../models/water-changes.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,23 @@ export class AquariumService extends BaseService {
         pageSize: pagination.pageSize,
       },
     });
+  }
+
+  getAquariumWaterChanges(
+    id: string,
+    pagination: PageRequest,
+  ): Observable<PageResponse<AquariumWaterChangeListItem>> {
+    return this.apiService.get<PageResponse<AquariumWaterChangeListItem>>(
+      `aquariums/${id}/water-changes`,
+      {
+        params: {
+          page: pagination.page,
+          pageSize: pagination.pageSize,
+          sortBy: pagination.sortBy,
+          sortDirection: pagination.sortDirection,
+        },
+      },
+    );
   }
 
   getAquariumForEdit(id: string): Observable<CreateEditAquariumDto> {

@@ -1,0 +1,14 @@
+<div class="p-2">
+  <data-table
+    [records]="waterChangeRecords"
+    [columns]="waterChangeColumns"
+    [paginationStore]="paginationStore"
+  />
+  <div class="mt-3"></div>
+  <pagination
+    [paginationState]="paginationStore.state"
+    (pageChange)="paginationStore.setPage($event)"
+    (pageSizeChange)="paginationStore.setPageSize($event)"
+  >
+  </pagination>
+</div>
