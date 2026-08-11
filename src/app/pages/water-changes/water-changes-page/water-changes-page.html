@@ -1,6 +1,6 @@
 <div class="p-2">
   <nav class="flex justify-end mb-2 gap-1">
-    <button hlmBtn size="sm" variant="success">
+    <button hlmBtn size="sm" variant="success" (click)="createEditDialogCmp.openCreate()">
       <ng-icon name="lucidePlus" />
       Dodaj podmianę
     </button>
@@ -19,6 +19,14 @@
 
   <ng-template #actionsMenu let-row>
     <div hlmDropdownMenu class="w-48">
+      <button
+        hlmDropdownMenuItem
+        (click)="createEditDialogCmp.openEdit(row.id)"
+        variant="secondary"
+      >
+        <ng-icon name="lucideNotebookPen" />
+        Edytuj
+      </button>
       <button
         hlmDropdownMenuItem
         (click)="
@@ -48,3 +56,5 @@
   elementName="Podmianę wody"
   (onConfirm)="onDelete($event || '')"
 />
+
+<water-change-create-edit-dialog #createEditDialogCmp (refreshList)="refreshList()" />

@@ -10,6 +10,7 @@ import { BaseService } from '../common/base.service';
 import { MessageResponse } from '../../models/message-response.model';
 import { PageRequest, PageResponse } from '../../models/pagination.model';
 import { AquariumWaterChangeListItem } from '../../models/water-changes.model';
+import { SelectOption } from '../../models/select.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,10 @@ export class AquariumService extends BaseService {
 
   getAquariums(): Observable<AquariumListItem[]> {
     return this.apiService.get<AquariumListItem[]>('aquariums/list');
+  }
+
+  getAquariumsForSelect(): Observable<SelectOption[]> {
+    return this.apiService.get<AquariumListItem[]>('aquariums/for-select');
   }
 
   getAquariumDetails(id: string): Observable<AquariumDetailsDto> {

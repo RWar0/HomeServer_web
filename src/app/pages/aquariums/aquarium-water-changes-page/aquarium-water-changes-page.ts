@@ -117,10 +117,6 @@ export class AquariumWaterChangesPage {
   }
 
   // Row actions
-  protected onEdit(waterChangeId: string): void {
-    console.log('Edytuj:', waterChangeId);
-  }
-
   protected onDelete(waterChangeId: string): void {
     if (!waterChangeId) {
       toast.error('Brak danych', { description: 'Identyfikator podmiany wody jest wymagany' });

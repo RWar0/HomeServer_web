@@ -1,22 +1,25 @@
-import { Component, effect, inject, input, output, signal, viewChild } from '@angular/core';
+import { Component, effect, inject, output, resource, signal, viewChild } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WaterChangeService } from '../../../core/services/water-change/water-change.service';
 import { HlmDialog, HlmDialogImports } from '@spartan-ng/helm/dialog';
-import { toast } from '@spartan-ng/brain/sonner';
-import { MessageResponse } from '../../../core/models/message-response.model';
-import { CreateEditWaterChangeOfAquariumDto } from '../../../core/models/water-changes.model';
+import { catchError, finalize, firstValueFrom, of, tap } from 'rxjs';
 import { displayApiError } from '../../../core/helpers/error-handler';
-import { finalize } from 'rxjs';
-import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+import { toast } from '@spartan-ng/brain/sonner';
+import { CreateEditWaterChangeDto } from '../../../core/models/water-changes.model';
+import { MessageResponse } from '../../../core/models/message-response.model';
 import { HlmFieldImports } from '@spartan-ng/helm/field';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { ErrorLabel } from '../../common/error-label/error-label';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
 import { SubmitButton } from '../../common/submit-button/submit-button';
+import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
+import { SelectOption } from '../../../core/models/select.model';
+import { FormSelect } from '../../select/form-select/form-select';
 
 @Component({
-  selector: 'aquarium-water-change-create-edit-dialog',
+  selector: 'water-change-create-edit-dialog',
   imports: [
     HlmDialogImports,
     HlmFieldImports,
@@ -27,28 +30,49 @@ import { SubmitButton } from '../../common/submit-button/submit-button';
     ReactiveFormsModule,
     HlmSpinnerImports,
     SubmitButton,
+    FormSelect,
   ],
-  templateUrl: './aquarium-water-change-create-edit-dialog.html',
-  styleUrl: './aquarium-water-change-create-edit-dialog.css',
+  templateUrl: './water-change-create-edit-dialog.html',
+  styleUrl: './water-change-create-edit-dialog.css',
 })
-export class AquariumWaterChangeCreateEditDialog {
+export class WaterChangeCreateEditDialog {
   // Injects
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly waterChangeService = inject(WaterChangeService);
-
-  // Inputs
-  readonly aquariumId = input.required<string>();
+  private readonly aquariumService = inject(AquariumService);
 
   // Outputs
   readonly refreshList = output<void>();
 
-  // State
+  // States
   readonly waterChangeId = signal<string | null>(null);
 
   // Signals
   readonly dialog = viewChild.required(HlmDialog);
   protected readonly isLoadingData = signal(false);
   protected readonly isSubmitting = signal(false);
+  protected readonly isLoadingAquariums = signal(false);
+
+  // Resources
+  protected readonly aquariumsForSelectResource = resource({
+    loader: () =>
+      firstValueFrom(
+        this.aquariumService.getAquariumsForSelect().pipe(
+          tap(() => this.isLoadingAquariums.set(true)),
+          catchError((err) => {
+            displayApiError(err);
+            return of([]);
+          }),
+          finalize(() => {
+            this.isLoadingAquariums.set(false);
+          }),
+        ),
+      ),
+  });
+
+  protected get aquariumsForSelect(): SelectOption[] {
+    return this.aquariumsForSelectResource.value() ?? [];
+  }
 
   constructor() {
     effect(() => {
@@ -60,7 +84,7 @@ export class AquariumWaterChangeCreateEditDialog {
 
       this.isLoadingData.set(true);
       this.waterChangeService
-        .getWaterChangeOfAquariumForEdit(this.waterChangeId()!)
+        .getWaterChangeForEdit(this.waterChangeId()!)
         .pipe(
           finalize(() => {
             this.isLoadingData.set(false);
@@ -80,7 +104,13 @@ export class AquariumWaterChangeCreateEditDialog {
   protected readonly changeWaterForm = this.fb.group({
     changeDate: ['', Validators.required],
     amount: [null as number | null, Validators.required],
+    aquariumId: ['', Validators.required],
   });
+
+  protected aquariumIdSelection(aquariumId: string) {
+    this.changeWaterForm.controls.aquariumId.setValue(aquariumId);
+    this.changeWaterForm.controls.aquariumId.markAsTouched();
+  }
 
   protected submitForm() {
     if (this.changeWaterForm.invalid) {
@@ -90,9 +120,10 @@ export class AquariumWaterChangeCreateEditDialog {
     }
 
     const formData = this.changeWaterForm.getRawValue();
-    const waterChangeData: CreateEditWaterChangeOfAquariumDto = {
+    const waterChangeData: CreateEditWaterChangeDto = {
       changeDate: formData.changeDate,
       amount: formData.amount!,
+      aquariumId: formData.aquariumId,
     };
 
     this.isSubmitting.set(true);
@@ -106,30 +137,26 @@ export class AquariumWaterChangeCreateEditDialog {
     this.isSubmitting.set(false);
   }
 
-  private editWaterChange(waterChangeData: CreateEditWaterChangeOfAquariumDto): void {
-    this.waterChangeService
-      .updateWaterChangeForAquarium(this.waterChangeId()!, waterChangeData)
-      .subscribe({
-        next: (res) => {
-          this.processSuccess(res);
-        },
-        error: (err) => {
-          displayApiError(err);
-        },
-      });
+  private editWaterChange(waterChangeData: CreateEditWaterChangeDto): void {
+    this.waterChangeService.updateWaterChange(this.waterChangeId()!, waterChangeData).subscribe({
+      next: (res) => {
+        this.processSuccess(res);
+      },
+      error: (err) => {
+        displayApiError(err);
+      },
+    });
   }
 
-  private createWaterChange(waterChangeData: CreateEditWaterChangeOfAquariumDto): void {
-    this.waterChangeService
-      .createWaterChangeForAquarium(this.aquariumId(), waterChangeData)
-      .subscribe({
-        next: (res) => {
-          this.processSuccess(res);
-        },
-        error: (err) => {
-          displayApiError(err);
-        },
-      });
+  private createWaterChange(waterChangeData: CreateEditWaterChangeDto): void {
+    this.waterChangeService.createWaterChange(waterChangeData).subscribe({
+      next: (res) => {
+        this.processSuccess(res);
+      },
+      error: (err) => {
+        displayApiError(err);
+      },
+    });
   }
 
   private processSuccess(res: MessageResponse): void {

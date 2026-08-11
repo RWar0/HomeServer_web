@@ -1,0 +1,15 @@
+<hlm-combobox
+  [value]="value()"
+  (valueChange)="onSelection.emit($event || '')"
+  [itemToString]="itemToStringFn"
+>
+  <hlm-combobox-input [placeholder]="placeholder()" />
+  <hlm-combobox-content *hlmComboboxPortal>
+    <hlm-combobox-empty>Brak elementów</hlm-combobox-empty>
+    <div hlmComboboxList>
+      @for (item of items(); track item.id) {
+        <hlm-combobox-item [value]="item.id">{{ item.name }}</hlm-combobox-item>
+      }
+    </div>
+  </hlm-combobox-content>
+</hlm-combobox>
