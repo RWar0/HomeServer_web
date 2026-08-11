@@ -10,12 +10,13 @@ import {
   lucideUsers,
 } from '@ng-icons/lucide';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
-import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { SidebarUser } from '../sidebar-user/sidebar-user';
 import { SidebarSection } from '../../../core/types/sidebar.type';
 import { SIDEBAR_ITEMS } from '../../../constants/sidebar-items';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
+import { tablerBucket } from '@ng-icons/tabler-icons';
 
 @Component({
   selector: 'app-sidebar',
@@ -38,6 +39,7 @@ import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
       lucideChevronRight,
       lucideFish,
       lucideList,
+      tablerBucket,
     }),
   ],
 })

@@ -11,6 +11,7 @@ import { AquariumDetailsLayout } from './layouts/aquarium-details-layout/aquariu
 import { AquariumPhotosPage } from './pages/aquariums/aquarium-photos-page/aquarium-photos-page';
 import { PhotoPreview } from './pages/photos/photo-preview/photo-preview';
 import { AquariumWaterChangesPage } from './pages/aquariums/aquarium-water-changes-page/aquarium-water-changes-page';
+import { WaterChangesPage } from './pages/aquariums/water-changes-page/water-changes-page';
 
 export const routes: Routes = [
   {
@@ -33,7 +34,16 @@ export const routes: Routes = [
       },
       {
         path: 'aquariums',
-        component: AquariumListPage,
+        children: [
+          {
+            path: '',
+            component: AquariumListPage,
+          },
+          {
+            path: 'water-changes',
+            component: WaterChangesPage,
+          },
+        ],
       },
       {
         path: 'aquariums/:aquariumId',

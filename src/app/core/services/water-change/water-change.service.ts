@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BaseService } from '../common/base.service';
 import { Observable } from 'rxjs';
 import { MessageResponse } from '../../models/message-response.model';
-import { CreateEditWaterChangeDto } from '../../models/water-changes.model';
+import { CreateEditWaterChangeDto, WaterChangeListItem } from '../../models/water-changes.model';
+import { PageRequest, PageResponse } from '../../models/pagination.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,17 @@ export class WaterChangeService extends BaseService {
       `water-changes/for-aquarium/${aquariumId}`,
       waterChangeData,
     );
+  }
+
+  getAll(pagination: PageRequest): Observable<PageResponse<WaterChangeListItem>> {
+    return this.apiService.get<PageResponse<WaterChangeListItem>>('water-changes/list', {
+      params: {
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        sortBy: pagination.sortBy,
+        sortDirection: pagination.sortDirection,
+      },
+    });
   }
 
   getWaterChangeForEdit(waterChangeId: string): Observable<CreateEditWaterChangeDto> {

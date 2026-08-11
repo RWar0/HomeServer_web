@@ -20,6 +20,7 @@
     "@angular/router": "^21.2.0",
     "@ng-icons/core": "^32.2.0",
     "@ng-icons/lucide": "^32.2.0",
+    "@ng-icons/tabler-icons": "^35.0.1",
     "@spartan-ng/brain": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

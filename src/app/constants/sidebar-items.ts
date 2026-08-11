@@ -24,6 +24,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
             url: '',
             icon: 'lucideList',
           },
+          {
+            title: 'Podmiany wody',
+            url: 'water-changes',
+            icon: 'tablerBucket',
+          },
         ],
       },
     ],
