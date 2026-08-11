@@ -1,0 +1,8 @@
+<button
+  hlmBtn
+  size="sm"
+  class="bg-blue-500 hover:bg-blue-400 border border-blue-600"
+  (click)="onRefresh.emit()"
+>
+  <ng-icon name="lucideRotateCw" [class.animate-spin]="isRefreshing()" />
+</button>

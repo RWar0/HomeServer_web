@@ -10,17 +10,40 @@ import { DataTable } from '../../../components/data-table/data-table/data-table'
 import { AquariumWaterChangeListItem } from '../../../core/models/water-changes.model';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { DatePipe } from '@angular/common';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideNotebookPen, lucidePlus, lucideRotateCw, lucideTrash2 } from '@ng-icons/lucide';
+import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
+import { toast } from '@spartan-ng/brain/sonner';
+import { WaterChangeService } from '../../../core/services/water-change/water-change.service';
+import { AquariumWaterChangeCreateEditDialog } from '../../../components/aquariums/aquarium-water-change-create-edit-dialog/aquarium-water-change-create-edit-dialog';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 
 @Component({
   selector: 'app-aquarium-water-changes-page',
-  imports: [Pagination, DataTable],
+  imports: [
+    HlmDropdownMenuImports,
+    HlmButtonImports,
+    Pagination,
+    DataTable,
+    NgIcon,
+    DeleteConfirmDialog,
+    AquariumWaterChangeCreateEditDialog,
+    RefreshListButton,
+  ],
   templateUrl: './aquarium-water-changes-page.html',
   styleUrl: './aquarium-water-changes-page.css',
-  providers: [PaginationStore, DatePipe],
+  providers: [
+    PaginationStore,
+    DatePipe,
+    provideIcons({ lucideNotebookPen, lucideTrash2, lucidePlus, lucideRotateCw }),
+  ],
 })
 export class AquariumWaterChangesPage {
   // Services
   private readonly aquariumService = inject(AquariumService);
+  private readonly waterChangeService = inject(WaterChangeService);
   private readonly appRef = inject(ApplicationRef);
   private readonly datePipe = inject(DatePipe);
   protected readonly paginationStore = inject(PaginationStore);
@@ -87,5 +110,31 @@ export class AquariumWaterChangesPage {
 
   protected get waterChangeRecords(): AquariumWaterChangeListItem[] {
     return this.waterChangesMetadataResponse.value()?.data ?? [];
+  }
+
+  protected refreshList(): void {
+    this.refreshSignal.update((val) => val + 1);
+  }
+
+  // Row actions
+  protected onEdit(waterChangeId: string): void {
+    console.log('Edytuj:', waterChangeId);
+  }
+
+  protected onDelete(waterChangeId: string): void {
+    if (!waterChangeId) {
+      toast.error('Brak danych', { description: 'Identyfikator podmiany wody jest wymagany' });
+      return;
+    }
+
+    this.waterChangeService.deleteWaterChange(waterChangeId).subscribe({
+      next: (res) => {
+        toast.success(res.message);
+        this.refreshList();
+      },
+      error: (error) => {
+        displayApiError(error);
+      },
+    });
   }
 }
