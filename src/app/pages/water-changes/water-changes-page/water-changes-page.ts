@@ -12,7 +12,7 @@ import {
 import { syncPaginationQueryParams } from '../../../core/helpers/pagination-query-sync';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { DatePipe } from '@angular/common';
-import { lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import { lucideFilterX, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { Pagination } from '../../../components/common/pagination/pagination';
@@ -51,7 +51,7 @@ import { FormDatePicker } from '../../../components/date-picker/form-date-picker
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen }),
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX }),
   ],
 })
 export class WaterChangesPage {
@@ -199,5 +199,11 @@ export class WaterChangesPage {
       ...filters,
       [key]: value,
     }));
+  }
+
+  protected clearAllFilters(): void {
+    this.setFilter('aquariumId', null);
+    this.setFilter('fromDate', null);
+    this.setFilter('toDate', null);
   }
 }
