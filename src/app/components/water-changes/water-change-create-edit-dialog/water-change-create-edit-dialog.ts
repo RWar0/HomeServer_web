@@ -107,8 +107,8 @@ export class WaterChangeCreateEditDialog {
     aquariumId: ['', Validators.required],
   });
 
-  protected aquariumIdSelection(aquariumId: string) {
-    this.changeWaterForm.controls.aquariumId.setValue(aquariumId);
+  protected aquariumIdSelection(aquariumId: string | null) {
+    this.changeWaterForm.controls.aquariumId.setValue(aquariumId ?? '');
     this.changeWaterForm.controls.aquariumId.markAsTouched();
   }
 

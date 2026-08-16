@@ -1,15 +1,48 @@
-<div class="p-2">
-  <nav class="flex justify-end mb-2 gap-1">
-    <button hlmBtn size="sm" variant="success" (click)="createEditDialogCmp.openCreate()">
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">Podmiany wody</h2>
+  <div class="ms-auto flex gap-2 align-center items-center">
+    <button
+      *appHasAnyRole="[RolesEnum.Moderator, RolesEnum.Admin]"
+      hlmBtn
+      variant="success"
+      hlmTooltip="Dodaj podmianę wody"
+      class="flex items-center justify-center"
+      (click)="createEditDialogCmp.openCreate()"
+    >
       <ng-icon name="lucidePlus" />
-      Dodaj podmianę
     </button>
     <refresh-list-button
       (onRefresh)="refreshList()"
       [isRefreshing]="waterChangesList.status() === 'loading'"
     />
-  </nav>
-
+  </div>
+</header>
+<div class="bg-white px-2 py-2 flex items-center gap-2">
+  <span class="text-muted-foreground">Filtry</span>
+  <form-select
+    [items]="aquariumsSelectRecords"
+    [isLoading]="false"
+    placeholder="Akwarium..."
+    [value]="this.filters().aquariumId"
+    (onSelection)="setFilter('aquariumId', $event)"
+  />
+  <span class="text-muted-foreground ms-2">Daty</span>
+  <form-date-picker
+    placeholder="Od"
+    [value]="this.filters().fromDate"
+    (onSelection)="setFilter('fromDate', $event ?? null)"
+    [maxDate]="this.filters().toDate ?? undefined"
+    inputId="fromDateFilter"
+  />
+  <span class="text-muted-foreground"> - </span>
+  <form-date-picker
+    placeholder="Do"
+    [value]="this.filters().toDate"
+    (onSelection)="setFilter('toDate', $event ?? null)"
+    inputId="toDateFilter"
+  />
+</div>
+<div class="p-2 mt-2">
   <data-table
     [records]="waterChangeRecords"
     [columns]="waterChangeColumns"

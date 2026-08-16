@@ -1,11 +1,14 @@
-import { ApplicationRef, Component, inject, resource, signal } from '@angular/core';
+import { ApplicationRef, Component, effect, inject, resource, signal } from '@angular/core';
 import { WaterChangeService } from '../../../core/services/water-change/water-change.service';
 import { PaginationStore } from '../../../core/stores/pagination.store';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
 import { displayApiError } from '../../../core/helpers/error-handler';
 import { emptyPaginatedResponse } from '../../../constants/empty-pagination-state';
-import { WaterChangeListItem } from '../../../core/models/water-changes.model';
+import {
+  WaterChangeListFiltersDto,
+  WaterChangeListItem,
+} from '../../../core/models/water-changes.model';
 import { syncPaginationQueryParams } from '../../../core/helpers/pagination-query-sync';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { DatePipe } from '@angular/common';
@@ -18,18 +21,30 @@ import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-d
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { toast } from '@spartan-ng/brain/sonner';
 import { WaterChangeCreateEditDialog } from '../../../components/water-changes/water-change-create-edit-dialog/water-change-create-edit-dialog';
+import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
+import { RolesEnum } from '../../../core/enums/roles.enum';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { FormSelect } from '../../../components/select/form-select/form-select';
+import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
+import { SelectOption } from '../../../core/models/select.model';
+import { syncQueryParams } from '../../../core/helpers/signal-patameter-query-sync';
+import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 
 @Component({
   selector: 'app-water-changes-page',
   imports: [
     HlmDropdownMenuImports,
     HlmButtonImports,
+    HlmTooltipImports,
     Pagination,
     DataTable,
     NgIcon,
     DeleteConfirmDialog,
     RefreshListButton,
     WaterChangeCreateEditDialog,
+    HasRoleDirective,
+    FormSelect,
+    FormDatePicker,
   ],
   templateUrl: './water-changes-page.html',
   styleUrl: './water-changes-page.css',
@@ -43,11 +58,20 @@ export class WaterChangesPage {
   // injects
   private readonly appRef = inject(ApplicationRef);
   private readonly waterChangesService = inject(WaterChangeService);
+  private readonly aquariumService = inject(AquariumService);
   private readonly datePipe = inject(DatePipe);
   protected readonly paginationStore = inject(PaginationStore);
 
   // signals
   private readonly refreshSignal = signal(0);
+  protected readonly RolesEnum = RolesEnum;
+
+  // filtration
+  protected readonly filters = signal<WaterChangeListFiltersDto>({
+    aquariumId: null,
+    fromDate: null,
+    toDate: null,
+  });
 
   // table colimn definitions
   protected readonly waterChangeColumns: TableColumn<WaterChangeListItem>[] = [
@@ -79,19 +103,34 @@ export class WaterChangesPage {
       sortable: true,
     },
   ];
+
   constructor() {
     syncPaginationQueryParams();
+    syncQueryParams(this.filters, {
+      aquariumId: {
+        setter: (value) => this.setFilter('aquariumId', value),
+      },
+      fromDate: {
+        setter: (value) => this.setFilter('fromDate', value ? new Date(value) : null),
+        formatter: (filters) => filters?.toISOString().split('T')[0],
+      },
+      toDate: {
+        setter: (value) => this.setFilter('toDate', value ? new Date(value) : null),
+        formatter: (filters) => filters?.toISOString().split('T')[0],
+      },
+    });
   }
 
   // resources
   protected readonly waterChangesList = resource({
     params: () => ({
       paginationState: this.paginationStore.state,
+      filters: this.filters(),
       refreshState: this.refreshSignal(),
     }),
     loader: () =>
       firstValueFrom(
-        this.waterChangesService.getAll(this.paginationStore.state).pipe(
+        this.waterChangesService.getAll(this.paginationStore.state, this.filters()).pipe(
           tap((res) => {
             this.paginationStore.setPagination(res.pagination);
           }),
@@ -104,6 +143,26 @@ export class WaterChangesPage {
         ),
       ),
   });
+
+  protected readonly aquariumsSelectList = resource({
+    params: () => ({
+      refreshState: this.refreshSignal(),
+    }),
+    loader: () =>
+      firstValueFrom(
+        this.aquariumService.getAquariumsForSelect().pipe(
+          catchError((err) => {
+            displayApiError(err);
+            this.appRef.tick();
+            return of([]);
+          }),
+        ),
+      ),
+  });
+
+  protected get aquariumsSelectRecords(): SelectOption[] {
+    return this.aquariumsSelectList.value() ?? [];
+  }
 
   protected get waterChangeRecords(): WaterChangeListItem[] {
     return this.waterChangesList.value()?.data ?? [];
@@ -129,5 +188,16 @@ export class WaterChangesPage {
         displayApiError(error);
       },
     });
+  }
+
+  // Helpers
+  protected setFilter<K extends keyof WaterChangeListFiltersDto>(
+    key: K,
+    value: WaterChangeListFiltersDto[K],
+  ): void {
+    this.filters.update((filters) => ({
+      ...filters,
+      [key]: value,
+    }));
   }
 }

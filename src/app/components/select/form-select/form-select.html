@@ -1,9 +1,9 @@
 <hlm-combobox
   [value]="value()"
-  (valueChange)="onSelection.emit($event || '')"
+  (valueChange)="onSelection.emit($event || null)"
   [itemToString]="itemToStringFn"
 >
-  <hlm-combobox-input [placeholder]="placeholder()" />
+  <hlm-combobox-input [placeholder]="placeholder()" [showClear]="showClear()" />
   <hlm-combobox-content *hlmComboboxPortal>
     <hlm-combobox-empty>Brak elementów</hlm-combobox-empty>
     <div hlmComboboxList>

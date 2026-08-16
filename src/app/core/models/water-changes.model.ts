@@ -22,3 +22,9 @@ export interface CreateEditWaterChangeOfAquariumDto {
   amount: number;
   changeDate: string;
 }
+
+export interface WaterChangeListFiltersDto {
+  aquariumId: string | null;
+  fromDate: Date | null;
+  toDate: Date | null;
+}

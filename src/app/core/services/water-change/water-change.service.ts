@@ -5,9 +5,12 @@ import { MessageResponse } from '../../models/message-response.model';
 import {
   CreateEditWaterChangeDto,
   CreateEditWaterChangeOfAquariumDto,
+  WaterChangeListFiltersDto,
   WaterChangeListItem,
 } from '../../models/water-changes.model';
 import { PageRequest, PageResponse } from '../../models/pagination.model';
+import { HttpParams } from '@angular/common/http';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root',
@@ -27,14 +30,33 @@ export class WaterChangeService extends BaseService {
     );
   }
 
-  getAll(pagination: PageRequest): Observable<PageResponse<WaterChangeListItem>> {
+  getAll(
+    pagination: PageRequest,
+    filters?: WaterChangeListFiltersDto,
+  ): Observable<PageResponse<WaterChangeListItem>> {
+    let params: HttpParams = new HttpParams()
+      .set('page', pagination.page)
+      .set('pageSize', pagination.pageSize);
+
+    if (pagination.sortBy) {
+      params = params.set('sortBy', pagination.sortBy);
+      params = params.set('sortDirection', pagination.sortDirection);
+    }
+
+    if (filters?.aquariumId) {
+      params = params.set('aquariumId', filters.aquariumId);
+    }
+
+    if (filters?.fromDate) {
+      params = params.set('fromDate', filters.fromDate.toISOString().split('T')[0]);
+    }
+
+    if (filters?.toDate) {
+      params = params.set('toDate', filters.toDate.toISOString().split('T')[0]);
+    }
+
     return this.apiService.get<PageResponse<WaterChangeListItem>>('water-changes/list', {
-      params: {
-        page: pagination.page,
-        pageSize: pagination.pageSize,
-        sortBy: pagination.sortBy,
-        sortDirection: pagination.sortDirection,
-      },
+      params,
     });
   }
 

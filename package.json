@@ -22,8 +22,10 @@
     "@ng-icons/lucide": "^32.2.0",
     "@ng-icons/tabler-icons": "^35.0.1",
     "@spartan-ng/brain": "^1.1.0",
+    "@types/luxon": "^3.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "luxon": "^3.7.2",
     "rxjs": "~7.8.0",
     "tailwind-merge": "^3.5.0",
     "tslib": "^2.3.0"

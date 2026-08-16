@@ -12,13 +12,14 @@ export class FormSelect {
   // inputs
   readonly items = input.required<SelectOption[]>();
   readonly isLoading = input.required<boolean>();
-  readonly label = input.required<string>();
+  readonly value = input.required<string | null>();
   readonly placeholder = input<string>('Wybierz...');
-  readonly value = input<string | null>(null);
+  readonly showClear = input<boolean>(true);
 
   // outputs
-  readonly onSelection = output<string>();
+  readonly onSelection = output<string | null>();
 
+  // Methods
   readonly itemToStringFn = (val: string | null | undefined): string => {
     if (!val) {
       return '';
