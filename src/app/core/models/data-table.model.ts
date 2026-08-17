@@ -22,6 +22,9 @@ export interface TableColumn<T> {
   /** When true the column is not rendered in the DOM. */
   hidden?: boolean;
 
+  /** When true is not visible in the list - can be changed in Column Visibility. */
+  isVisible?: boolean;
+
   /** Optional custom cell renderer – a function that formats the raw value.
    *
    * @example

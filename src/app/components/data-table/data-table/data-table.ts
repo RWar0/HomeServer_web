@@ -6,6 +6,7 @@ import {
   model,
   booleanAttribute,
   TemplateRef,
+  signal,
 } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -13,182 +14,172 @@ import {
   lucideArrowUp,
   lucideChevronsUpDown,
   lucideMoreHorizontal,
+  lucideSettings2,
 } from '@ng-icons/lucide';
 
 import { HlmTableImports } from '@spartan-ng/helm/table';
 import { PaginationStore } from '../../../core/stores/pagination.store';
 import { SortDirectionEnum } from '../../../core/enums/sort-direction.enum';
 import { TableColumn } from '../../../core/models/data-table.model';
-import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
+import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+import { HlmButton } from "@spartan-ng/helm/button";
 
 @Component({
   selector: 'data-table',
-  imports: [NgIcon, HlmTableImports, HlmCheckboxImports, HlmDropdownMenuImports],
+  imports: [NgIcon, HlmTableImports, HlmCheckboxImports, HlmDropdownMenuImports, HlmButton],
   templateUrl: './data-table.html',
   styleUrl: './data-table.css',
   providers: [
-    provideIcons({ lucideArrowUp, lucideArrowDown, lucideChevronsUpDown, lucideMoreHorizontal }),
+    provideIcons({
+      lucideArrowUp,
+      lucideArrowDown,
+      lucideChevronsUpDown,
+      lucideMoreHorizontal,
+      lucideSettings2,
+    }),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full block',
   },
 })
-/*
-@input { T[] } records - The rows to display.
-@input { TableColumn<T>[] } columns - Column definitions (label, key, sortable flag, optional formatter).
-@input { PaginationStore } paginationStore - The PaginationStore instance provided by the parent component. Sort state is read from and written to this store.
-@input { boolean } selectable - Whether the table supports row selection
-@input { keyof T & string } idKey - The key in the record used to uniquely identify it for selection
-
-@model { string[] } selection - The array of selected record IDs
-*/
-/**
- * Example usage:
- * ```html
- * <data-table
- *   [records]="users"
- *   [columns]="columns"
- *   [paginationStore]="paginationStore"
- *
- *   selectable
- *   [(selection)]="selectedIds" // this should be like: protected readonly selectedIds = signal<string[]>([]);
- *
- * />
- * ```
- * Example of actions column:
- * ```html
- * <data-table
- *   [records]="records"
- *   [columns]="columns"
- *   [paginationStore]="paginationStore"
- *   [rowActions]="actionsMenu"
- * />
- *
- * <ng-template #actionsMenu let-row>
- *   <div hlmDropdownMenu class="w-48">
- *     <button hlmDropdownMenuItem (click)="onEdit(row)">Edytuj</button>
- *     <button hlmDropdownMenuItem (click)="onDelete(row)" class="text-destructive">Usuń</button>
- *   </div>
- * </ng-template>
- * ```
- *
- * Example column definition:
- * ```typescript
- * const columns: TableColumn<User>[] = [
- *   {
- *     label: 'First Name',
- *     key: 'firstName',
- *     sortable: true,
- *   },
- *   {
- *     label: 'Last Name',
- *     key: 'lastName',
- *     sortable: true,
- *   },
- *   {
- *     label: 'Email',
- *     key: 'email',
- *     sortable: true,
- *   },
- *   {
- *     label: 'Age',
- *     key: 'age',
- *     sortable: true,
- *   },
- * ];
- * ```
- *
- *
- * Example column definition with custom formatter:
- * ```typescript
- * const columns: TableColumn<User>[] = [
- *   {
- *     label: 'First Name',
- *     key: 'firstName',
- *     sortable: true,
- *   },
- *   {
- *     label: 'Last Name',
- *     key: 'lastName',
- *     sortable: true,
- *   },
- *   {
- *     label: 'Email',
- *     key: 'email',
- *     sortable: true,
- *   },
- *   {
- *     label: 'Age',
- *     key: 'age',
- *     sortable: true,
- *     format: (value) => (value != null ? `${value} y` : '—'),
- *   },
- * ];
- * ```
- */
 export class DataTable<T extends object> {
   // Inputs
+
   /** The rows to display. */
   readonly records = input.required<T[]>();
 
-  /** Column definitions (label, key, sortable flag, optional formatter). */
+  /** Column definitions. */
   readonly columns = input.required<TableColumn<T>[]>();
 
-  /**
-   * The PaginationStore instance provided by the parent component.
-   * Sort state is read from and written to this store.
-   */
+  /** The PaginationStore instance provided by the parent component. */
   readonly paginationStore = input.required<PaginationStore>();
 
-  /** Whether the table supports row selection */
-  readonly selectable = input<boolean, unknown>(false, { transform: booleanAttribute });
+  /** Whether the table supports row selection. */
+  readonly selectable = input<boolean, unknown>(false, {
+    transform: booleanAttribute,
+  });
 
-  /** The key in the record used to uniquely identify it for selection */
+  /** The key in the record used to uniquely identify it for selection. */
   readonly idKey = input<keyof T & string>('id' as any);
 
-  /** The array of selected record IDs */
+  /** The array of selected record IDs. */
   readonly selection = model<string[]>([]);
 
-  /** Optional template for rendering a dropdown menu of actions per row */
+  /** Optional template for rendering a dropdown menu of actions per row. */
   readonly rowActions = input<TemplateRef<{ $implicit: T }>>();
 
-  //  Derived state
+  // Derived state
+
   protected readonly sortBy = computed(() => this.paginationStore().sortBy());
+
   protected readonly sortDirection = computed(() => this.paginationStore().sortDirection());
 
-  //  Public helpers
-  protected readonly SortDirectionEnum = SortDirectionEnum;
+  /**
+   * Stores columns manually hidden by the user.
+   *
+   * `hidden` from TableColumn is not stored here because it represents
+   * a permanently hidden column.
+   */
+  private readonly userHiddenColumns = signal<Set<string>>(new Set());
 
   /**
-   * Returns the current sort icon name for a given column key.
-   * – 'lucideChevronsUpDown'  → column is not the active sort column
-   * – 'lucideArrowUp'         → column is sorted ASC
-   * – 'lucideArrowDown'       → column is sorted DESC
+   * Columns that can be controlled through Column Visibility.
+   *
+   * Permanently hidden columns are excluded.
    */
+  protected readonly configurableColumns = computed(() =>
+    this.columns().filter((column) => !column.hidden),
+  );
+
+  /**
+   * Currently visible columns.
+   *
+   * `hidden` always takes precedence.
+   * `isVisible` defines the initial visibility.
+   * `userHiddenColumns` defines the current user selection.
+   */
+  protected readonly visibleColumns = computed(() => {
+    const userHidden = this.userHiddenColumns();
+
+    return this.columns().filter((column) => {
+      if (column.hidden) {
+        return false;
+      }
+
+      if (userHidden.has(column.key)) {
+        return false;
+      }
+
+      return column.isVisible !== false;
+    });
+  });
+
+  /**
+   * Returns whether a configurable column is currently visible.
+   */
+  protected isColumnVisible(key: string): boolean {
+    return this.visibleColumns().some((column) => column.key === key);
+  }
+
+  /**
+   * Toggles visibility of a column.
+   *
+   * Permanently hidden columns cannot be changed.
+   * At least one configurable column must remain visible.
+   */
+  protected toggleColumn(key: string): void {
+    const column = this.columns().find((column) => column.key === key);
+
+    if (!column || column.hidden) {
+      return;
+    }
+
+    this.userHiddenColumns.update((current) => {
+      const next = new Set(current);
+
+      if (next.has(key)) {
+        next.delete(key);
+        return next;
+      }
+
+      const visibleConfigurableColumns = this.configurableColumns().filter(
+        (column) => !next.has(column.key) && column.isVisible !== false,
+      );
+
+      if (visibleConfigurableColumns.length <= 1) {
+        return current;
+      }
+
+      next.add(key);
+
+      return next;
+    });
+  }
+
+  /**
+   * Makes all configurable columns visible.
+   */
+  protected showAllColumns(): void {
+    this.userHiddenColumns.set(new Set());
+  }
+
+  // Sorting
+  protected readonly SortDirectionEnum = SortDirectionEnum;
+
   protected getSortIcon(key: string): string {
     if (this.sortBy() !== key) {
       return 'lucideChevronsUpDown';
     }
+
     return this.sortDirection() === SortDirectionEnum.asc ? 'lucideArrowUp' : 'lucideArrowDown';
   }
 
-  /**
-   * Returns true when the given column is the currently active sort column.
-   */
   protected isActiveSortColumn(key: string): boolean {
     return this.sortBy() === key;
   }
 
-  /**
-   * Handles a click on a sortable column header.
-   *
-   * Toggle logic:
-   *  – If the column is not currently sorted → sort ASC
-   *  – If the column is sorted ASC           → sort DESC
-   *  – If the column is sorted DESC          → sort ASC (cycle back)
-   */
   protected onSortClick(key: string): void {
     const currentSortBy = this.sortBy();
     const currentDir = this.sortDirection();
@@ -203,13 +194,10 @@ export class DataTable<T extends object> {
     }
 
     this.paginationStore().setSort(key, nextDirection);
-    // Reset to first page when sorting changes
     this.paginationStore().setPage(1);
   }
 
-  /**
-   * Safely reads a cell value from a row and applies optional formatting.
-   */
+  // Cells
   protected getCellValue(row: T, col: TableColumn<T>): string {
     const raw = (row as Record<string, unknown>)[col.key];
 
@@ -224,7 +212,7 @@ export class DataTable<T extends object> {
     return String(raw);
   }
 
-  // Selection helpers
+  // Selection
   protected isSelected(row: T): boolean {
     const id = String((row as Record<string, unknown>)[this.idKey()]);
     return this.selection().includes(id);
@@ -232,6 +220,7 @@ export class DataTable<T extends object> {
 
   protected toggleSelection(row: T): void {
     const id = String((row as Record<string, unknown>)[this.idKey()]);
+
     this.selection.update((current) =>
       current.includes(id) ? current.filter((x) => x !== id) : [...current, id],
     );
@@ -240,7 +229,11 @@ export class DataTable<T extends object> {
   protected readonly isAllOnPageSelected = computed(() => {
     const records = this.records();
     const selection = this.selection();
-    if (records.length === 0) return false;
+
+    if (records.length === 0) {
+      return false;
+    }
+
     return records.every((row) => {
       const id = String((row as Record<string, unknown>)[this.idKey()]);
       return selection.includes(id);
@@ -250,12 +243,21 @@ export class DataTable<T extends object> {
   protected readonly isSomeOnPageSelected = computed(() => {
     const records = this.records();
     const selection = this.selection();
-    if (records.length === 0) return false;
+
+    if (records.length === 0) {
+      return false;
+    }
+
     let selectedCount = 0;
+
     for (const row of records) {
       const id = String((row as Record<string, unknown>)[this.idKey()]);
-      if (selection.includes(id)) selectedCount++;
+
+      if (selection.includes(id)) {
+        selectedCount++;
+      }
     }
+
     return selectedCount > 0 && selectedCount < records.length;
   });
 
@@ -264,21 +266,23 @@ export class DataTable<T extends object> {
     const allSelected = this.isAllOnPageSelected();
 
     if (allSelected) {
-      // Deselect all on current page
       const idsToRemove = records.map((row) =>
         String((row as Record<string, unknown>)[this.idKey()]),
       );
+
       this.selection.update((current) => current.filter((id) => !idsToRemove.includes(id)));
     } else {
-      // Select all on current page
       const idsToAdd = records.map((row) => String((row as Record<string, unknown>)[this.idKey()]));
+
       this.selection.update((current) => {
         const newSelection = [...current];
+
         for (const id of idsToAdd) {
           if (!newSelection.includes(id)) {
             newSelection.push(id);
           }
         }
+
         return newSelection;
       });
     }

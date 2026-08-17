@@ -1,3 +1,49 @@
+<div class="flex items-center justify-end mb-2">
+  <button
+    type="button"
+    class="inline-flex h-9 items-center gap-2 rounded-md border border-gray-200/70 bg-white px-3 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:text-foreground"
+    [hlmDropdownMenuTrigger]="columnsVisibilityMenu"
+  >
+    <ng-icon name="lucideSettings2" size="16" />
+    <span>Kolumny</span>
+  </button>
+
+  <ng-template #columnsVisibilityMenu>
+    <div hlmDropdownMenu class="w-56">
+      <div hlmDropdownMenuLabel>Widoczność kolumn</div>
+
+      @for (col of configurableColumns(); track col.key) {
+        <button
+          hlmBtn
+          type="button"
+          class="flex items-center justify-start gap-3 py-0.5 w-full"
+          variant="ghost"
+          (click)="toggleColumn(col.key)"
+        >
+          <hlm-checkbox
+            tabindex="-1"
+            [checked]="isColumnVisible(col.key)"
+            class="pointer-events-none"
+          />
+          <span>{{ col.label }}</span>
+        </button>
+      }
+
+      <div class="my-1 h-px bg-border"></div>
+
+      <button
+        hlmBtn
+        type="button"
+        class="flex items-center justify-start gap-3 py-1 w-full"
+        variant="ghost"
+        (click)="showAllColumns()"
+      >
+        Pokaż wszystkie
+      </button>
+    </div>
+  </ng-template>
+</div>
+
 <div hlmTableContainer class="bg-white border border-gray-200/70 shadow rounded-md">
   <table hlmTable>
     <!-- Headers -->
@@ -12,36 +58,37 @@
             />
           </th>
         }
-        @for (col of columns(); track col.key) {
-          @if (!col.hidden) {
-            <th
-              hlmTableHead
-              [class]="
-                col.sortable
-                  ? 'cursor-pointer select-none transition-colors duration-150 hover:bg-primary/8 hover:text-primary'
-                  : ''
-              "
-              [class.text-primary]="col.sortable && isActiveSortColumn(col.key)"
-              [class.font-semibold]="col.sortable && isActiveSortColumn(col.key)"
-              (click)="col.sortable && onSortClick(col.key)"
-            >
-              <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
-                {{ col.label }}
-                @if (col.sortable) {
-                  <span
-                    class="inline-flex items-center transition-all duration-200"
-                    [class.text-primary]="isActiveSortColumn(col.key)"
-                    [class.opacity-100]="isActiveSortColumn(col.key)"
-                    [class.text-muted-foreground]="!isActiveSortColumn(col.key)"
-                    [class.opacity-50]="!isActiveSortColumn(col.key)"
-                  >
-                    <ng-icon [name]="getSortIcon(col.key)" size="14" />
-                  </span>
-                }
-              </span>
-            </th>
-          }
+
+        @for (col of visibleColumns(); track col.key) {
+          <th
+            hlmTableHead
+            [class]="
+              col.sortable
+                ? 'cursor-pointer select-none transition-colors duration-150 hover:bg-primary/8 hover:text-primary'
+                : ''
+            "
+            [class.text-primary]="col.sortable && isActiveSortColumn(col.key)"
+            [class.font-semibold]="col.sortable && isActiveSortColumn(col.key)"
+            (click)="col.sortable && onSortClick(col.key)"
+          >
+            <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+              {{ col.label }}
+
+              @if (col.sortable) {
+                <span
+                  class="inline-flex items-center transition-all duration-200"
+                  [class.text-primary]="isActiveSortColumn(col.key)"
+                  [class.opacity-100]="isActiveSortColumn(col.key)"
+                  [class.text-muted-foreground]="!isActiveSortColumn(col.key)"
+                  [class.opacity-50]="!isActiveSortColumn(col.key)"
+                >
+                  <ng-icon [name]="getSortIcon(col.key)" size="14" />
+                </span>
+              }
+            </span>
+          </th>
         }
+
         @if (rowActions()) {
           <th hlmTableHead class="w-12 text-center p-3 align-middle"></th>
         }
@@ -53,7 +100,9 @@
       @if (records().length === 0) {
         <tr hlmTableRow>
           <td
-            [attr.colspan]="columns().length + (selectable() ? 1 : 0) + (rowActions() ? 1 : 0)"
+            [attr.colspan]="
+              visibleColumns().length + (selectable() ? 1 : 0) + (rowActions() ? 1 : 0)
+            "
             hlmTableCell
             class="py-10 text-center text-muted-foreground italic"
           >
@@ -61,6 +110,7 @@
           </td>
         </tr>
       }
+
       @for (row of records(); track $index) {
         <tr
           hlmTableRow
@@ -72,17 +122,22 @@
               <hlm-checkbox [checked]="isSelected(row)" (checkedChange)="toggleSelection(row)" />
             </td>
           }
-          @for (col of columns(); track col.key) {
-            @if (!col.hidden) {
-              <td hlmTableCell>{{ getCellValue(row, col) }}</td>
-            }
+
+          @for (col of visibleColumns(); track col.key) {
+            <td hlmTableCell>
+              {{ getCellValue(row, col) }}
+            </td>
           }
+
           @if (rowActions()) {
             <td hlmTableCell class="w-12 text-center p-1 align-middle">
               <button
+                type="button"
                 class="flex h-8 w-8 items-center justify-center rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors ml-auto mr-auto"
                 [hlmDropdownMenuTrigger]="rowActions()!"
-                [hlmDropdownMenuTriggerData]="{ $implicit: row }"
+                [hlmDropdownMenuTriggerData]="{
+                  $implicit: row,
+                }"
               >
                 <ng-icon name="lucideMoreHorizontal" size="16" />
               </button>
