@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   CreateEditParametersCheckDto,
+  CreateEditParametersCheckForAquariumDto,
   ParametersCheckListFiltersDto,
   ParametersCheckListItem,
 } from '../../models/parameters-check.model';
@@ -17,6 +18,16 @@ import { MessageResponse } from '../../models/message-response.model';
 export class ParametersCheckService extends BaseService {
   create(parameterCheckData: CreateEditParametersCheckDto): Observable<MessageResponse> {
     return this.apiService.post<MessageResponse>(`parameter-checks`, parameterCheckData);
+  }
+
+  createForAquarium(
+    aquariumId: string,
+    parameterCheckData: CreateEditParametersCheckForAquariumDto,
+  ): Observable<MessageResponse> {
+    return this.apiService.post<MessageResponse>(
+      `parameter-checks/for-aquarium/${aquariumId}`,
+      parameterCheckData,
+    );
   }
 
   getAll(
@@ -61,6 +72,16 @@ export class ParametersCheckService extends BaseService {
   ): Observable<MessageResponse> {
     return this.apiService.put<MessageResponse>(
       `parameter-checks/${parameterCheckId}`,
+      parameterCheckData,
+    );
+  }
+
+  updateForAquarium(
+    parameterCheckId: string,
+    parameterCheckData: CreateEditParametersCheckForAquariumDto,
+  ): Observable<MessageResponse> {
+    return this.apiService.put<MessageResponse>(
+      `parameter-checks/for-aquarium/${parameterCheckId}`,
       parameterCheckData,
     );
   }

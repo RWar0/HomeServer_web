@@ -38,3 +38,14 @@ export interface AquariumPhotoWithMetadata {
   createdAt: Date;
   imageUrl: string | null;
 }
+
+export interface AquariumParameterCheckListItem {
+  id: string;
+  ph?: number | null;
+  kh?: number | null;
+  gh?: number | null;
+  no3?: number | null;
+  no2?: number | null;
+  temperature?: number | null;
+  measuredAt: Date;
+}

@@ -1,0 +1,60 @@
+<div class="px-2">
+  <nav class="flex justify-end mb-2 gap-1">
+    <button hlmBtn size="sm" (click)="createEditDialogCmp.openCreate()" variant="success">
+      <ng-icon name="lucidePlus" />
+      Dodaj pomiar
+    </button>
+    <refresh-list-button
+      (onRefresh)="refreshList()"
+      [isRefreshing]="parameterChecksData.status() === 'loading'"
+    />
+  </nav>
+
+  <data-table
+    [records]="parameterCheckRecords"
+    [columns]="parameterCheckColumns"
+    [paginationStore]="paginationStore"
+    [rowActions]="actionsMenu"
+  />
+
+  <ng-template #actionsMenu let-row>
+    <div hlmDropdownMenu class="w-48">
+      <button
+        hlmDropdownMenuItem
+        (click)="createEditDialogCmp.openEdit(row.id)"
+        variant="secondary"
+      >
+        <ng-icon name="lucideNotebookPen" />
+        Edytuj
+      </button>
+      <button
+        hlmDropdownMenuItem
+        (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, `z dnia ${row.changeDate}`)"
+        variant="destructive"
+      >
+        <ng-icon name="lucideTrash2" />
+        Usuń
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="mt-3"></div>
+  <pagination
+    [paginationState]="paginationStore.state"
+    (pageChange)="paginationStore.setPage($event)"
+    (pageSizeChange)="paginationStore.setPageSize($event)"
+  >
+  </pagination>
+</div>
+
+<delete-confirm-dialog
+  #deleteDialogCmp
+  elementName="Podmianę wody"
+  (onConfirm)="onDelete($event || '')"
+/>
+
+<aquarium-parameter-check-create-edit-dialog
+  #createEditDialogCmp
+  [aquariumId]="aquariumId()"
+  (refreshList)="refreshList()"
+/>

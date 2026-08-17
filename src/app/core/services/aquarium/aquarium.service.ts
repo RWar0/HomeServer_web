@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AquariumDetailsDto,
   AquariumListItem,
+  AquariumParameterCheckListItem,
   AquariumPhotoDto,
   CreateEditAquariumDto,
 } from '../../models/aquarium.model';
@@ -50,6 +51,23 @@ export class AquariumService extends BaseService {
   ): Observable<PageResponse<AquariumWaterChangeListItem>> {
     return this.apiService.get<PageResponse<AquariumWaterChangeListItem>>(
       `aquariums/${id}/water-changes`,
+      {
+        params: {
+          page: pagination.page,
+          pageSize: pagination.pageSize,
+          sortBy: pagination.sortBy,
+          sortDirection: pagination.sortDirection,
+        },
+      },
+    );
+  }
+
+  getAquariumParameterChecks(
+    id: string,
+    pagination: PageRequest,
+  ): Observable<PageResponse<AquariumParameterCheckListItem>> {
+    return this.apiService.get<PageResponse<AquariumParameterCheckListItem>>(
+      `aquariums/${id}/parameter-checks`,
       {
         params: {
           page: pagination.page,
