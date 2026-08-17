@@ -101,34 +101,38 @@ export class AquariumCreateEditDialog {
     } else {
       this.createAquarium(aquariumData);
     }
-
-    this.isSubmitting.set(false);
   }
 
   private createAquarium(aquariumData: CreateEditAquariumDto): void {
-    this.aquariumService.createAquarium(aquariumData).subscribe({
-      next: (res) => {
-        // Clear form
-        this.createAquariumForm.reset();
-        this.createAquariumForm.markAsUntouched();
+    this.aquariumService
+      .createAquarium(aquariumData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          // Clear form
+          this.createAquariumForm.reset();
+          this.createAquariumForm.markAsUntouched();
 
-        this.processSuccess(res);
-      },
-      error: (error) => {
-        displayApiError(error);
-      },
-    });
+          this.processSuccess(res);
+        },
+        error: (error) => {
+          displayApiError(error);
+        },
+      });
   }
 
   private editAquarium(aquariumData: CreateEditAquariumDto): void {
-    this.aquariumService.updateAquarium(this.aquariumId()!, aquariumData).subscribe({
-      next: (res) => {
-        this.processSuccess(res);
-      },
-      error: (error) => {
-        displayApiError(error);
-      },
-    });
+    this.aquariumService
+      .updateAquarium(this.aquariumId()!, aquariumData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          this.processSuccess(res);
+        },
+        error: (error) => {
+          displayApiError(error);
+        },
+      });
   }
 
   private processSuccess(res: MessageResponse): void {

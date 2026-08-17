@@ -17,7 +17,6 @@ import { SelectOption } from '../../../core/models/select.model';
 import { toast } from '@spartan-ng/brain/sonner';
 import { CreateEditParametersCheckDto } from '../../../core/models/parameters-check.model';
 import { MessageResponse } from '../../../core/models/message-response.model';
-import { FormDatePicker } from '../../date-picker/form-date-picker/form-date-picker';
 
 @Component({
   selector: 'parameter-check-create-edit-dialog',
@@ -173,30 +172,34 @@ export class ParameterCheckCreateEditDialog {
     } else {
       this.createParameterCheck(parameterCheckData);
     }
-
-    this.isSubmitting.set(false);
   }
 
   private editParameterCheck(parameterCheckData: CreateEditParametersCheckDto): void {
-    this.parameterCheckService.update(this.parameterCheckId()!, parameterCheckData).subscribe({
-      next: (res) => {
-        this.processSuccess(res);
-      },
-      error: (err) => {
-        displayApiError(err);
-      },
-    });
+    this.parameterCheckService
+      .update(this.parameterCheckId()!, parameterCheckData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          this.processSuccess(res);
+        },
+        error: (err) => {
+          displayApiError(err);
+        },
+      });
   }
 
   private createParameterCheck(parameterCheckData: CreateEditParametersCheckDto): void {
-    this.parameterCheckService.create(parameterCheckData).subscribe({
-      next: (res) => {
-        this.processSuccess(res);
-      },
-      error: (err) => {
-        displayApiError(err);
-      },
-    });
+    this.parameterCheckService
+      .create(parameterCheckData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          this.processSuccess(res);
+        },
+        error: (err) => {
+          displayApiError(err);
+        },
+      });
   }
 
   private processSuccess(res: MessageResponse): void {
@@ -217,6 +220,10 @@ export class ParameterCheckCreateEditDialog {
   }
 
   private open(parameterCheckId: string | null) {
+    this.parameterCheckForm.reset();
+    this.parameterCheckForm.markAsUntouched();
+
+    this.parameterCheckId.set(null);
     this.parameterCheckId.set(parameterCheckId);
     this.dialog().open();
   }

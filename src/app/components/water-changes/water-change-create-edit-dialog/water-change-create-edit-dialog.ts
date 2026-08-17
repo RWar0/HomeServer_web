@@ -133,30 +133,34 @@ export class WaterChangeCreateEditDialog {
     } else {
       this.createWaterChange(waterChangeData);
     }
-
-    this.isSubmitting.set(false);
   }
 
   private editWaterChange(waterChangeData: CreateEditWaterChangeDto): void {
-    this.waterChangeService.updateWaterChange(this.waterChangeId()!, waterChangeData).subscribe({
-      next: (res) => {
-        this.processSuccess(res);
-      },
-      error: (err) => {
-        displayApiError(err);
-      },
-    });
+    this.waterChangeService
+      .updateWaterChange(this.waterChangeId()!, waterChangeData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          this.processSuccess(res);
+        },
+        error: (err) => {
+          displayApiError(err);
+        },
+      });
   }
 
   private createWaterChange(waterChangeData: CreateEditWaterChangeDto): void {
-    this.waterChangeService.createWaterChange(waterChangeData).subscribe({
-      next: (res) => {
-        this.processSuccess(res);
-      },
-      error: (err) => {
-        displayApiError(err);
-      },
-    });
+    this.waterChangeService
+      .createWaterChange(waterChangeData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          this.processSuccess(res);
+        },
+        error: (err) => {
+          displayApiError(err);
+        },
+      });
   }
 
   private processSuccess(res: MessageResponse): void {
@@ -176,6 +180,10 @@ export class WaterChangeCreateEditDialog {
   }
 
   private open(waterChangeId: string | null) {
+    this.changeWaterForm.reset();
+    this.changeWaterForm.markAsUntouched();
+
+    this.waterChangeId.set(null);
     this.waterChangeId.set(waterChangeId);
     this.dialog().open();
   }

@@ -133,13 +133,12 @@ export class AquariumParameterCheckCreateEditDialog {
     } else {
       this.createParameterCheck(parameterCheckData);
     }
-
-    this.isSubmitting.set(false);
   }
 
   private editParameterCheck(parameterCheckData: CreateEditParametersCheckForAquariumDto): void {
     this.parameterCheckService
       .updateForAquarium(this.parameterCheckId()!, parameterCheckData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => {
           this.processSuccess(res);
@@ -151,22 +150,27 @@ export class AquariumParameterCheckCreateEditDialog {
   }
 
   private createParameterCheck(parameterCheckData: CreateEditParametersCheckForAquariumDto): void {
-    this.parameterCheckService.createForAquarium(this.aquariumId(), parameterCheckData).subscribe({
-      next: (res) => {
-        this.processSuccess(res);
-      },
-      error: (err) => {
-        displayApiError(err);
-      },
-    });
+    this.parameterCheckService
+      .createForAquarium(this.aquariumId(), parameterCheckData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          this.processSuccess(res);
+        },
+        error: (err) => {
+          displayApiError(err);
+        },
+      });
   }
 
   private processSuccess(res: MessageResponse): void {
     this.refreshList.emit();
     toast.success(res.message);
     this.dialog().close();
+
     this.parameterCheckForm.reset();
     this.parameterCheckForm.markAsUntouched();
+    this.parameterCheckId.set(null);
   }
 
   openCreate() {
@@ -178,6 +182,10 @@ export class AquariumParameterCheckCreateEditDialog {
   }
 
   private open(parameterCheckId: string | null) {
+    this.parameterCheckForm.reset();
+    this.parameterCheckForm.markAsUntouched();
+
+    this.parameterCheckId.set(null);
     this.parameterCheckId.set(parameterCheckId);
     this.dialog().open();
   }

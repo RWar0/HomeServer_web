@@ -102,13 +102,12 @@ export class AquariumWaterChangeCreateEditDialog {
     } else {
       this.createWaterChange(waterChangeData);
     }
-
-    this.isSubmitting.set(false);
   }
 
   private editWaterChange(waterChangeData: CreateEditWaterChangeOfAquariumDto): void {
     this.waterChangeService
       .updateWaterChangeForAquarium(this.waterChangeId()!, waterChangeData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => {
           this.processSuccess(res);
@@ -122,6 +121,7 @@ export class AquariumWaterChangeCreateEditDialog {
   private createWaterChange(waterChangeData: CreateEditWaterChangeOfAquariumDto): void {
     this.waterChangeService
       .createWaterChangeForAquarium(this.aquariumId(), waterChangeData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => {
           this.processSuccess(res);
@@ -138,6 +138,7 @@ export class AquariumWaterChangeCreateEditDialog {
     this.dialog()?.close();
     this.changeWaterForm.reset();
     this.changeWaterForm.markAsUntouched();
+    this.waterChangeId.set(null);
   }
 
   openCreate() {
@@ -149,6 +150,10 @@ export class AquariumWaterChangeCreateEditDialog {
   }
 
   private open(waterChangeId: string | null) {
+    this.changeWaterForm.reset();
+    this.changeWaterForm.markAsUntouched();
+
+    this.waterChangeId.set(null);
     this.waterChangeId.set(waterChangeId);
     this.dialog().open();
   }
