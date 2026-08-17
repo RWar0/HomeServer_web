@@ -34,8 +34,6 @@ import { RefreshListButton } from '../../../components/common/refresh-list-butto
 export class AquariumListPage {
   private readonly aquariumService = inject(AquariumService);
 
-  protected readonly createEditDialog = viewChild.required(AquariumCreateEditDialog);
-  protected readonly selectedAquariumId = signal<string | null>(null);
   private readonly reload = signal(0);
 
   protected RolesEnum = RolesEnum;
@@ -48,15 +46,5 @@ export class AquariumListPage {
 
   protected refreshAquariums(): void {
     this.reload.update((item) => item + 1);
-  }
-
-  protected openCreateDialog(): void {
-    this.selectedAquariumId.set(null);
-    this.createEditDialog()?.dialog().open();
-  }
-
-  protected openEditDialog(id: string): void {
-    this.selectedAquariumId.set(id);
-    this.createEditDialog()?.dialog().open();
   }
 }

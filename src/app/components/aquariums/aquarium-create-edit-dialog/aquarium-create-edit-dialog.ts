@@ -37,11 +37,11 @@ export class AquariumCreateEditDialog {
   private readonly aquariumService = inject(AquariumService);
 
   // I/O
-  readonly aquariumId = input.required<string | null>();
   public readonly refreshList = output<void>();
 
   // Signals
   readonly dialog = viewChild.required(HlmDialog);
+  readonly aquariumId = signal<string | null>(null);
   protected readonly isSubmitting = signal(false);
   protected readonly isLoadingData = signal(false);
 
@@ -144,5 +144,23 @@ export class AquariumCreateEditDialog {
 
     // Close dialog
     this.dialog()?.close();
+  }
+
+  // Open - Create / Edit
+  openCreate() {
+    this.open(null);
+  }
+
+  openEdit(aquariumId: string) {
+    this.open(aquariumId);
+  }
+
+  private open(aquariumId: string | null) {
+    this.createAquariumForm.reset();
+    this.createAquariumForm.markAsUntouched();
+
+    this.aquariumId.set(null);
+    this.aquariumId.set(aquariumId);
+    this.dialog().open();
   }
 }
