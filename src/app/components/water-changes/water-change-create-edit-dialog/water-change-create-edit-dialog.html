@@ -4,8 +4,8 @@
   <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-sm md:w-md">
     @if (isLoadingData()) {
       <hlm-dialog-header>
-        <h3 hlmDialogTitle>{{ waterChangeId() ? 'Edytuj' : 'Utwórz' }} akwarium</h3>
-        <p hlmDialogDescription>{{ waterChangeId() ? 'Edytuj' : 'Wprowadź' }} dane akwarium</p>
+        <h3 hlmDialogTitle>{{ waterChangeId() ? 'Edytuj' : 'Utwórz' }} podmianę wody</h3>
+        <p hlmDialogDescription>{{ waterChangeId() ? 'Edytuj' : 'Wprowadź' }} dane podmiany wody</p>
       </hlm-dialog-header>
       <div class="flex items-center justify-center h-50">
         <hlm-spinner class="text-3xl text-primary" />
@@ -22,8 +22,10 @@
     } @else {
       <form [formGroup]="changeWaterForm" (ngSubmit)="submitForm()">
         <hlm-dialog-header>
-          <h3 hlmDialogTitle>{{ waterChangeId() ? 'Edytuj' : 'Utwórz' }} akwarium</h3>
-          <p hlmDialogDescription>{{ waterChangeId() ? 'Edytuj' : 'Wprowadź' }} dane akwarium</p>
+          <h3 hlmDialogTitle>{{ waterChangeId() ? 'Edytuj' : 'Utwórz' }} podmianę wody</h3>
+          <p hlmDialogDescription>
+            {{ waterChangeId() ? 'Edytuj' : 'Wprowadź' }} dane podmiany wody
+          </p>
         </hlm-dialog-header>
         <hlm-field-group>
           <hlm-field>
@@ -66,7 +68,7 @@
                 changeWaterForm.controls.aquariumId.invalid &&
                 changeWaterForm.controls.aquariumId.touched
               "
-              message="Data podmiany wody jest wymagana!"
+              message="Akwarium jest wymagane!"
             ></error-label>
           </hlm-field>
         </hlm-field-group>

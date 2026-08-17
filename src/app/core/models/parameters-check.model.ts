@@ -1,25 +1,25 @@
 export interface ParametersCheckListItem {
   id: string;
   ph?: number;
-  kH?: number;
-  gH?: number;
-  nO3?: number;
-  nO2?: number;
+  kh?: number;
+  gh?: number;
+  no3?: number;
+  no2?: number;
   temperature?: number;
   measuredAt: Date;
   aquariumId: string;
   aquariumName: string;
 }
 
-export interface AddEditParametersCheckDto {
+export interface CreateEditParametersCheckDto {
   aquariumId: string;
-  ph?: number;
-  kH?: number;
-  gH?: number;
-  nO3?: number;
-  nO2?: number;
-  temperature?: number;
-  measuredAt: Date;
+  ph?: number | null;
+  kh?: number | null;
+  gh?: number | null;
+  no3?: number | null;
+  no2?: number | null;
+  temperature?: number | null;
+  measuredAt: string;
 }
 
 export interface ParametersCheckListFiltersDto {

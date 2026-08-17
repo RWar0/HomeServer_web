@@ -22,9 +22,13 @@ import { syncQueryParams } from '../../../core/helpers/signal-patameter-query-sy
 import { FormSelect } from '../../../components/select/form-select/form-select';
 import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideFilterX } from '@ng-icons/lucide';
+import { lucideFilterX, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
 import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
 import { SelectOption } from '../../../core/models/select.model';
+import { ParameterCheckCreateEditDialog } from '../../../components/parameter-checks/parameter-check-create-edit-dialog/parameter-check-create-edit-dialog';
+import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
+import { toast } from '@spartan-ng/brain/sonner';
+import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 
 @Component({
   selector: 'app-parameters-check-page',
@@ -38,10 +42,17 @@ import { SelectOption } from '../../../core/models/select.model';
     FormSelect,
     FormDatePicker,
     NgIcon,
+    ParameterCheckCreateEditDialog,
+    HasRoleDirective,
+    DeleteConfirmDialog,
   ],
   templateUrl: './parameter-checks-page.html',
   styleUrl: './parameter-checks-page.css',
-  providers: [PaginationStore, DatePipe, provideIcons({ lucideFilterX })],
+  providers: [
+    PaginationStore,
+    DatePipe,
+    provideIcons({ lucideFilterX, lucidePlus, lucideNotebookPen, lucideTrash2 }),
+  ],
 })
 export class ParameterChecksPage {
   // Injects
@@ -89,22 +100,22 @@ export class ParameterChecksPage {
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {
-      key: 'kH',
+      key: 'kh',
       label: 'KH',
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {
-      key: 'gH',
+      key: 'gh',
       label: 'GH',
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {
-      key: 'nO3',
+      key: 'no3',
       label: 'NO3',
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {
-      key: 'nO2',
+      key: 'no2',
       label: 'NO2',
       format: (value) => (value != null ? value.toString() : '-'),
     },
@@ -184,6 +195,22 @@ export class ParameterChecksPage {
   }
 
   // Row Actions
+  protected onDelete(parameterCheckId: string): void {
+    if (!parameterCheckId) {
+      toast.error('Brak danych', { description: 'Identyfikator pomiaru jest wymagany' });
+      return;
+    }
+
+    this.parametersCheckService.delete(parameterCheckId).subscribe({
+      next: (res) => {
+        toast.success(res.message);
+        this.refreshList();
+      },
+      error: (error) => {
+        displayApiError(error);
+      },
+    });
+  }
 
   // Helpers
   protected setFilter<K extends keyof ParametersCheckListFiltersDto>(
