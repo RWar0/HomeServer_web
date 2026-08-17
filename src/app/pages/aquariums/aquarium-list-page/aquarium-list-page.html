@@ -16,15 +16,7 @@
       >
         <ng-icon name="lucidePlus" />
       </button>
-      <button
-        hlmBtn
-        (click)="refreshAquariums()"
-        variant="info"
-        hlmTooltip="Odswiez listę"
-        class="flex items-center justify-center"
-      >
-        <ng-icon name="lucideRefreshCcw" />
-      </button>
+      <refresh-list-button [isRefreshing]="aquariums.isLoading()" (refresh)="refreshAquariums()" />
     </div>
   </header>
 

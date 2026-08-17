@@ -12,6 +12,7 @@ import { AquariumPhotosPage } from './pages/aquariums/aquarium-photos-page/aquar
 import { PhotoPreview } from './pages/photos/photo-preview/photo-preview';
 import { AquariumWaterChangesPage } from './pages/aquariums/aquarium-water-changes-page/aquarium-water-changes-page';
 import { WaterChangesPage } from './pages/water-changes/water-changes-page/water-changes-page';
+import { ParameterChecksPage } from './pages/parameter-checks/parameter-checks-page/parameter-checks-page';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,10 @@ export const routes: Routes = [
           {
             path: 'water-changes',
             component: WaterChangesPage,
+          },
+          {
+            path: 'parameter-checks',
+            component: ParameterChecksPage,
           },
         ],
       },

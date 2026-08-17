@@ -29,6 +29,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
             url: 'water-changes',
             icon: 'tablerBucket',
           },
+          {
+            title: 'Parametry wody',
+            url: 'parameter-checks',
+            icon: 'lucideTestTube2',
+          },
         ],
       },
     ],

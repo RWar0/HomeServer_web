@@ -40,8 +40,9 @@
                       <span [class.font-medium]="rla.isActive">{{ item.title }}</span>
                     </a>
                   </li>
-                  <!-- If item in section has sub-pages -->
-                } @else {
+                }
+                <!-- If item in section has sub-pages -->
+                @else {
                   <hlm-collapsible
                     class="group/collapsible"
                     [expanded]="activeCollapsible() === item.title"
@@ -77,6 +78,12 @@
                                 routerLinkActive
                                 #rla="routerLinkActive"
                                 [routerLink]="[item.url, ...(subItem.url ? [subItem.url] : [])]"
+                                [routerLinkActiveOptions]="{
+                                  paths: 'exact',
+                                  queryParams: 'ignored',
+                                  fragment: 'ignored',
+                                  matrixParams: 'ignored',
+                                }"
                                 class="flex items-center gap-1"
                               >
                                 @if (subItem.icon) {

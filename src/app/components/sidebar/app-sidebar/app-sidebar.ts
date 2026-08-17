@@ -7,6 +7,7 @@ import {
   lucideHouse,
   lucideList,
   lucideLockKeyholeOpen,
+  lucideTestTube2,
   lucideUsers,
 } from '@ng-icons/lucide';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
@@ -40,6 +41,7 @@ import { tablerBucket } from '@ng-icons/tabler-icons';
       lucideFish,
       lucideList,
       tablerBucket,
+      lucideTestTube2,
     }),
   ],
 })
