@@ -1,8 +1,4 @@
-<aquarium-create-edit-dialog
-  *appHasAnyRole="[RolesEnum.Moderator, RolesEnum.Admin]"
-  [aquariumId]="selectedAquariumId()"
-  (refreshList)="refreshAquariums()"
->
+<aquarium-create-edit-dialog [aquariumId]="selectedAquariumId()" (refreshList)="refreshAquariums()">
   <header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
     <h2 class="font-bold text-2xl text-primary">Aktualne akwaria</h2>
     <div class="ms-auto flex gap-2 align-center items-center">

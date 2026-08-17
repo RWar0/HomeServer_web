@@ -26,7 +26,6 @@ import { lucideFilterX, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-
 import { AquariumService } from '../../../core/services/aquarium/aquarium.service';
 import { SelectOption } from '../../../core/models/select.model';
 import { ParameterCheckCreateEditDialog } from '../../../components/parameter-checks/parameter-check-create-edit-dialog/parameter-check-create-edit-dialog';
-import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 import { toast } from '@spartan-ng/brain/sonner';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 
@@ -43,7 +42,6 @@ import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-d
     FormDatePicker,
     NgIcon,
     ParameterCheckCreateEditDialog,
-    HasRoleDirective,
     DeleteConfirmDialog,
   ],
   templateUrl: './parameter-checks-page.html',

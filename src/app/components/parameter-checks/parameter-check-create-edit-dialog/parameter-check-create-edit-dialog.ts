@@ -32,7 +32,6 @@ import { FormDatePicker } from '../../date-picker/form-date-picker/form-date-pic
     HlmSpinnerImports,
     SubmitButton,
     FormSelect,
-    FormDatePicker,
   ],
   templateUrl: './parameter-check-create-edit-dialog.html',
   styleUrl: './parameter-check-create-edit-dialog.css',

@@ -9,7 +9,7 @@ import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 import { AquariumCreateEditDialog } from '../../../components/aquariums/aquarium-create-edit-dialog/aquarium-create-edit-dialog';
 import { RolesEnum } from '../../../core/enums/roles.enum';
-import { RefreshListButton } from "../../../components/common/refresh-list-button/refresh-list-button";
+import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 
 @Component({
   selector: 'app-aquarium-list-page',
@@ -20,8 +20,8 @@ import { RefreshListButton } from "../../../components/common/refresh-list-butto
     NgIcon,
     AquariumCreateEditDialog,
     HasRoleDirective,
-    RefreshListButton
-],
+    RefreshListButton,
+  ],
   templateUrl: './aquarium-list-page.html',
   styleUrl: './aquarium-list-page.css',
   viewProviders: [

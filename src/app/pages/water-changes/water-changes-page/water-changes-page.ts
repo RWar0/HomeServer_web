@@ -21,7 +21,6 @@ import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-d
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { toast } from '@spartan-ng/brain/sonner';
 import { WaterChangeCreateEditDialog } from '../../../components/water-changes/water-change-create-edit-dialog/water-change-create-edit-dialog';
-import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 import { RolesEnum } from '../../../core/enums/roles.enum';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { FormSelect } from '../../../components/select/form-select/form-select';
@@ -42,7 +41,6 @@ import { FormDatePicker } from '../../../components/date-picker/form-date-picker
     DeleteConfirmDialog,
     RefreshListButton,
     WaterChangeCreateEditDialog,
-    HasRoleDirective,
     FormSelect,
     FormDatePicker,
   ],

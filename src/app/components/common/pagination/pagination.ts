@@ -14,7 +14,7 @@ export class Pagination {
   readonly pageChange = output<number>();
   readonly pageSizeChange = output<number>();
 
-  protected readonly pageSizes = signal<number[]>([2, 10, 20, 50, 100]);
+  protected readonly pageSizes = signal<number[]>([10, 20, 50, 100]);
 
   protected readonly _pageSizesWithCurrent = computed(() =>
     this.pageSizes().includes(this.paginationState().pageSize)
