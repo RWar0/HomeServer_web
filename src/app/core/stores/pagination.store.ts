@@ -87,6 +87,14 @@ export class PaginationStore {
     this.sortDirection.set(sortDirection);
   }
 
+  setSortBy(sortBy: string) {
+    this.sortBy.set(sortBy);
+  }
+
+  setSortDirection(sortDirection: SortDirectionEnum) {
+    this.sortDirection.set(sortDirection);
+  }
+
   setPagination(pagination: PageMetadata) {
     this.totalPages.set(pagination.totalPages);
     this.totalCount.set(pagination.totalCount);
