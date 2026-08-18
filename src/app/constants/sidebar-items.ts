@@ -38,16 +38,16 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
       },
     ],
   },
-  // {
-  //   title: 'Administracja',
-  //   icon: 'lucideLockKeyholeOpen',
-  //   roles: ['Admin'],
-  //   items: [
-  //     {
-  //       title: 'Użytkownicy',
-  //       url: '/admin/users',
-  //       icon: 'lucideUsers',
-  //     },
-  //   ],
-  // },
+  {
+    title: 'Administracja',
+    icon: 'lucideLockKeyholeOpen',
+    roles: ['Admin'],
+    items: [
+      {
+        title: 'Użytkownicy',
+        url: '/admin/users',
+        icon: 'lucideUsers',
+      },
+    ],
+  },
 ];

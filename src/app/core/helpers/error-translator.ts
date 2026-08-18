@@ -4,6 +4,7 @@ const statusTranslations: Record<string, string> = {
   NoServerConnection: 'Brak polaczenia z serwerem',
   BadRequest: 'Niepoprawne dane!',
   NotFound: 'Nie znaleziono!',
+  Conflict: 'Wystąpił konflikt!',
   'Bad Request': 'Niepoprawne dane!',
   'Not Found': 'Nie znaleziono!',
   'Internal Server Error': 'Błąd serwera!',
