@@ -14,6 +14,8 @@ import { AquariumWaterChangesPage } from './pages/aquariums/aquarium-water-chang
 import { WaterChangesPage } from './pages/water-changes/water-changes-page/water-changes-page';
 import { ParameterChecksPage } from './pages/parameter-checks/parameter-checks-page/parameter-checks-page';
 import { AquariumParameterChecksPage } from './pages/aquariums/aquarium-parameter-checks-page/aquarium-parameter-checks-page';
+import { UserListPage } from './pages/admin/users/user-list-page/user-list-page';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -76,6 +78,16 @@ export const routes: Routes = [
       {
         path: 'photo/:photoId',
         component: PhotoPreview,
+      },
+      {
+        path: 'admin',
+        canActivateChild: [roleGuard('Admin')],
+        children: [
+          {
+            path: 'users',
+            component: UserListPage,
+          },
+        ],
       },
     ],
   },
