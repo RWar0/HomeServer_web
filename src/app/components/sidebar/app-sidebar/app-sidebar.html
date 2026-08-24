@@ -29,6 +29,7 @@
                       #rla="routerLinkActive"
                       [routerLink]="item.url"
                       class="flex items-center gap-1"
+                      (click)="closeMobileIfNeeded()"
                     >
                       @if (item.icon) {
                         <ng-icon
@@ -85,6 +86,7 @@
                                   matrixParams: 'ignored',
                                 }"
                                 class="flex items-center gap-1"
+                                (click)="closeMobileIfNeeded()"
                               >
                                 @if (subItem.icon) {
                                   <ng-icon

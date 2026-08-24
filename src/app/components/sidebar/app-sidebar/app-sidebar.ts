@@ -18,6 +18,7 @@ import { SIDEBAR_ITEMS } from '../../../constants/sidebar-items';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
 import { tablerBucket } from '@ng-icons/tabler-icons';
+import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
 
 @Component({
   selector: 'app-sidebar',
@@ -48,6 +49,7 @@ import { tablerBucket } from '@ng-icons/tabler-icons';
 export class Sidebar {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly sidebarService = inject(HlmSidebarService);
   protected readonly activeCollapsible = signal<string | null>(null);
 
   constructor() {
@@ -73,6 +75,11 @@ export class Sidebar {
     } else if (this.activeCollapsible() === title) {
       this.activeCollapsible.set(null);
     }
+  }
+
+  /** Zamyka sidebar na mobile po wybraniu opcji nawigacyjnej. */
+  protected closeMobileIfNeeded() {
+    this.sidebarService.setOpenMobile(false);
   }
 
   protected readonly _sections = computed<SidebarSection[]>(() => {
