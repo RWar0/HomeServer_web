@@ -27,19 +27,23 @@
         <ng-icon name="lucideNotebookPen" />
         Edytuj
       </button>
+
       <button hlmDropdownMenuItem (click)="passwordDialogCmp.open(row.id)" variant="primary">
         <ng-icon name="lucideKeyRound" />
         Zmień hasło
       </button>
-      <hlm-dropdown-menu-separator />
-      <button
-        hlmDropdownMenuItem
-        (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, `&quot;${row.name}&quot;`)"
-        variant="destructive"
-      >
-        <ng-icon name="lucideTrash2" />
-        Usuń
-      </button>
+      @if (currentUserName !== row.name) {
+        <hlm-dropdown-menu-separator />
+
+        <button
+          hlmDropdownMenuItem
+          (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, `&quot;${row.name}&quot;`)"
+          variant="destructive"
+        >
+          <ng-icon name="lucideTrash2" />
+          Usuń
+        </button>
+      }
     </div>
   </ng-template>
 

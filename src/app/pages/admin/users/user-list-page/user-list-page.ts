@@ -22,6 +22,7 @@ import { UserCreateDialog } from '../../../../components/users/user-create-dialo
 import { RolesEnum } from '../../../../core/enums/roles.enum';
 import { UserEditDialog } from '../../../../components/users/user-edit-dialog/user-edit-dialog';
 import { UserEditPasswordDialog } from '../../../../components/users/user-edit-password-dialog/user-edit-password-dialog';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-user-list-page',
@@ -50,9 +51,11 @@ export class UserListPage {
   private readonly appRef = inject(ApplicationRef);
   private readonly userService = inject(UserService);
   protected readonly paginationStore = inject(PaginationStore);
+  private readonly authService = inject(AuthService);
 
   // Signals
   private readonly refreshSignal = signal(0);
+  protected readonly currentUserName = this.authService.user()?.name ?? '';
 
   // Table columns
   protected readonly userColumns: TableColumn<UserListItem>[] = [
