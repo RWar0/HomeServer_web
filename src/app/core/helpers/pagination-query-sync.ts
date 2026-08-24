@@ -43,7 +43,7 @@ export function syncPaginationQueryParams() {
   
   // Keep URL in sync with store state
   effect(() => {
-    const state = paginationStore.state;
+    const state = paginationStore.requestParams();
     router.navigate([], {
       relativeTo: route,
       queryParams: {

@@ -1,6 +1,6 @@
 <div class="m-2">
   <pagination
-    [paginationState]="paginationStore.state"
+    [paginationState]="paginationStore.state()"
     (pageChange)="paginationStore.setPage($event)"
     (pageSizeChange)="paginationStore.setPageSize($event)"
   >

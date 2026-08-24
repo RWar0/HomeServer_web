@@ -111,13 +111,13 @@ export class AquariumParameterChecksPage {
   // Resources
   protected readonly parameterChecksData = resource({
     params: () => ({
-      paginationState: this.paginationStore.state,
+      paginationState: this.paginationStore.requestParams(),
       refreshState: this.refreshSignal(),
     }),
-    loader: () =>
+    loader: ({ params }) =>
       firstValueFrom(
         this.aquariumService
-          .getAquariumParameterChecks(this.aquariumId(), this.paginationStore.state)
+          .getAquariumParameterChecks(this.aquariumId(), params.paginationState)
           .pipe(
             tap((res) => {
               this.paginationStore.setPagination(res.pagination);

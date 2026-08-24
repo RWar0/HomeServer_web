@@ -52,9 +52,11 @@ export class ParameterCheckCreateEditDialog {
   protected readonly isLoadingData = signal(false);
   protected readonly isSubmitting = signal(false);
   protected readonly isLoadingAquariums = signal(false);
+  protected readonly isOpen = signal(false);
 
   // Resources
   protected readonly aquariumsForSelectResource = resource({
+    params: () => (this.isOpen() ? true : undefined),
     loader: () =>
       firstValueFrom(
         this.aquariumService.getAquariumsForSelect().pipe(
@@ -225,6 +227,7 @@ export class ParameterCheckCreateEditDialog {
 
     this.parameterCheckId.set(null);
     this.parameterCheckId.set(parameterCheckId);
+    this.isOpen.set(true);
     this.dialog().open();
   }
 }

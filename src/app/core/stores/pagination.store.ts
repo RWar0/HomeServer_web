@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { PageMetadata } from '../models/pagination.model';
 import { SortDirectionEnum } from '../enums/sort-direction.enum';
 
@@ -13,7 +13,7 @@ import { SortDirectionEnum } from '../enums/sort-direction.enum';
  *  protected readonly paginationStore = inject(PaginationStore);
  *
  * // Get current pagination state
- * const state = this.paginationStore.state; // { page: 1, pageSize: 20, totalPages: 0, totalCount: 0 }
+ * const state = this.paginationStore.state(); // { page: 1, pageSize: 20, totalPages: 0, totalCount: 0 }
  *
  * // Set a new page number
  * this.paginationStore.setPage(2);
@@ -48,16 +48,24 @@ export class PaginationStore {
   readonly totalPages = signal(0);
   readonly totalCount = signal(0);
 
-  get state(): PageMetadata {
-    return {
-      page: this.page(),
-      pageSize: this.pageSize(),
-      sortBy: this.sortBy(),
-      sortDirection: this.sortDirection(),
-      totalPages: this.totalPages(),
-      totalCount: this.totalCount(),
-    };
-  }
+  /**
+   * Params sent to the API — does NOT include totalPages/totalCount.
+   * Use this in resource `params()` so that `setPagination()` (which sets
+   * totalPages/totalCount) does NOT trigger a second HTTP request.
+   */
+  readonly requestParams = computed(() => ({
+    page: this.page(),
+    pageSize: this.pageSize(),
+    sortBy: this.sortBy(),
+    sortDirection: this.sortDirection(),
+  }));
+
+  /** Full state including totalPages/totalCount — use in templates / pagination component. */
+  readonly state = computed<PageMetadata>(() => ({
+    ...this.requestParams(),
+    totalPages: this.totalPages(),
+    totalCount: this.totalCount(),
+  }));
 
   setPage(page: number) {
     this.page.set(page);

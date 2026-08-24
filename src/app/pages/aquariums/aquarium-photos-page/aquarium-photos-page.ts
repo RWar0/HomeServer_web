@@ -55,12 +55,12 @@ export class AquariumPhotosPage {
 
   protected readonly photosMetadataResponse = resource({
     params: () => ({
-      paginationState: this.paginationStore.state,
+      paginationState: this.paginationStore.requestParams(),
       refreshState: this.refreshSignal(),
     }),
-    loader: () =>
+    loader: ({ params }) =>
       firstValueFrom(
-        this.aquariumService.getAquariumPhotos(this.aquariumId(), this.paginationStore.state).pipe(
+        this.aquariumService.getAquariumPhotos(this.aquariumId(), params.paginationState).pipe(
           tap((res) => {
             this.paginationStore.setPagination(res.pagination);
           }),

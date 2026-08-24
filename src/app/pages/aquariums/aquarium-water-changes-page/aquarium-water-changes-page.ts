@@ -87,13 +87,13 @@ export class AquariumWaterChangesPage {
   // Resources
   protected readonly waterChangesMetadataResponse = resource({
     params: () => ({
-      paginationState: this.paginationStore.state,
+      paginationState: this.paginationStore.requestParams(),
       refreshState: this.refreshSignal(),
     }),
-    loader: () =>
+    loader: ({ params }) =>
       firstValueFrom(
         this.aquariumService
-          .getAquariumWaterChanges(this.aquariumId(), this.paginationStore.state)
+          .getAquariumWaterChanges(this.aquariumId(), params.paginationState)
           .pipe(
             tap((res) => {
               this.paginationStore.setPagination(res.pagination);

@@ -144,7 +144,7 @@ export class ParameterChecksPage {
   // Resources
   protected readonly parametersCheckList = resource({
     params: () => ({
-      paginationState: this.paginationStore.state,
+      paginationState: this.paginationStore.requestParams(),
       filters: this.filters(),
       refreshState: this.refreshSignal(),
     }),

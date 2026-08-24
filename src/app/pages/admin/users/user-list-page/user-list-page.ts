@@ -93,7 +93,7 @@ export class UserListPage {
   // Resources
   protected readonly usersList = resource({
     params: () => ({
-      paginationState: this.paginationStore.state,
+      paginationState: this.paginationStore.requestParams(),
       refreshState: this.refreshSignal(),
     }),
     loader: ({ params }) =>

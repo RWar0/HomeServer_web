@@ -122,7 +122,7 @@ export class WaterChangesPage {
   // resources
   protected readonly waterChangesList = resource({
     params: () => ({
-      paginationState: this.paginationStore.state,
+      paginationState: this.paginationStore.requestParams(),
       filters: this.filters(),
       refreshState: this.refreshSignal(),
     }),
