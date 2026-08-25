@@ -9,6 +9,7 @@ import { MessageResponse } from '../../models/message-response.model';
 import { Observable } from 'rxjs';
 import { PageRequest, PageResponse } from '../../models/pagination.model';
 import { HttpParams } from '@angular/common/http';
+import { SelectOption } from '../../models/select.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,10 @@ export class VehicleService extends BaseService {
 
   getForEdit(id: string): Observable<VehicleForEditDto> {
     return this.apiService.get<VehicleForEditDto>(`vehicles/${id}/for-edit`);
+  }
+
+  getForSelect(): Observable<SelectOption[]> {
+    return this.apiService.get<SelectOption[]>(`vehicles/for-select`);
   }
 
   update(id: string, vehicleData: CreateEditVehicleDto): Observable<MessageResponse> {

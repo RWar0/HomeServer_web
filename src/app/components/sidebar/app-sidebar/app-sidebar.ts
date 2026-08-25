@@ -4,6 +4,7 @@ import {
   lucideCalendar,
   lucideChevronRight,
   lucideFish,
+  lucideFuel,
   lucideHouse,
   lucideList,
   lucideLockKeyholeOpen,
@@ -44,6 +45,7 @@ import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
       tablerBucket,
       lucideTestTube2,
       tablerCar,
+      lucideFuel,
     }),
   ],
 })

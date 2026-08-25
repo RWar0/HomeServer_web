@@ -48,7 +48,6 @@ export class VehicleListPage {
   // injects
   private readonly appRef = inject(ApplicationRef);
   private readonly vehicleService = inject(VehicleService);
-  private readonly datePipe = inject(DatePipe);
   protected readonly paginationStore = inject(PaginationStore);
 
   // signals
