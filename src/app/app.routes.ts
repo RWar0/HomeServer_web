@@ -16,6 +16,7 @@ import { ParameterChecksPage } from './pages/parameter-checks/parameter-checks-p
 import { AquariumParameterChecksPage } from './pages/aquariums/aquarium-parameter-checks-page/aquarium-parameter-checks-page';
 import { UserListPage } from './pages/admin/users/user-list-page/user-list-page';
 import { roleGuard } from './core/guards/role.guard';
+import { VehicleListPage } from './pages/vehicles/vehicle-list-page/vehicle-list-page';
 
 export const routes: Routes = [
   {
@@ -72,6 +73,15 @@ export const routes: Routes = [
           {
             path: 'parameter-checks',
             component: AquariumParameterChecksPage,
+          },
+        ],
+      },
+      {
+        path: 'vehicles',
+        children: [
+          {
+            path: '',
+            component: VehicleListPage,
           },
         ],
       },

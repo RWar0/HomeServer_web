@@ -8,6 +8,8 @@ const statusTranslations: Record<string, string> = {
   'Bad Request': 'Niepoprawne dane!',
   'Not Found': 'Nie znaleziono!',
   'Internal Server Error': 'Błąd serwera!',
+  'Unsupported Media Type': 'Nieobsługiwany format danych!',
+  'Unprocessable Entity': 'Nieobsługiwane dane!',
 };
 
 /**

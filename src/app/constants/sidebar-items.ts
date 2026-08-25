@@ -36,6 +36,28 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
           },
         ],
       },
+      {
+        title: 'Samochody',
+        url: '/vehicles',
+        icon: 'tablerCar',
+        subItems: [
+          {
+            title: 'Lista',
+            url: '',
+            icon: 'lucideList',
+          },
+          // {
+          //   title: 'Historia tankowania',
+          //   url: 'refuels',
+          //   icon: 'lucideFuel',
+          // },
+          // {
+          //   title: 'Serwis pojazdów',
+          //   url: 'parameter-checks',
+          //   icon: 'lucideTestTube2',
+          // },
+        ],
+      },
     ],
   },
   {

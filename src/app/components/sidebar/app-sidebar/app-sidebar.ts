@@ -17,7 +17,7 @@ import { SidebarSection } from '../../../core/types/sidebar.type';
 import { SIDEBAR_ITEMS } from '../../../constants/sidebar-items';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
-import { tablerBucket } from '@ng-icons/tabler-icons';
+import { tablerBucket, tablerCar } from '@ng-icons/tabler-icons';
 import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
 
 @Component({
@@ -43,6 +43,7 @@ import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
       lucideList,
       tablerBucket,
       lucideTestTube2,
+      tablerCar,
     }),
   ],
 })

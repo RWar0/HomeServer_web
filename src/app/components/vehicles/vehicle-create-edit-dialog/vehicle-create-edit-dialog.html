@@ -1,0 +1,92 @@
+<hlm-dialog>
+  <ng-content></ng-content>
+
+  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-sm md:w-md">
+    @if (isLoadingData()) {
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>{{ vehicleId() ? 'Edytuj' : 'Utwórz' }} pojazd</h3>
+        <p hlmDialogDescription>{{ vehicleId() ? 'Edytuj' : 'Wprowadź' }} dane pojazdu</p>
+      </hlm-dialog-header>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+      <hlm-dialog-footer>
+        <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+        <button hlmBtn disabled class="self-center mt-auto" variant="success">
+          {{ vehicleId() ? 'Zapisz zmiany' : 'Utwórz' }}
+          @if (isSubmitting()) {
+            <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
+          }
+        </button>
+      </hlm-dialog-footer>
+    } @else {
+      <form [formGroup]="vehicleForm" (ngSubmit)="submitForm()">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>{{ vehicleId() ? 'Edytuj' : 'Utwórz' }} pojazd</h3>
+          <p hlmDialogDescription>{{ vehicleId() ? 'Edytuj' : 'Wprowadź' }} dane pojazdu</p>
+        </hlm-dialog-header>
+        <hlm-field-group>
+          <hlm-field>
+            <label hlmFieldLabel for="brand">Marka</label>
+            <input hlmInput id="brand" type="text" formControlName="brand" />
+            <error-label
+              [isDisabled]="
+                vehicleForm.controls.brand.invalid && vehicleForm.controls.brand.touched
+              "
+              message="Marka pojazdu jest wymagana!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="model">Model</label>
+            <input hlmInput id="model" type="text" formControlName="model" />
+            <error-label
+              [isDisabled]="
+                vehicleForm.controls.model.invalid && vehicleForm.controls.model.touched
+              "
+              message="Model pojazdu jest wymagany!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="production">Rok produkcji</label>
+            <input hlmInput id="production" type="number" formControlName="production" />
+            <error-label
+              [isDisabled]="
+                vehicleForm.controls.production.invalid && vehicleForm.controls.production.touched
+              "
+              [message]="
+                vehicleForm.controls.production.errors?.['min']
+                  ? 'Rocznik pojazdu musi być większy niż 1800!'
+                  : vehicleForm.controls.production.errors?.['max']
+                    ? 'Rocznik pojazdu nie może być z przyszłości!'
+                    : 'Rocznik pojazdu jest wymagany!'
+              "
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel>Typ pojazdu</label>
+            <form-select
+              [items]="vehicleTypesSelectOption()"
+              [value]="vehicleForm.controls.type.value"
+              [isLoading]="false"
+              id="type"
+              (onSelection)="selectVehicleType($event)"
+            />
+            <error-label
+              [isDisabled]="vehicleForm.controls.type.invalid && vehicleForm.controls.type.touched"
+              message="Typ pojazdu jest wymagany!"
+            ></error-label>
+          </hlm-field>
+        </hlm-field-group>
+        <hlm-dialog-footer>
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <submit-button
+            [buttonText]="vehicleId() ? 'Zapisz zmiany' : 'Utwórz'"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="(vehicleForm.invalid && vehicleForm.touched) || isSubmitting()"
+            variant="success"
+          />
+        </hlm-dialog-footer>
+      </form>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>
