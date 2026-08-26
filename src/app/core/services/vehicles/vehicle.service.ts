@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   CreateEditVehicleDto,
+  VehicleBaseDataDto,
   VehicleForEditDto,
   VehicleListItemDto,
 } from '../../models/vehicle.model';
@@ -10,6 +11,8 @@ import { Observable } from 'rxjs';
 import { PageRequest, PageResponse } from '../../models/pagination.model';
 import { HttpParams } from '@angular/common/http';
 import { SelectOption } from '../../models/select.model';
+import { VehicleFuelingOfVehicleListItemDto } from '../../models/vehicle-fueling.model';
+import { DateFilterDto } from '../../models/common-filters.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,12 +35,44 @@ export class VehicleService extends BaseService {
     return this.apiService.get<PageResponse<VehicleListItemDto>>(`vehicles/list`, { params });
   }
 
+  getBaseData(vehicleId: string): Observable<VehicleBaseDataDto> {
+    return this.apiService.get<VehicleBaseDataDto>(`vehicles/${vehicleId}/base-data`);
+  }
+
   getForEdit(id: string): Observable<VehicleForEditDto> {
     return this.apiService.get<VehicleForEditDto>(`vehicles/${id}/for-edit`);
   }
 
   getForSelect(): Observable<SelectOption[]> {
     return this.apiService.get<SelectOption[]>(`vehicles/for-select`);
+  }
+
+  getFuelings(
+    vehicleId: string,
+    pagination: PageRequest,
+    filters: DateFilterDto,
+  ): Observable<PageResponse<VehicleFuelingOfVehicleListItemDto>> {
+    let params: HttpParams = new HttpParams()
+      .set('page', pagination.page)
+      .set('pageSize', pagination.pageSize);
+
+    if (pagination.sortBy) {
+      params = params.set('sortBy', pagination.sortBy);
+      params = params.set('sortDirection', pagination.sortDirection);
+    }
+
+    if (filters.fromDate) {
+      params = params.set('fromDate', filters.fromDate.toISOString().split('T')[0]);
+    }
+
+    if (filters.toDate) {
+      params = params.set('toDate', filters.toDate.toISOString().split('T')[0]);
+    }
+
+    return this.apiService.get<PageResponse<VehicleFuelingOfVehicleListItemDto>>(
+      `vehicles/${vehicleId}/fuelings`,
+      { params },
+    );
   }
 
   update(id: string, vehicleData: CreateEditVehicleDto): Observable<MessageResponse> {

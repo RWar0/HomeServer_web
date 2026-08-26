@@ -26,6 +26,10 @@
 
   <ng-template #actionsMenu let-row>
     <div hlmDropdownMenu class="w-48">
+      <button hlmDropdownMenuItem [routerLink]="[row.id, 'fuelings']" variant="primary">
+        <ng-icon name="lucideNotebookText" />
+        Szczegóły
+      </button>
       <button
         hlmDropdownMenuItem
         (click)="createEditDialogCmp.openEdit(row.id)"

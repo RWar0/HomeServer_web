@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../common/base.service';
 import {
-  CreateEditVehicleDto,
+  CreateEditVehicleFuelingDto,
+  CreateEditVehicleFuelingForVehicleDto,
   VehicleFuelingFilterDto,
   VehicleFuelingForEditDto,
+  VehicleFuelingForEditWithoutVehicleDto,
   VehicleFuelingListItemDto,
 } from '../../models/vehicle-fueling.model';
 import { MessageResponse } from '../../models/message-response.model';
@@ -15,8 +17,18 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root',
 })
 export class VehicleFuelingService extends BaseService {
-  create(fuelingData: CreateEditVehicleDto): Observable<MessageResponse> {
+  create(fuelingData: CreateEditVehicleFuelingDto): Observable<MessageResponse> {
     return this.apiService.post<MessageResponse>(`vehicle-fuelings`, fuelingData);
+  }
+
+  createForVehicle(
+    vehicleId: string,
+    fuelingData: CreateEditVehicleFuelingForVehicleDto,
+  ): Observable<MessageResponse> {
+    return this.apiService.post<MessageResponse>(
+      `vehicle-fuelings/for-vehicle/${vehicleId}`,
+      fuelingData,
+    );
   }
 
   getAll(
@@ -53,8 +65,24 @@ export class VehicleFuelingService extends BaseService {
     return this.apiService.get<VehicleFuelingForEditDto>(`vehicle-fuelings/${id}/for-edit`);
   }
 
-  update(id: string, fuelingData: CreateEditVehicleDto): Observable<MessageResponse> {
+  getForEditWithoutVehicle(id: string): Observable<VehicleFuelingForEditWithoutVehicleDto> {
+    return this.apiService.get<VehicleFuelingForEditWithoutVehicleDto>(
+      `vehicle-fuelings/${id}/for-edit-without-vehicle`,
+    );
+  }
+
+  update(id: string, fuelingData: CreateEditVehicleFuelingDto): Observable<MessageResponse> {
     return this.apiService.put<MessageResponse>(`vehicle-fuelings/${id}`, fuelingData);
+  }
+
+  updateForVehicle(
+    vehicleId: string,
+    fuelingData: CreateEditVehicleFuelingForVehicleDto,
+  ): Observable<MessageResponse> {
+    return this.apiService.put<MessageResponse>(
+      `vehicle-fuelings/${vehicleId}/without-vehicle`,
+      fuelingData,
+    );
   }
 
   delete(id: string): Observable<MessageResponse> {

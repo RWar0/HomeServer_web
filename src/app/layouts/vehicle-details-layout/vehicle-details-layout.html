@@ -1,0 +1,13 @@
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">
+    {{ vehicleRecord.brand }} {{ vehicleRecord.model }} ({{ vehicleRecord.production }})
+  </h2>
+</header>
+<nav class="w-full bg-white flex flex-wrap px-2 py-2 gap-2 border-b">
+  <button hlmBtn variant="outline" routerLinkActive="bg-primary/10" routerLink="fuelings">
+    Tankowania
+  </button>
+</nav>
+<div>
+  <router-outlet />
+</div>

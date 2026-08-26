@@ -91,7 +91,7 @@ export class VehicleFuelingListPage {
         formatter: (filters) => filters?.toISOString().split('T')[0],
       },
     });
-  } 
+  }
 
   protected readonly fuelingsList = resource({
     params: () => ({

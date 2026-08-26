@@ -18,6 +18,8 @@ import { UserListPage } from './pages/admin/users/user-list-page/user-list-page'
 import { roleGuard } from './core/guards/role.guard';
 import { VehicleListPage } from './pages/vehicles/vehicle-list-page/vehicle-list-page';
 import { VehicleFuelingListPage } from './pages/vehicle-fuelings/vehicle-fueling-list-page/vehicle-fueling-list-page';
+import { VehicleDetailsLayout } from './layouts/vehicle-details-layout/vehicle-details-layout';
+import { VehicleFuelingsListPage } from './pages/vehicles/vehicle-fuelings-list-page/vehicle-fuelings-list-page';
 
 export const routes: Routes = [
   {
@@ -87,6 +89,21 @@ export const routes: Routes = [
           {
             path: 'fuelings',
             component: VehicleFuelingListPage,
+          },
+        ],
+      },
+      {
+        path: 'vehicles/:vehicleId',
+        component: VehicleDetailsLayout,
+        children: [
+          {
+            path: '',
+            redirectTo: 'fuelings',
+            pathMatch: 'full',
+          },
+          {
+            path: 'fuelings',
+            component: VehicleFuelingsListPage,
           },
         ],
       },

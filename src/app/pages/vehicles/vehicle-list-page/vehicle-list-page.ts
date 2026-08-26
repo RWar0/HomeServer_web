@@ -7,11 +7,9 @@ import { DataTable } from '../../../components/data-table/data-table/data-table'
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
-import { FormSelect } from '../../../components/select/form-select/form-select';
-import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 import { PaginationStore } from '../../../core/stores/pagination.store';
 import { DatePipe } from '@angular/common';
-import { lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import { lucideNotebookPen, lucideNotebookText, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { VehicleListItemDto } from '../../../core/models/vehicle.model';
@@ -22,6 +20,7 @@ import { emptyPaginatedResponse } from '../../../constants/empty-pagination-stat
 import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { VehicleCreateEditDialog } from '../../../components/vehicles/vehicle-create-edit-dialog/vehicle-create-edit-dialog';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-list-page',
@@ -35,13 +34,14 @@ import { VehicleCreateEditDialog } from '../../../components/vehicles/vehicle-cr
     DeleteConfirmDialog,
     RefreshListButton,
     VehicleCreateEditDialog,
+    RouterLink,
   ],
   templateUrl: './vehicle-list-page.html',
   styleUrl: './vehicle-list-page.css',
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen }),
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideNotebookText }),
   ],
 })
 export class VehicleListPage {

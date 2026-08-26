@@ -8,6 +8,13 @@ export interface VehicleListItemDto {
   type: VehicleType;
 }
 
+export interface VehicleBaseDataDto {
+  id: string;
+  brand: string;
+  model: string;
+  production: number;
+}
+
 export interface VehicleForEditDto {
   id: string;
   brand: string;
