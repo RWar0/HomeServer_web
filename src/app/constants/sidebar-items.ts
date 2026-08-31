@@ -51,11 +51,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
             url: 'fuelings',
             icon: 'lucideFuel',
           },
-          // {
-          //   title: 'Serwis pojazdów',
-          //   url: 'parameter-checks',
-          //   icon: 'lucideTestTube2',
-          // },
+          {
+            title: 'Historia serwisowa',
+            url: 'services',
+            icon: 'lucideWrench',
+          },
         ],
       },
     ],

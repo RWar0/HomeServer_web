@@ -1,10 +1,10 @@
 <header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
-  <h2 class="font-bold text-2xl text-primary">Tankowania</h2>
+  <h2 class="font-bold text-2xl text-primary">Serwisy Pojazdów</h2>
   <div class="ms-auto flex gap-2 align-center items-center">
     <button
       hlmBtn
       variant="success"
-      hlmTooltip="Dodaj tankowanie"
+      hlmTooltip="Dodaj serwis"
       class="flex items-center justify-center"
       (click)="createEditDialogCmp.openCreate()"
     >
@@ -12,7 +12,7 @@
     </button>
     <refresh-list-button
       (onRefresh)="refreshList()"
-      [isRefreshing]="fuelingsList.status() === 'loading'"
+      [isRefreshing]="servicesList.status() === 'loading'"
     />
   </div>
 </header>
@@ -26,21 +26,22 @@
     [value]="this.filters().vehicleId"
     (onSelection)="setFilter('vehicleId', $event)"
   />
+
   <span class="text-muted-foreground ms-2">Daty</span>
   <form-date-picker
     placeholder="Od"
     [value]="this.filters().fromDate"
     (onSelection)="setFilter('fromDate', $event ?? null)"
-    [maxDate]="this.filters().toDate ?? undefined"
-    inputId="fromDateFilter"
+    inputId="serviceFromDate"
   />
   <span class="text-muted-foreground"> - </span>
   <form-date-picker
     placeholder="Do"
     [value]="this.filters().toDate"
     (onSelection)="setFilter('toDate', $event ?? null)"
-    inputId="toDateFilter"
+    inputId="serviceToDate"
   />
+
   <button
     hlmBtn
     variant="secondary"
@@ -53,8 +54,8 @@
 
 <div class="p-2 mt-2">
   <data-table
-    [records]="fuelingsRecords"
-    [columns]="fuelingColumns"
+    [records]="servicesRecords"
+    [columns]="serviceColumns"
     [paginationStore]="paginationStore"
     [rowActions]="actionsMenu"
   />
@@ -72,7 +73,7 @@
       <hlm-dropdown-menu-separator />
       <button
         hlmDropdownMenuItem
-        (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, ` z dnia ${row.date}`)"
+        (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, ` - ${row.title}`)"
         variant="destructive"
       >
         <ng-icon name="lucideTrash2" />
@@ -89,9 +90,5 @@
   />
 </div>
 
-<delete-confirm-dialog
-  #deleteDialogCmp
-  elementName="Tankowanie"
-  (onConfirm)="onDelete($event || '')"
-/>
-<vehicle-fueling-create-edit-dialog #createEditDialogCmp (refreshList)="refreshList()" />
+<delete-confirm-dialog #deleteDialogCmp elementName="Serwis" (onConfirm)="onDelete($event || '')" />
+<vehicle-service-create-edit-dialog #createEditDialogCmp (refreshList)="refreshList()" />

@@ -20,6 +20,7 @@ import { VehicleListPage } from './pages/vehicles/vehicle-list-page/vehicle-list
 import { VehicleFuelingListPage } from './pages/vehicle-fuelings/vehicle-fueling-list-page/vehicle-fueling-list-page';
 import { VehicleDetailsLayout } from './layouts/vehicle-details-layout/vehicle-details-layout';
 import { VehicleFuelingsListPage } from './pages/vehicles/vehicle-fuelings-list-page/vehicle-fuelings-list-page';
+import { VehicleServiceListPage } from './pages/vehicle-services/vehicle-service-list-page/vehicle-service-list-page';
 
 export const routes: Routes = [
   {
@@ -89,6 +90,10 @@ export const routes: Routes = [
           {
             path: 'fuelings',
             component: VehicleFuelingListPage,
+          },
+          {
+            path: 'services',
+            component: VehicleServiceListPage,
           },
         ],
       },

@@ -10,6 +10,7 @@ import {
   lucideLockKeyholeOpen,
   lucideTestTube2,
   lucideUsers,
+  lucideWrench,
 } from '@ng-icons/lucide';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
@@ -46,6 +47,7 @@ import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
       lucideTestTube2,
       tablerCar,
       lucideFuel,
+      lucideWrench,
     }),
   ],
 })
