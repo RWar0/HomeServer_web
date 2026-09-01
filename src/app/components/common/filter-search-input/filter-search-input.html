@@ -1,0 +1,15 @@
+<div class="relative w-full">
+  <ng-icon
+    name="lucideSearch"
+    class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+  />
+  <input
+    hlmInput
+    class="pl-9"
+    type="text"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [id]="fieldName()"
+    (input)="onChange($any($event.target).value)"
+  />
+</div>

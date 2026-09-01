@@ -19,6 +19,12 @@
 
 <div class="bg-white px-2 py-2 flex items-center flex-wrap gap-2">
   <span class="text-muted-foreground">Filtry</span>
+  <filter-search-input
+    fieldName="title"
+    [value]="this.filters().title"
+    placeholder="Szukaj po tytule..."
+    (onValueChange)="setFilter('title', $event)"
+  />
   <span class="text-muted-foreground ms-2">Daty</span>
   <form-date-picker
     placeholder="Od"

@@ -27,6 +27,7 @@ import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { VehicleServiceCreateEditDialog } from '../../../components/vehicle-services/vehicle-service-create-edit-dialog/vehicle-service-create-edit-dialog';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
+import { FilterSearchInput } from "../../../components/common/filter-search-input/filter-search-input";
 
 @Component({
   selector: 'app-vehicle-service-list-page',
@@ -42,7 +43,8 @@ import { VehicleService } from '../../../core/services/vehicles/vehicle.service'
     VehicleServiceCreateEditDialog,
     FormSelect,
     FormDatePicker,
-  ],
+    FilterSearchInput
+],
   templateUrl: './vehicle-service-list-page.html',
   styleUrl: './vehicle-service-list-page.css',
   providers: [

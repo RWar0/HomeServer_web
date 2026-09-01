@@ -26,6 +26,7 @@ import { VehicleService } from '../../../core/services/vehicles/vehicle.service'
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { VehicleServiceForVehicleCreateEditDialog } from '../../../components/vehicle-services/vehicle-service-for-vehicle-create-edit-dialog/vehicle-service-for-vehicle-create-edit-dialog';
+import { FilterSearchInput } from '../../../components/common/filter-search-input/filter-search-input';
 
 @Component({
   selector: 'app-vehicle-services-list-page',
@@ -40,6 +41,7 @@ import { VehicleServiceForVehicleCreateEditDialog } from '../../../components/ve
     RefreshListButton,
     FormDatePicker,
     VehicleServiceForVehicleCreateEditDialog,
+    FilterSearchInput,
   ],
   templateUrl: './vehicle-services-list-page.html',
   styleUrl: './vehicle-services-list-page.css',
