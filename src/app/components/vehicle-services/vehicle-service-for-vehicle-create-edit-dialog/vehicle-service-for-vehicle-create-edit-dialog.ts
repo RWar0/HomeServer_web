@@ -1,10 +1,4 @@
-import { Component, effect, inject, output, resource, signal, viewChild } from '@angular/core';
-import { HlmButtonImports } from '@spartan-ng/helm/button';
-import { HlmDialog, HlmDialogImports } from '@spartan-ng/helm/dialog';
-import { HlmFieldImports } from '@spartan-ng/helm/field';
-import { HlmInputImports } from '@spartan-ng/helm/input';
-import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
-import { ErrorLabel } from '../../common/error-label/error-label';
+import { Component, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -13,21 +7,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmDialog, HlmDialogImports } from '@spartan-ng/helm/dialog';
+import { HlmFieldImports } from '@spartan-ng/helm/field';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { ErrorLabel } from '../../common/error-label/error-label';
 import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
 import { SubmitButton } from '../../common/submit-button/submit-button';
-import { FormSelect } from '../../select/form-select/form-select';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { HlmScrollAreaImports } from '@spartan-ng/helm/scroll-area';
+import { lucideTrash2 } from '@ng-icons/lucide';
 import { VehicleServicesService } from '../../../core/services/vehicle-service/vehicle-service.service';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
-import { catchError, finalize, firstValueFrom, of, tap } from 'rxjs';
+import { CreateEditVehicleServiceItemDto } from '../../../core/models/vehicle-service-item.model';
+import { finalize } from 'rxjs';
 import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
-import { CreateEditVehicleServiceDto } from '../../../core/models/vehicle-service.model';
+import { CreateEditVehicleServiceForVehicleDto } from '../../../core/models/vehicle-service.model';
 import { MessageResponse } from '../../../core/models/message-response.model';
-import { SelectOption } from '../../../core/models/select.model';
-import { CreateEditVehicleServiceItemDto } from '../../../core/models/vehicle-service-item.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrash2 } from '@ng-icons/lucide';
-import { HlmScrollAreaImports } from '@spartan-ng/helm/scroll-area';
 
 type VehicleServiceItemForm = FormGroup<{
   id: FormControl<string | null>;
@@ -37,7 +35,7 @@ type VehicleServiceItemForm = FormGroup<{
 }>;
 
 @Component({
-  selector: 'vehicle-service-create-edit-dialog',
+  selector: 'vehicle-service-for-vehicle-create-edit-dialog',
   imports: [
     HlmDialogImports,
     HlmFieldImports,
@@ -48,33 +46,32 @@ type VehicleServiceItemForm = FormGroup<{
     ReactiveFormsModule,
     HlmSpinnerImports,
     SubmitButton,
-    FormSelect,
     NgIcon,
     HlmScrollAreaImports,
   ],
-  templateUrl: './vehicle-service-create-edit-dialog.html',
-  styleUrl: './vehicle-service-create-edit-dialog.css',
+  templateUrl: './vehicle-service-for-vehicle-create-edit-dialog.html',
+  styleUrl: './vehicle-service-for-vehicle-create-edit-dialog.css',
   providers: provideIcons({ lucideTrash2 }),
 })
-export class VehicleServiceCreateEditDialog {
+export class VehicleServiceForVehicleCreateEditDialog {
   // Injectss
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly vehicleServicesService = inject(VehicleServicesService);
-  private readonly vehicleService = inject(VehicleService);
 
   // Outputs
   readonly refreshList = output<void>();
+
+  // Inputs
+  readonly vehicleId = input.required<string>();
 
   // Signals
   readonly serviceId = signal<string | null>(null);
   readonly dialog = viewChild.required(HlmDialog);
   readonly isLoadingData = signal(false);
-  protected readonly isLoadingVehicles = signal(false);
   protected readonly isSubmitting = signal(false);
   protected readonly isOpen = signal(false);
 
   protected readonly serviceForm = this.fb.group({
-    vehicleId: ['', Validators.required],
     title: ['', Validators.required],
     date: [null as Date | null, Validators.required],
     cost: [null as number | null, [Validators.min(0)]],
@@ -103,25 +100,6 @@ export class VehicleServiceCreateEditDialog {
     this.itemsFormArray.markAsUntouched();
   }
 
-  protected readonly vehiclesForSelectResource = resource({
-    params: () => (this.isOpen() ? true : undefined),
-    loader: () =>
-      firstValueFrom(
-        this.vehicleService.getForSelect().pipe(
-          tap(() => this.isLoadingVehicles.set(true)),
-          catchError((err) => {
-            displayApiError(err);
-            return of([]);
-          }),
-          finalize(() => this.isLoadingVehicles.set(false)),
-        ),
-      ),
-  });
-
-  protected get vehiclesForSelect(): SelectOption[] {
-    return this.vehiclesForSelectResource.value() ?? [];
-  }
-
   constructor() {
     effect(() => {
       if (!this.serviceId()) {
@@ -132,12 +110,11 @@ export class VehicleServiceCreateEditDialog {
 
       this.isLoadingData.set(true);
       this.vehicleServicesService
-        .getForEdit(this.serviceId()!)
+        .getForVehicleEdit(this.serviceId()!)
         .pipe(finalize(() => this.isLoadingData.set(false)))
         .subscribe({
           next: (res) => {
             this.serviceForm.patchValue({
-              vehicleId: res.vehicleId,
               title: res.title,
               date: res.date,
               cost: res.cost,
@@ -154,11 +131,6 @@ export class VehicleServiceCreateEditDialog {
     });
   }
 
-  protected vehicleIdSelection(vehicleId: string | null) {
-    this.serviceForm.controls.vehicleId.setValue(vehicleId ?? '');
-    this.serviceForm.controls.vehicleId.markAsTouched();
-  }
-
   protected submitForm() {
     if (this.serviceForm.invalid) {
       this.serviceForm.markAllAsTouched();
@@ -173,8 +145,7 @@ export class VehicleServiceCreateEditDialog {
       return;
     }
 
-    const serviceData: CreateEditVehicleServiceDto = {
-      vehicleId: formData.vehicleId,
+    const serviceData: CreateEditVehicleServiceForVehicleDto = {
       title: formData.title,
       date: formData.date!,
       cost: formData.cost,
@@ -189,9 +160,9 @@ export class VehicleServiceCreateEditDialog {
     }
   }
 
-  private updateService(data: CreateEditVehicleServiceDto) {
+  private updateService(data: CreateEditVehicleServiceForVehicleDto) {
     this.vehicleServicesService
-      .update(this.serviceId()!, data)
+      .updateWithoutVehicle(this.serviceId()!, data)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => this.processSuccess(res),
@@ -199,9 +170,9 @@ export class VehicleServiceCreateEditDialog {
       });
   }
 
-  private createService(data: CreateEditVehicleServiceDto) {
+  private createService(data: CreateEditVehicleServiceForVehicleDto) {
     this.vehicleServicesService
-      .create(data)
+      .createForVehicle(this.vehicleId()!, data)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => this.processSuccess(res),

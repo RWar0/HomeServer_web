@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { BaseService } from '../common/base.service';
 import {
   CreateEditVehicleServiceDto,
+  CreateEditVehicleServiceForVehicleDto,
   VehicleServiceFilterDto,
+  VehicleServiceForVehicleFilterDto,
+  VehicleServiceForVehicleListItemDto,
   VehicleServiceListItemDto,
 } from '../../models/vehicle-service.model';
 import {
@@ -20,6 +23,16 @@ import { HttpParams } from '@angular/common/http';
 export class VehicleServicesService extends BaseService {
   create(serviceData: CreateEditVehicleServiceDto): Observable<MessageResponse> {
     return this.apiService.post<MessageResponse>(`vehicle-services`, serviceData);
+  }
+
+  createForVehicle(
+    vehicleId: string,
+    serviceData: CreateEditVehicleServiceForVehicleDto,
+  ): Observable<MessageResponse> {
+    return this.apiService.post<MessageResponse>(
+      `vehicle-services/for-vehicle/${vehicleId}`,
+      serviceData,
+    );
   }
 
   getAll(
@@ -68,8 +81,24 @@ export class VehicleServicesService extends BaseService {
     return this.apiService.get<CreateEditVehicleServiceDto>(`vehicle-services/${id}/for-edit`);
   }
 
+  getForVehicleEdit(id: string): Observable<CreateEditVehicleServiceForVehicleDto> {
+    return this.apiService.get<CreateEditVehicleServiceForVehicleDto>(
+      `vehicle-services/${id}/for-edit-without-vehicle`,
+    );
+  }
+
   update(id: string, serviceData: CreateEditVehicleServiceDto): Observable<MessageResponse> {
     return this.apiService.put<MessageResponse>(`vehicle-services/${id}`, serviceData);
+  }
+
+  updateWithoutVehicle(
+    id: string,
+    serviceData: CreateEditVehicleServiceForVehicleDto,
+  ): Observable<MessageResponse> {
+    return this.apiService.put<MessageResponse>(
+      `vehicle-services/${id}/without-vehicle`,
+      serviceData,
+    );
   }
 
   delete(id: string): Observable<MessageResponse> {

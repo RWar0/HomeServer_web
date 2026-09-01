@@ -21,6 +21,7 @@ import { VehicleFuelingListPage } from './pages/vehicle-fuelings/vehicle-fueling
 import { VehicleDetailsLayout } from './layouts/vehicle-details-layout/vehicle-details-layout';
 import { VehicleFuelingsListPage } from './pages/vehicles/vehicle-fuelings-list-page/vehicle-fuelings-list-page';
 import { VehicleServiceListPage } from './pages/vehicle-services/vehicle-service-list-page/vehicle-service-list-page';
+import { VehicleServicesListPage } from './pages/vehicles/vehicle-services-list-page/vehicle-services-list-page';
 
 export const routes: Routes = [
   {
@@ -109,6 +110,10 @@ export const routes: Routes = [
           {
             path: 'fuelings',
             component: VehicleFuelingsListPage,
+          },
+          {
+            path: 'services',
+            component: VehicleServicesListPage,
           },
         ],
       },

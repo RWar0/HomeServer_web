@@ -13,6 +13,10 @@ import { HttpParams } from '@angular/common/http';
 import { SelectOption } from '../../models/select.model';
 import { VehicleFuelingOfVehicleListItemDto } from '../../models/vehicle-fueling.model';
 import { DateFilterDto } from '../../models/common-filters.model';
+import {
+  VehicleServiceForVehicleFilterDto,
+  VehicleServiceForVehicleListItemDto,
+} from '../../models/vehicle-service.model';
 
 @Injectable({
   providedIn: 'root',
@@ -72,6 +76,48 @@ export class VehicleService extends BaseService {
     return this.apiService.get<PageResponse<VehicleFuelingOfVehicleListItemDto>>(
       `vehicles/${vehicleId}/fuelings`,
       { params },
+    );
+  }
+
+  getServices(
+    vehicleId: string,
+    pagination: PageRequest,
+    filters?: VehicleServiceForVehicleFilterDto,
+  ): Observable<PageResponse<VehicleServiceForVehicleListItemDto>> {
+    let params: HttpParams = new HttpParams()
+      .set('page', pagination.page)
+      .set('pageSize', pagination.pageSize);
+
+    if (pagination.sortBy) {
+      params = params.set('sortBy', pagination.sortBy);
+      params = params.set('sortDirection', pagination.sortDirection);
+    }
+
+    if (filters?.title) {
+      params = params.set('title', filters.title);
+    }
+
+    if (filters?.fromDate) {
+      params = params.set('fromDate', filters.fromDate.toISOString().split('T')[0]);
+    }
+
+    if (filters?.toDate) {
+      params = params.set('toDate', filters.toDate.toISOString().split('T')[0]);
+    }
+
+    if (filters?.fromCost) {
+      params = params.set('fromCost', filters.fromCost!);
+    }
+
+    if (filters?.toCost) {
+      params = params.set('toCost', filters.toCost!);
+    }
+
+    return this.apiService.get<PageResponse<VehicleServiceForVehicleListItemDto>>(
+      `vehicles/${vehicleId}/services`,
+      {
+        params,
+      },
     );
   }
 
