@@ -1,7 +1,10 @@
 <hlm-dialog>
   <ng-content></ng-content>
 
-  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-sm md:w-md">
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
     @if (isLoadingData()) {
       <hlm-dialog-header>
         <h3 hlmDialogTitle>
