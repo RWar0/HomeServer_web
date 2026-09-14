@@ -77,6 +77,7 @@ export class VehicleServiceCreateEditDialog {
     vehicleId: ['', Validators.required],
     title: ['', Validators.required],
     date: [null as Date | null, Validators.required],
+    mileage: [null as number | null, [Validators.min(0)]],
     cost: [null as number | null, [Validators.min(0)]],
     items: this.fb.array<VehicleServiceItemForm>([]),
   });
@@ -140,6 +141,7 @@ export class VehicleServiceCreateEditDialog {
               vehicleId: res.vehicleId,
               title: res.title,
               date: res.date,
+              mileage: res.mileage,
               cost: res.cost,
             });
 
@@ -177,6 +179,7 @@ export class VehicleServiceCreateEditDialog {
       vehicleId: formData.vehicleId,
       title: formData.title,
       date: formData.date!,
+      mileage: formData.mileage,
       cost: formData.cost,
       items: formData.items,
     };

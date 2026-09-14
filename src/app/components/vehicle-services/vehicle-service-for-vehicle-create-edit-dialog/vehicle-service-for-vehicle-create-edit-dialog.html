@@ -45,8 +45,18 @@
               />
             </hlm-field>
             <hlm-field>
+              <label hlmFieldLabel>Przebieg (km)</label>
+              <input hlmInput type="number" min="0" formControlName="mileage" />
+              <error-label
+                [isDisabled]="
+                  serviceForm.controls.mileage.invalid && serviceForm.controls.mileage.touched
+                "
+                message="Przebieg nie może być ujemny!"
+              />
+            </hlm-field>
+            <hlm-field>
               <label hlmFieldLabel>Koszt</label>
-              <input hlmInput type="number" formControlName="cost" />
+              <input hlmInput type="number" min="0" formControlName="cost" />
               <error-label
                 [isDisabled]="
                   serviceForm.controls.cost.invalid && serviceForm.controls.cost.touched

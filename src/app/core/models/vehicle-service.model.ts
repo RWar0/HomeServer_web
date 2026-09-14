@@ -4,6 +4,7 @@ export interface VehicleServiceListItemDto {
   id: string;
   title: string;
   date: Date;
+  mileage: number | null;
   cost?: number;
 
   vehicleId: string;
@@ -16,6 +17,7 @@ export interface VehicleServiceForVehicleListItemDto {
   id: string;
   title: string;
   date: Date;
+  mileage: number | null;
   cost?: number;
 
   itemsCount: number;
@@ -25,6 +27,7 @@ export interface CreateEditVehicleServiceDto {
   title: string;
   date: Date;
   cost: number | null;
+  mileage: number | null;
   vehicleId: string;
 
   items: CreateEditVehicleServiceItemDto[];
@@ -34,7 +37,7 @@ export interface CreateEditVehicleServiceForVehicleDto {
   title: string;
   date: Date;
   cost: number | null;
-
+  mileage: number | null;
   items: CreateEditVehicleServiceItemDto[];
 }
 

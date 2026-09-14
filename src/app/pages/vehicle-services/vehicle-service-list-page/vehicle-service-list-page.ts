@@ -27,7 +27,7 @@ import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { VehicleServiceCreateEditDialog } from '../../../components/vehicle-services/vehicle-service-create-edit-dialog/vehicle-service-create-edit-dialog';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
-import { FilterSearchInput } from "../../../components/common/filter-search-input/filter-search-input";
+import { FilterSearchInput } from '../../../components/common/filter-search-input/filter-search-input';
 
 @Component({
   selector: 'app-vehicle-service-list-page',
@@ -43,8 +43,8 @@ import { FilterSearchInput } from "../../../components/common/filter-search-inpu
     VehicleServiceCreateEditDialog,
     FormSelect,
     FormDatePicker,
-    FilterSearchInput
-],
+    FilterSearchInput,
+  ],
   templateUrl: './vehicle-service-list-page.html',
   styleUrl: './vehicle-service-list-page.css',
   providers: [
@@ -74,6 +74,12 @@ export class VehicleServiceListPage {
     { key: 'id', label: 'ID', hidden: true },
     { key: 'date', label: 'Data', sortable: true },
     { key: 'vehicleName', label: 'Pojazd', sortable: true },
+    {
+      key: 'mileage',
+      label: 'Przebieg (km)',
+      sortable: true,
+      format: (v) => (v ? v.toString() : '-'),
+    },
     { key: 'title', label: 'Usługa', sortable: true },
     { key: 'cost', label: 'Koszt', sortable: true },
     { key: 'itemsCount', label: 'Pozycje', sortable: true },

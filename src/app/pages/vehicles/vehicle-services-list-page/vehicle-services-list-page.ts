@@ -6,7 +6,6 @@ import { DataTable } from '../../../components/data-table/data-table/data-table'
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
-import { FormSelect } from '../../../components/select/form-select/form-select';
 import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 import { PaginationStore } from '../../../core/stores/pagination.store';
 import { DatePipe } from '@angular/common';
@@ -75,6 +74,12 @@ export class VehicleServicesListPage {
   protected readonly serviceColumns: TableColumn<VehicleServiceForVehicleListItemDto>[] = [
     { key: 'id', label: 'ID', hidden: true },
     { key: 'date', label: 'Data', sortable: true },
+    {
+      key: 'mileage',
+      label: 'Przebieg (km)',
+      sortable: true,
+      format: (v) => (v ? v.toString() : '-'),
+    },
     { key: 'title', label: 'Usługa', sortable: true },
     { key: 'cost', label: 'Koszt', sortable: true },
     { key: 'itemsCount', label: 'Pozycje', sortable: true },

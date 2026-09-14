@@ -19,7 +19,6 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { HlmScrollAreaImports } from '@spartan-ng/helm/scroll-area';
 import { lucideTrash2 } from '@ng-icons/lucide';
 import { VehicleServicesService } from '../../../core/services/vehicle-service/vehicle-service.service';
-import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
 import { CreateEditVehicleServiceItemDto } from '../../../core/models/vehicle-service-item.model';
 import { finalize } from 'rxjs';
 import { displayApiError } from '../../../core/helpers/error-handler';
@@ -75,6 +74,7 @@ export class VehicleServiceForVehicleCreateEditDialog {
     title: ['', Validators.required],
     date: [null as Date | null, Validators.required],
     cost: [null as number | null, [Validators.min(0)]],
+    mileage: [null as number | null, [Validators.min(0)]],
     items: this.fb.array<VehicleServiceItemForm>([]),
   });
 
@@ -117,6 +117,7 @@ export class VehicleServiceForVehicleCreateEditDialog {
             this.serviceForm.patchValue({
               title: res.title,
               date: res.date,
+              mileage: res.mileage,
               cost: res.cost,
             });
 
@@ -149,6 +150,7 @@ export class VehicleServiceForVehicleCreateEditDialog {
       title: formData.title,
       date: formData.date!,
       cost: formData.cost,
+      mileage: formData.mileage,
       items: formData.items,
     };
 
