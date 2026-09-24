@@ -15,9 +15,17 @@ export class CalendarService extends BaseService {
   }
 
   getAll(filters?: DateFilterDto): Observable<CalendarEvent[]> {
-    return forkJoin({
-      customEvents: this.getCustomEvents(filters),
-    }).pipe(map((result) => [...result.customEvents]));
+    let params: HttpParams = new HttpParams();
+    if (filters) {
+      if (filters.fromDate) {
+        params = params.set('fromDate', filters.fromDate.toISOString().split('T')[0]);
+      }
+      if (filters.toDate) {
+        params = params.set('toDate', filters.toDate.toISOString().split('T')[0]);
+      }
+    }
+
+    return this.apiService.get<CalendarEvent[]>('calendar', { params });
   }
 
   getCustomEventForEdit(id: string): Observable<CreateEditCalendarEvent> {
@@ -38,20 +46,5 @@ export class CalendarService extends BaseService {
 
   deleteEvent(id: string): Observable<MessageResponse> {
     return this.apiService.delete<MessageResponse>(`custom-events/${id}`);
-  }
-
-  // Helpers
-  private getCustomEvents(filters?: DateFilterDto): Observable<CalendarEvent[]> {
-    let params: HttpParams = new HttpParams();
-    if (filters) {
-      if (filters.fromDate) {
-        params = params.set('fromDate', filters.fromDate.toISOString().split('T')[0]);
-      }
-      if (filters.toDate) {
-        params = params.set('toDate', filters.toDate.toISOString().split('T')[0]);
-      }
-    }
-
-    return this.apiService.get<CalendarEvent[]>('custom-events', { params });
   }
 }

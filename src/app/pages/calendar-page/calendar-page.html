@@ -128,88 +128,98 @@
       </div>
 
       <!-- Month Days Matrix -->
-      <div class="grid grid-cols-7 border-collapse">
-        @for (cell of calendarGrid(); track cell.dateStr) {
-          <div
-            (click)="selectCell(cell)"
-            class="min-h-21.25 sm:min-h-26.25 p-1.5 sm:p-2 border-b border-r border-slate-100 flex flex-col justify-between transition-all cursor-pointer relative group"
-            [ngClass]="{
-              'bg-slate-50/40 text-slate-400': !cell.isCurrentMonth,
-              'bg-white text-slate-800 hover:bg-slate-50/90':
-                cell.isCurrentMonth && !cell.isSelected,
-              'ring-2 ring-primary ring-inset border-primary bg-sky-50/40 z-10 font-bold':
-                cell.isSelected,
-            }"
-          >
-            <!-- Cell Top Row: Day Number & Indicators -->
-            <div class="flex items-center justify-between">
-              <span
-                class="text-xs sm:text-sm transition-transform group-hover:scale-105"
-                [ngClass]="{
-                  'w-6 h-6 rounded-full bg-primary text-white font-bold flex items-center justify-center shadow-2xs':
-                    cell.isToday,
-                  'font-semibold text-slate-800': cell.isCurrentMonth && !cell.isToday,
-                  'text-slate-400 font-normal': !cell.isCurrentMonth,
-                }"
-              >
-                {{ cell.dayNumber }}
-              </span>
-
-              @if (cell.events.length > 0) {
+      <div class="relative">
+        @if (isLoading()) {
+          <div class="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
+            <hlm-spinner class="text-3xl text-primary" />
+          </div>
+        }
+        <div class="grid grid-cols-7 border-collapse">
+          @for (cell of calendarGrid(); track cell.dateStr) {
+            <div
+              (click)="selectCell(cell)"
+              class="min-h-21.25 sm:min-h-26.25 p-1.5 sm:p-2 border-b border-r border-slate-100 flex flex-col justify-between transition-all cursor-pointer relative group"
+              [ngClass]="{
+                'bg-slate-50/40 text-slate-400': !cell.isCurrentMonth,
+                'bg-white text-slate-800 hover:bg-slate-50/90':
+                  cell.isCurrentMonth && !cell.isSelected,
+                'ring-2 ring-primary ring-inset border-primary bg-sky-50/40 z-10 font-bold':
+                  cell.isSelected,
+                'ring-primary/20': cell.isSelected && isLoading(),
+              }"
+            >
+              <!-- Cell Top Row: Day Number & Indicators -->
+              <div class="flex items-center justify-between">
                 <span
-                  class="text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-full sm:hidden"
+                  class="text-xs sm:text-sm transition-transform group-hover:scale-105"
+                  [ngClass]="{
+                    'w-6 h-6 rounded-full bg-primary text-white font-bold flex items-center justify-center shadow-2xs':
+                      cell.isToday,
+                    'opacity-20': cell.isToday && isLoading(),
+                    'font-semibold text-slate-800': cell.isCurrentMonth && !cell.isToday,
+                    'text-slate-400 font-normal': !cell.isCurrentMonth,
+                  }"
                 >
-                  {{ cell.events.length }}
+                  {{ cell.dayNumber }}
                 </span>
-              }
-            </div>
 
-            <!-- Event Dots / Badges -->
-            <div class="mt-1 space-y-1">
-              <!-- Colored Dots Container -->
-              <div class="flex items-center gap-1 flex-wrap">
-                @for (event of cell.events.slice(0, 3); track event.id) {
+                @if (cell.events.length > 0) {
                   <span
-                    class="w-2.5 h-2.5 rounded-full transition-transform group-hover:scale-110 shadow-2xs inline-block"
-                    [ngClass]="'ring-1 ' + getColorForEventDot(event.category)"
-                    [title]="event.title"
-                  ></span>
-                }
-
-                @if (cell.overflowCount > 0) {
-                  <span
-                    class="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.2 rounded-full border border-slate-200"
+                    class="text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-full sm:hidden"
                   >
-                    +{{ cell.overflowCount }}
+                    {{ cell.events.length }}
                   </span>
                 }
               </div>
 
-              <!-- Miniature Event titles for Desktops and Tablets -->
-              <div class="hidden sm:flex flex-col gap-0.5 mt-1 overflow-hidden">
-                @for (event of cell.events.slice(0, 2); track event.id) {
-                  <div
-                    class="text-[10px] leading-tight font-medium ps-1 pe-1.5 py-0.5 rounded border flex items-center gap-1 overflow-hidden"
-                    [ngClass]="getClassesForEventCategory(event.category)"
-                  >
-                    <ng-icon
-                      class="shrink-0"
-                      [name]="getStatusIcon(getEventStatus(event))"
-                      [class]="getStatusIconColorClass(getEventStatus(event))"
-                      strokeWidth="2.5"
-                    />
+              <!-- Event Dots / Badges -->
+              <div class="mt-1 space-y-1">
+                <!-- Colored Dots Container -->
+                <div class="flex items-center gap-1 flex-wrap">
+                  @for (event of cell.events.slice(0, 3); track event.id) {
+                    <span
+                      class="w-2.5 h-2.5 rounded-full transition-transform group-hover:scale-110 shadow-2xs inline-block"
+                      [ngClass]="'ring-1 ' + getColorForEventDot(event.category)"
+                      [title]="event.title"
+                    ></span>
+                  }
 
-                    <span class="min-w-0 truncate">
-                      {{ event.title }}
+                  @if (cell.overflowCount > 0) {
+                    <span
+                      class="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.2 rounded-full border border-slate-200"
+                    >
+                      +{{ cell.overflowCount }}
                     </span>
-                  </div>
-                }
+                  }
+                </div>
+
+                <!-- Miniature Event titles for Desktops and Tablets -->
+                <div class="hidden sm:flex flex-col gap-0.5 mt-1 overflow-hidden">
+                  @for (event of cell.events.slice(0, 2); track event.id) {
+                    <div
+                      class="text-[10px] leading-tight font-medium ps-1 pe-1.5 py-0.5 rounded border flex items-center gap-1 overflow-hidden"
+                      [ngClass]="getClassesForEventCategory(event.category)"
+                    >
+                      @if (event.isCustomEvent) {
+                        <ng-icon
+                          class="shrink-0"
+                          [name]="getStatusIcon(getEventStatus(event))"
+                          [class]="getStatusIconColorClass(getEventStatus(event))"
+                          strokeWidth="2.5"
+                        />
+                      }
+
+                      <span class="min-w-0 truncate">
+                        {{ event.title }}
+                      </span>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
-          </div>
-        }
+          }
+        </div>
       </div>
-
       <!-- Calendar Bottom Legend -->
       <div
         class="bg-slate-50 border-t border-slate-200 p-3 flex flex-wrap items-center gap-6 text-xs text-slate-700 font-medium"
@@ -320,22 +330,23 @@
                 <!-- Title -->
                 <h4 class="font-bold text-slate-900 text-sm leading-snug md:flex-1">
                   {{ event.title }}
-                  dsa dsa dsa
                 </h4>
 
-                <span
-                  class="px-2 py-0.5 rounded-full text-[11px] font-semibold border flex items-center gap-1"
-                  [ngClass]="[
-                    getStatusIconColorClass(getEventStatus(event)),
-                    getStatusIconBgColorClass(getEventStatus(event)),
-                  ]"
-                >
-                  <ng-icon
-                    [name]="getStatusIcon(getEventStatus(event))"
-                    [class]="getStatusIconColorClass(getEventStatus(event))"
-                  />
-                  {{ translateCalendarStatus(getEventStatus(event)) }}
-                </span>
+                @if (event.isCustomEvent) {
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[11px] font-semibold border flex items-center gap-1"
+                    [ngClass]="[
+                      getStatusIconColorClass(getEventStatus(event)),
+                      getStatusIconBgColorClass(getEventStatus(event)),
+                    ]"
+                  >
+                    <ng-icon
+                      [name]="getStatusIcon(getEventStatus(event))"
+                      [class]="getStatusIconColorClass(getEventStatus(event))"
+                    />
+                    {{ translateCalendarStatus(getEventStatus(event)) }}
+                  </span>
+                }
               </div>
 
               <!-- Metadata: Time & Location -->
@@ -360,7 +371,7 @@
               <!-- Description -->
               @if (event.description) {
                 <p
-                  class="text-xs text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/80 leading-relaxed"
+                  class="text-xs text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/80 leading-relaxed whitespace-pre-line"
                 >
                   {{ event.description }}
                 </p>
@@ -391,7 +402,7 @@
             <div>
               <h4 class="font-semibold text-slate-800 text-sm">Brak wydarzeń w tym dniu</h4>
               <p class="text-xs text-slate-500 mt-1 max-w-55 mx-auto">
-                Nie zaplanowano jeszcze żadnych prac ani przypomnień.
+                Nie było żadnych wydarzeń i nie zaplanowano jeszcze żadnych prac ani przypomnień.
               </p>
             </div>
             <button

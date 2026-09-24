@@ -49,6 +49,7 @@ import {
   getCalendarEventStatusIcon,
   translateCalendarStatus,
 } from '../../core/helpers/category-event-status';
+import { HlmSpinner } from '@spartan-ng/helm/spinner';
 
 @Component({
   selector: 'app-calendar-page',
@@ -60,6 +61,7 @@ import {
     CalendarEventDialog,
     RefreshListButton,
     DeleteConfirmDialog,
+    HlmSpinner,
   ],
   templateUrl: './calendar-page.html',
   styleUrl: './calendar-page.css',
@@ -109,6 +111,7 @@ export class CalendarPage {
   protected readonly translateCalendarStatus = translateCalendarStatus;
 
   // State Signals
+  protected readonly isLoading = computed(() => this.eventsResource.status() === 'loading');
   readonly activeDate = signal<Date>(new Date());
   readonly selectedDate = signal<Date>(new Date());
   readonly selectedDateStr = computed(() => formatDateToIsoDate(this.selectedDate()));
@@ -278,16 +281,29 @@ export class CalendarPage {
 
   goToToday(): void {
     const today = new Date();
+
+    if (today.getMonth() !== this.activeDate().getMonth()) {
+      this.updateMonthFilters(today);
+    }
+
     this.activeDate.set(today);
     this.selectedDate.set(today);
-    this.updateMonthFilters(today);
   }
 
   selectCell(cell: CalendarDayCell): void {
-    this.selectedDate.set(cell.date);
-    if (!cell.isCurrentMonth) {
-      this.activeDate.set(new Date(cell.date.getFullYear(), cell.date.getMonth(), 1));
+    if (cell.isCurrentMonth) {
+      this.selectedDate.set(cell.date);
+      return;
     }
+
+    if (cell.date.getMonth() < this.activeDate().getMonth()) {
+      this.prevMonth();
+    } else {
+      this.nextMonth();
+    }
+
+    this.selectedDate.set(cell.date);
+    this.updateMonthFilters(cell.date);
   }
 
   setCategoryFilter(category: null | CalendarEventCategory): void {
