@@ -8,8 +8,13 @@ import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-d
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 import { PaginationStore } from '../../../core/stores/pagination.store';
-import { DatePipe } from '@angular/common';
-import { lucideFilterX, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideFilterX,
+  lucideInfo,
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 import { VehicleServicesService } from '../../../core/services/vehicle-service/vehicle-service.service';
 import {
   VehicleServiceForVehicleFilterDto,
@@ -26,6 +31,8 @@ import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { VehicleServiceForVehicleCreateEditDialog } from '../../../components/vehicle-services/vehicle-service-for-vehicle-create-edit-dialog/vehicle-service-for-vehicle-create-edit-dialog';
 import { FilterSearchInput } from '../../../components/common/filter-search-input/filter-search-input';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { VehicleServiceInfoDialog } from '../../../components/vehicle-services/vehicle-service-info-dialog/vehicle-service-info-dialog';
 
 @Component({
   selector: 'app-vehicle-services-list-page',
@@ -41,17 +48,21 @@ import { FilterSearchInput } from '../../../components/common/filter-search-inpu
     FormDatePicker,
     VehicleServiceForVehicleCreateEditDialog,
     FilterSearchInput,
-  ],
+    VehicleServiceInfoDialog
+],
   templateUrl: './vehicle-services-list-page.html',
   styleUrl: './vehicle-services-list-page.css',
   providers: [
     PaginationStore,
+    CurrencyPipe,
     DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX }),
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
 })
 export class VehicleServicesListPage {
   // Injects
+  private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly datePipe = inject(DatePipe);
   private readonly appRef = inject(ApplicationRef);
   private readonly vehicleServicesService = inject(VehicleServicesService);
   private readonly vehicleService = inject(VehicleService);
@@ -73,7 +84,17 @@ export class VehicleServicesListPage {
 
   protected readonly serviceColumns: TableColumn<VehicleServiceForVehicleListItemDto>[] = [
     { key: 'id', label: 'ID', hidden: true },
-    { key: 'date', label: 'Data', sortable: true },
+    {
+      key: 'date',
+      label: 'Data',
+      sortable: true,
+      format: (value) => {
+        if (!value) {
+          return '-';
+        }
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
+      },
+    },
     {
       key: 'mileage',
       label: 'Przebieg (km)',
@@ -81,7 +102,12 @@ export class VehicleServicesListPage {
       format: (v) => (v ? v.toString() : '-'),
     },
     { key: 'title', label: 'Usługa', sortable: true },
-    { key: 'cost', label: 'Koszt', sortable: true },
+    {
+      key: 'cost',
+      label: 'Koszt',
+      sortable: true,
+      format: (v) => (v ? (this.currencyPipe.transform(v as number, 'PLN', 'symbol') ?? '-') : '-'),
+    },
     { key: 'itemsCount', label: 'Pozycje', sortable: true },
   ];
 

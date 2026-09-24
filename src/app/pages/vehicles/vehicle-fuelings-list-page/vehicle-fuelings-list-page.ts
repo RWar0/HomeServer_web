@@ -8,8 +8,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { PaginationStore } from '../../../core/stores/pagination.store';
-import { DatePipe } from '@angular/common';
-import { lucideFilterX, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideFilterX,
+  lucideInfo,
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { VehicleFuelingOfVehicleListItemDto } from '../../../core/models/vehicle-fueling.model';
@@ -22,6 +27,8 @@ import { VehicleFuelingService } from '../../../core/services/vehicle-fueling/ve
 import { DateFilterDto } from '../../../core/models/common-filters.model';
 import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 import { VehicleFuelingForVehicleCreateEditDialog } from '../../../components/vehicle-fuelings/vehicle-fueling-for-vehicle-create-edit-dialog/vehicle-fueling-for-vehicle-create-edit-dialog';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { VehicleFuelingInfoDialog } from '../../../components/vehicle-fuelings/vehicle-fueling-info-dialog/vehicle-fueling-info-dialog';
 
 @Component({
   selector: 'app-vehicle-fuelings-list-page',
@@ -36,17 +43,21 @@ import { VehicleFuelingForVehicleCreateEditDialog } from '../../../components/ve
     RefreshListButton,
     VehicleFuelingForVehicleCreateEditDialog,
     FormDatePicker,
+    VehicleFuelingInfoDialog,
   ],
   templateUrl: './vehicle-fuelings-list-page.html',
   styleUrl: './vehicle-fuelings-list-page.css',
   providers: [
     PaginationStore,
+    CurrencyPipe,
     DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX }),
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
 })
 export class VehicleFuelingsListPage {
   // Injects
+  private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly datePipe = inject(DatePipe);
   private readonly appRef = inject(ApplicationRef);
   private readonly vehicleService = inject(VehicleService);
   private readonly vehicleFuelingService = inject(VehicleFuelingService);
@@ -66,9 +77,25 @@ export class VehicleFuelingsListPage {
   // Table columns
   protected readonly fuelingColumns: TableColumn<VehicleFuelingOfVehicleListItemDto>[] = [
     { key: 'id', label: 'ID', hidden: true },
-    { key: 'date', label: 'Data', sortable: true },
+    {
+      key: 'date',
+      label: 'Data',
+      sortable: true,
+      format: (value) => {
+        if (!value) {
+          return '-';
+        }
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
+      },
+    },
     { key: 'quantity', label: 'Ilość (L)', sortable: true },
-    { key: 'cost', label: 'Koszt', sortable: true },
+    {
+      key: 'cost',
+      label: 'Koszt',
+      sortable: true,
+      format: (v: unknown) =>
+        v ? (this.currencyPipe.transform(v as number, 'PLN', 'symbol') ?? '-') : '-',
+    },
   ];
 
   constructor() {

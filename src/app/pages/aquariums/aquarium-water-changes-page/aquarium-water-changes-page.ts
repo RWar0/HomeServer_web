@@ -12,13 +12,20 @@ import { TableColumn } from '../../../core/models/data-table.model';
 import { DatePipe } from '@angular/common';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideNotebookPen, lucidePlus, lucideRotateCw, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideInfo,
+  lucideNotebookPen,
+  lucidePlus,
+  lucideRotateCw,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { toast } from '@spartan-ng/brain/sonner';
 import { WaterChangeService } from '../../../core/services/water-change/water-change.service';
 import { AquariumWaterChangeCreateEditDialog } from '../../../components/aquariums/aquarium-water-change-create-edit-dialog/aquarium-water-change-create-edit-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
+import { WaterChangeInfoDialog } from '../../../components/water-changes/water-change-info-dialog/water-change-info-dialog';
 
 @Component({
   selector: 'app-aquarium-water-changes-page',
@@ -31,13 +38,14 @@ import { RefreshListButton } from '../../../components/common/refresh-list-butto
     DeleteConfirmDialog,
     AquariumWaterChangeCreateEditDialog,
     RefreshListButton,
-  ],
+    WaterChangeInfoDialog
+],
   templateUrl: './aquarium-water-changes-page.html',
   styleUrl: './aquarium-water-changes-page.css',
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucideNotebookPen, lucideTrash2, lucidePlus, lucideRotateCw }),
+    provideIcons({ lucideNotebookPen, lucideTrash2, lucidePlus, lucideRotateCw, lucideInfo }),
   ],
 })
 export class AquariumWaterChangesPage {

@@ -107,16 +107,16 @@ export class WaterChangesPage {
       sortable: true,
       format: (value) => {
         if (!value) {
-          return '—';
+          return '-';
         }
-        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '—';
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
       },
     },
     {
       key: 'amount',
-      label: 'Ilość (l)',
+      label: 'Ilość',
       sortable: true,
-      format: (value) => (value != null ? `${value} l` : '—'),
+      format: (value) => (value != null ? `${value} L` : '-'),
     },
     {
       key: 'aquariumName',

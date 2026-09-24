@@ -43,7 +43,7 @@ import { VehicleService } from '../../../core/services/vehicles/vehicle.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { VehicleFuelingInfoDialog } from '../../../components/vehicle-fuelings/vehicle-fueling-info-dialog/vehicle-fueling-info-dialog';
 import { getOpenDialogAndRemoveQueryParam } from '../../../core/helpers/get-open-dialog-and-remove-query-param';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-fueling-list-page',
@@ -65,6 +65,7 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './vehicle-fueling-list-page.css',
   providers: [
     CurrencyPipe,
+    DatePipe,
     PaginationStore,
     provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
@@ -72,6 +73,7 @@ import { CurrencyPipe } from '@angular/common';
 export class VehicleFuelingListPage {
   // Injects
   private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly datePipe = inject(DatePipe);
   private readonly appRef = inject(ApplicationRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -92,7 +94,17 @@ export class VehicleFuelingListPage {
   // Table columns
   protected readonly fuelingColumns: TableColumn<VehicleFuelingListItemDto>[] = [
     { key: 'id', label: 'ID', hidden: true },
-    { key: 'date', label: 'Data', sortable: true },
+    {
+      key: 'date',
+      label: 'Data',
+      sortable: true,
+      format: (value) => {
+        if (!value) {
+          return '-';
+        }
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
+      },
+    },
     { key: 'vehicleName', label: 'Pojazd', sortable: true },
     { key: 'quantity', label: 'Ilość (L)', sortable: true },
     {

@@ -44,7 +44,7 @@ import { FilterSearchInput } from '../../../components/common/filter-search-inpu
 import { VehicleServiceInfoDialog } from '../../../components/vehicle-services/vehicle-service-info-dialog/vehicle-service-info-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getOpenDialogAndRemoveQueryParam } from '../../../core/helpers/get-open-dialog-and-remove-query-param';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-service-list-page',
@@ -68,12 +68,14 @@ import { CurrencyPipe } from '@angular/common';
   providers: [
     PaginationStore,
     CurrencyPipe,
+    DatePipe,
     provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
 })
 export class VehicleServiceListPage {
   // Injects
   private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly datePipe = inject(DatePipe);
   private readonly appRef = inject(ApplicationRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -96,7 +98,17 @@ export class VehicleServiceListPage {
 
   protected readonly serviceColumns: TableColumn<VehicleServiceListItemDto>[] = [
     { key: 'id', label: 'ID', hidden: true },
-    { key: 'date', label: 'Data', sortable: true },
+    {
+      key: 'date',
+      label: 'Data',
+      sortable: true,
+      format: (value) => {
+        if (!value) {
+          return '-';
+        }
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
+      },
+    },
     { key: 'vehicleName', label: 'Pojazd', sortable: true },
     {
       key: 'mileage',

@@ -60,6 +60,10 @@
 
   <ng-template #actionsMenu let-row>
     <div hlmDropdownMenu class="w-48">
+      <button hlmDropdownMenuItem (click)="infoDialogCmp.open(row.id)" variant="primary">
+        <ng-icon name="lucideInfo" />
+        Szczegóły
+      </button>
       <button
         hlmDropdownMenuItem
         (click)="createEditDialogCmp.openEdit(row.id)"
@@ -94,3 +98,4 @@
   (refreshList)="refreshList()"
   [vehicleId]="vehicleId()"
 />
+<vehicle-service-info-dialog #infoDialogCmp />
