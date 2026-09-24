@@ -5,6 +5,7 @@ import { MessageResponse } from '../../models/message-response.model';
 import {
   CreateEditWaterChangeDto,
   CreateEditWaterChangeOfAquariumDto,
+  WaterChangeInfoItem,
   WaterChangeListFiltersDto,
   WaterChangeListItem,
 } from '../../models/water-changes.model';
@@ -59,6 +60,9 @@ export class WaterChangeService extends BaseService {
     });
   }
 
+  getById(waterChangeId: string): Observable<WaterChangeInfoItem> {
+    return this.apiService.get<WaterChangeInfoItem>(`water-changes/${waterChangeId}`);
+  }
   getWaterChangeForEdit(waterChangeId: string): Observable<CreateEditWaterChangeDto> {
     return this.apiService.get<CreateEditWaterChangeDto>(`water-changes/${waterChangeId}/for-edit`);
   }

@@ -26,6 +26,7 @@ import {
   lucideCheckSquare2,
   lucideCheck,
   lucideCalendarCheck,
+  lucideInfo,
 } from '@ng-icons/lucide';
 import { tablerCar } from '@ng-icons/tabler-icons';
 import { CalendarService } from '../../core/services/calendar/calendar.service';
@@ -50,6 +51,11 @@ import {
   translateCalendarStatus,
 } from '../../core/helpers/category-event-status';
 import { HlmSpinner } from '@spartan-ng/helm/spinner';
+import {
+  existsCalendarEventSubCategory,
+  getRedirectPathForCalendarEventSubcategory,
+} from '../../core/helpers/calendar-event-subcategory';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-calendar-page',
@@ -62,6 +68,7 @@ import { HlmSpinner } from '@spartan-ng/helm/spinner';
     RefreshListButton,
     DeleteConfirmDialog,
     HlmSpinner,
+    RouterLink,
   ],
   templateUrl: './calendar-page.html',
   styleUrl: './calendar-page.css',
@@ -91,6 +98,7 @@ import { HlmSpinner } from '@spartan-ng/helm/spinner';
       lucideNotebookPen,
       lucideHome,
       lucideUser,
+      lucideInfo,
     }),
   ],
 })
@@ -105,10 +113,14 @@ export class CalendarPage {
     ([key, value]) => ({ key: value, value: translateEventCategory(value) }),
   );
 
+  // Custom methods allowing easy access to helper functions and HTML
   protected readonly getStatusIcon = getCalendarEventStatusIcon;
   protected readonly getStatusIconColorClass = getCalendarEventIconStatusColorClass;
   protected readonly getStatusIconBgColorClass = getCalendarEventIconBgColorClass;
   protected readonly translateCalendarStatus = translateCalendarStatus;
+  protected readonly existsCalendarEventSubCategory = existsCalendarEventSubCategory;
+  protected readonly getRedirectPathForCalendarEventSubcategory =
+    getRedirectPathForCalendarEventSubcategory;
 
   // State Signals
   protected readonly isLoading = computed(() => this.eventsResource.status() === 'loading');

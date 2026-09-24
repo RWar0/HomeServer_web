@@ -1,6 +1,6 @@
-<div class="flex items-center">
+<div class="flex items-start">
   <span [class]="labelWeightClass() + ' ' + labelColorClass() + ' ' + gapClass()"
     >{{ label() }}:</span
   >
-  <span> {{ value() ?? '' }} {{ value() && unit() ? unit() : '' }} </span>
+  <span> {{ value() ?? '-' }} {{ value() && unit() ? unit() : '' }} </span>
 </div>

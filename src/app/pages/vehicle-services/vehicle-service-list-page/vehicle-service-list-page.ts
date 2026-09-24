@@ -1,4 +1,12 @@
-import { ApplicationRef, Component, inject, resource, signal } from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  effect,
+  inject,
+  resource,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
@@ -8,8 +16,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { PaginationStore } from '../../../core/stores/pagination.store';
-import { DatePipe } from '@angular/common';
-import { lucideNotebookPen, lucidePlus, lucideTrash2, lucideFilterX } from '@ng-icons/lucide';
+import {
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+  lucideFilterX,
+  lucideInfo,
+} from '@ng-icons/lucide';
 import { VehicleServicesService } from '../../../core/services/vehicle-service/vehicle-service.service';
 import { TableColumn } from '../../../core/models/data-table.model';
 import {
@@ -28,6 +41,10 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { VehicleServiceCreateEditDialog } from '../../../components/vehicle-services/vehicle-service-create-edit-dialog/vehicle-service-create-edit-dialog';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
 import { FilterSearchInput } from '../../../components/common/filter-search-input/filter-search-input';
+import { VehicleServiceInfoDialog } from '../../../components/vehicle-services/vehicle-service-info-dialog/vehicle-service-info-dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { getOpenDialogAndRemoveQueryParam } from '../../../core/helpers/get-open-dialog-and-remove-query-param';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-service-list-page',
@@ -44,21 +61,28 @@ import { FilterSearchInput } from '../../../components/common/filter-search-inpu
     FormSelect,
     FormDatePicker,
     FilterSearchInput,
+    VehicleServiceInfoDialog,
   ],
   templateUrl: './vehicle-service-list-page.html',
   styleUrl: './vehicle-service-list-page.css',
   providers: [
     PaginationStore,
-    DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX }),
+    CurrencyPipe,
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
 })
 export class VehicleServiceListPage {
+  // Injects
+  private readonly currencyPipe = inject(CurrencyPipe);
   private readonly appRef = inject(ApplicationRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly vehicleServicesService = inject(VehicleServicesService);
   private readonly vehicleService = inject(VehicleService);
   protected readonly paginationStore = inject(PaginationStore);
 
+  // Signals
+  protected readonly infoDialogCmp = viewChild<VehicleServiceInfoDialog>('infoDialogCmp');
   private readonly refreshSignal = signal(0);
 
   protected readonly filters = signal<VehicleServiceFilterDto>({
@@ -81,7 +105,13 @@ export class VehicleServiceListPage {
       format: (v) => (v ? v.toString() : '-'),
     },
     { key: 'title', label: 'Usługa', sortable: true },
-    { key: 'cost', label: 'Koszt', sortable: true },
+    {
+      key: 'cost',
+      label: 'Koszt',
+      sortable: true,
+      format: (v: unknown) =>
+        v ? (this.currencyPipe.transform(v as number, 'PLN', 'symbol') ?? '-') : '-',
+    },
     { key: 'itemsCount', label: 'Pozycje', sortable: true },
   ];
 
@@ -98,6 +128,12 @@ export class VehicleServiceListPage {
         setter: (v) => this.setFilter('toDate', v ? new Date(v) : null),
         formatter: (v) => v?.toISOString().split('T')[0],
       },
+    });
+
+    effect(() => {
+      getOpenDialogAndRemoveQueryParam(this.route, this.router, 'show_id', (showId) =>
+        this.infoDialogCmp()?.open(showId),
+      );
     });
   }
 

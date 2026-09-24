@@ -6,6 +6,7 @@ import {
   VehicleServiceFilterDto,
   VehicleServiceForVehicleFilterDto,
   VehicleServiceForVehicleListItemDto,
+  VehicleServiceInfoItem,
   VehicleServiceListItemDto,
 } from '../../models/vehicle-service.model';
 import {
@@ -75,6 +76,10 @@ export class VehicleServicesService extends BaseService {
     return this.apiService.get<PageResponse<VehicleServiceListItemDto>>(`vehicle-services/list`, {
       params,
     });
+  }
+
+  getById(id: string): Observable<VehicleServiceInfoItem> {
+    return this.apiService.get<VehicleServiceInfoItem>(`vehicle-services/${id}`);
   }
 
   getForEdit(id: string): Observable<CreateEditVehicleServiceDto> {

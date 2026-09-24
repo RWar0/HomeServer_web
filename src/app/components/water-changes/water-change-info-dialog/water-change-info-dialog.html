@@ -1,0 +1,23 @@
+<hlm-dialog>
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Podmiana wody</h3>
+      <p hlmDialogDescription>Szczegóły dotyczące podmiany wody.</p>
+    </hlm-dialog-header>
+
+    @if (isLoadingData()) {
+      <div class="flex items-center justify-center h-20">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+    } @else {
+      <div class="flex flex-col gap-1">
+        <labeled-field label="Akwarium" [value]="waterChange?.aquariumName" />
+        <labeled-field label="Data" [value]="waterChange?.changeDate | date: 'dd.MM.yyyy'" />
+        <labeled-field label="Ilość" [value]="waterChange?.amount" unit="L" />
+      </div>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

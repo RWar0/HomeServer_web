@@ -1,4 +1,13 @@
-import { ApplicationRef, Component, effect, inject, resource, signal } from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  effect,
+  inject,
+  resource,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WaterChangeService } from '../../../core/services/water-change/water-change.service';
 import { PaginationStore } from '../../../core/stores/pagination.store';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -12,7 +21,13 @@ import {
 import { syncPaginationQueryParams } from '../../../core/helpers/pagination-query-sync';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { DatePipe } from '@angular/common';
-import { lucideFilterX, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideFilterX,
+  lucideInfo,
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { Pagination } from '../../../components/common/pagination/pagination';
@@ -28,6 +43,8 @@ import { AquariumService } from '../../../core/services/aquarium/aquarium.servic
 import { SelectOption } from '../../../core/models/select.model';
 import { syncQueryParams } from '../../../core/helpers/signal-patameter-query-sync';
 import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
+import { WaterChangeInfoDialog } from '../../../components/water-changes/water-change-info-dialog/water-change-info-dialog';
+import { getOpenDialogAndRemoveQueryParam } from '../../../core/helpers/get-open-dialog-and-remove-query-param';
 
 @Component({
   selector: 'app-water-changes-page',
@@ -43,22 +60,28 @@ import { FormDatePicker } from '../../../components/date-picker/form-date-picker
     WaterChangeCreateEditDialog,
     FormSelect,
     FormDatePicker,
+    WaterChangeInfoDialog,
   ],
   templateUrl: './water-changes-page.html',
   styleUrl: './water-changes-page.css',
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX }),
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
 })
 export class WaterChangesPage {
   // injects
   private readonly appRef = inject(ApplicationRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly waterChangesService = inject(WaterChangeService);
   private readonly aquariumService = inject(AquariumService);
   private readonly datePipe = inject(DatePipe);
   protected readonly paginationStore = inject(PaginationStore);
+
+  // viewChilds
+  protected readonly infoDialogCmp = viewChild<WaterChangeInfoDialog>('infoDialogCmp');
 
   // signals
   private readonly refreshSignal = signal(0);
@@ -116,6 +139,12 @@ export class WaterChangesPage {
         setter: (value) => this.setFilter('toDate', value ? new Date(value) : null),
         formatter: (filters) => filters?.toISOString().split('T')[0],
       },
+    });
+
+    effect(() => {
+      getOpenDialogAndRemoveQueryParam(this.route, this.router, 'show_id', (showId) =>
+        this.infoDialogCmp()?.open(showId),
+      );
     });
   }
 

@@ -1,7 +1,8 @@
 export interface VehicleServiceItemDto {
+  id: string;
   title: string;
   description?: string;
-  cost?: string;
+  cost?: number;
 }
 
 export interface CreateEditVehicleServiceItemDto {

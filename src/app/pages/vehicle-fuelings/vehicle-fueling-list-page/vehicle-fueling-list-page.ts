@@ -1,4 +1,12 @@
-import { ApplicationRef, Component, inject, resource, signal } from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  effect,
+  inject,
+  resource,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
@@ -8,8 +16,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { PaginationStore } from '../../../core/stores/pagination.store';
-import { DatePipe } from '@angular/common';
-import { lucideNotebookPen, lucidePlus, lucideTrash2, lucideFilterX } from '@ng-icons/lucide';
+import {
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+  lucideFilterX,
+  lucideInfo,
+} from '@ng-icons/lucide';
 import { VehicleFuelingService } from '../../../core/services/vehicle-fueling/vehicle-fueling.service';
 import { TableColumn } from '../../../core/models/data-table.model';
 import {
@@ -27,6 +40,10 @@ import { displayApiError } from '../../../core/helpers/error-handler';
 import { toast } from '@spartan-ng/brain/sonner';
 import { VehicleFuelingCreateEditDialog } from '../../../components/vehicle-fuelings/vehicle-fueling-create-edit-dialog/vehicle-fueling-create-edit-dialog';
 import { VehicleService } from '../../../core/services/vehicles/vehicle.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { VehicleFuelingInfoDialog } from '../../../components/vehicle-fuelings/vehicle-fueling-info-dialog/vehicle-fueling-info-dialog';
+import { getOpenDialogAndRemoveQueryParam } from '../../../core/helpers/get-open-dialog-and-remove-query-param';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-fueling-list-page',
@@ -42,23 +59,28 @@ import { VehicleService } from '../../../core/services/vehicles/vehicle.service'
     VehicleFuelingCreateEditDialog,
     FormSelect,
     FormDatePicker,
+    VehicleFuelingInfoDialog,
   ],
   templateUrl: './vehicle-fueling-list-page.html',
   styleUrl: './vehicle-fueling-list-page.css',
   providers: [
+    CurrencyPipe,
     PaginationStore,
-    DatePipe,
-    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX }),
+    provideIcons({ lucidePlus, lucideTrash2, lucideNotebookPen, lucideFilterX, lucideInfo }),
   ],
 })
 export class VehicleFuelingListPage {
   // Injects
+  private readonly currencyPipe = inject(CurrencyPipe);
   private readonly appRef = inject(ApplicationRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly fuelingService = inject(VehicleFuelingService);
   private readonly vehicleService = inject(VehicleService);
   protected readonly paginationStore = inject(PaginationStore);
 
   // Signals
+  protected readonly infoDialogCmp = viewChild<VehicleFuelingInfoDialog>('infoDialogCmp');
   private readonly refreshSignal = signal(0);
 
   protected readonly filters = signal<VehicleFuelingFilterDto>({
@@ -73,7 +95,13 @@ export class VehicleFuelingListPage {
     { key: 'date', label: 'Data', sortable: true },
     { key: 'vehicleName', label: 'Pojazd', sortable: true },
     { key: 'quantity', label: 'Ilość (L)', sortable: true },
-    { key: 'cost', label: 'Koszt', sortable: true },
+    {
+      key: 'cost',
+      label: 'Koszt',
+      sortable: true,
+      format: (v: unknown) =>
+        v ? (this.currencyPipe.transform(v as number, 'PLN', 'symbol') ?? '-') : '-',
+    },
   ];
 
   constructor() {
@@ -90,6 +118,12 @@ export class VehicleFuelingListPage {
         setter: (value) => this.setFilter('toDate', value ? new Date(value) : null),
         formatter: (filters) => filters?.toISOString().split('T')[0],
       },
+    });
+
+    effect(() => {
+      getOpenDialogAndRemoveQueryParam(this.route, this.router, 'show_id', (showId) =>
+        this.infoDialogCmp()?.open(showId),
+      );
     });
   }
 

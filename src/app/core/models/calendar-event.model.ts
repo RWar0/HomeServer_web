@@ -1,9 +1,11 @@
 import { CalendarEventCategory } from '../enums/calendar-event-category.enum';
+import { CalendarEventSubCategory } from '../enums/calendar-event-subcategory.enum';
 
 export interface CalendarEvent {
   id: string;
   title: string;
   category: CalendarEventCategory;
+  subCategory?: CalendarEventSubCategory;
   date: Date;
   time?: string;
   location?: string;

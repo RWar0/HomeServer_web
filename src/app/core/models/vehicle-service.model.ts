@@ -1,4 +1,7 @@
-import { CreateEditVehicleServiceItemDto } from './vehicle-service-item.model';
+import {
+  CreateEditVehicleServiceItemDto,
+  VehicleServiceItemDto,
+} from './vehicle-service-item.model';
 
 export interface VehicleServiceListItemDto {
   id: string;
@@ -11,6 +14,18 @@ export interface VehicleServiceListItemDto {
   vehicleName: string;
 
   itemsCount: number;
+}
+
+export interface VehicleServiceInfoItem {
+  id: string;
+  title: string;
+  date: Date;
+  mileage: number | null;
+  cost?: number;
+
+  vehicleName: string;
+
+  items: VehicleServiceItemDto[];
 }
 
 export interface VehicleServiceForVehicleListItemDto {

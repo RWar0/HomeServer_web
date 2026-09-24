@@ -14,6 +14,14 @@ export interface VehicleFuelingOfVehicleListItemDto {
   date: Date;
 }
 
+export interface VehicleFuelingInfoItem {
+  id: string;
+  quantity: number;
+  cost?: number;
+  date: Date;
+  vehicleName: string;
+}
+
 export interface VehicleFuelingForEditDto {
   id: string;
   quantity: number;

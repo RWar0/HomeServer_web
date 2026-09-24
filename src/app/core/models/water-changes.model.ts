@@ -12,6 +12,13 @@ export interface WaterChangeListItem {
   aquariumName: string;
 }
 
+export interface WaterChangeInfoItem {
+  id: string;
+  amount: number;
+  changeDate: Date;
+  aquariumName: string;
+}
+
 export interface CreateEditWaterChangeDto {
   amount: number;
   changeDate: string;

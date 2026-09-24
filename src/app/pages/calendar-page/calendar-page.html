@@ -31,7 +31,7 @@
     class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-2xs flex flex-wrap items-center justify-between gap-3"
   >
     <!-- Month Navigation -->
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <button
         hlmBtn
         variant="outline"
@@ -328,9 +328,37 @@
 
               <div class="flex flex-wrap md:flex-nowrap items-center justify-between gap-2">
                 <!-- Title -->
-                <h4 class="font-bold text-slate-900 text-sm leading-snug md:flex-1">
-                  {{ event.title }}
-                </h4>
+                @if (
+                  !event.isCustomEvent &&
+                  event.subCategory &&
+                  existsCalendarEventSubCategory(event.subCategory)
+                ) {
+                  <div class="w-full flex flex-wrap justify-between items-center gap-2">
+                    <h4 class="font-bold text-slate-900 text-sm leading-snug md:flex-1">
+                      <a
+                        [routerLink]="getRedirectPathForCalendarEventSubcategory(event.subCategory)"
+                        [queryParams]="{ show_id: event.id }"
+                      >
+                        {{ event.title }}
+                      </a>
+                    </h4>
+                    <button
+                      hlmBtn
+                      [routerLink]="getRedirectPathForCalendarEventSubcategory(event.subCategory)"
+                      [queryParams]="{ show_id: event.id }"
+                      variant="outline"
+                      type="button"
+                      class="text-slate-400 hover:text-blue-600 transition-colors hover:bg-slate-200/60"
+                      hlmTooltip="Szczegóły wydarzenia"
+                    >
+                      <ng-icon name="lucideInfo" class="text-sm" />
+                    </button>
+                  </div>
+                } @else {
+                  <h4 class="font-bold text-slate-900 text-sm leading-snug md:flex-1">
+                    {{ event.title }}
+                  </h4>
+                }
 
                 @if (event.isCustomEvent) {
                   <span

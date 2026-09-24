@@ -200,6 +200,9 @@ export class VehicleServiceForVehicleCreateEditDialog {
     this.serviceForm.reset();
     this.serviceForm.markAsUntouched();
 
+    this.itemsFormArray.clear();
+    this.itemsFormArray.markAsUntouched();
+
     this.serviceId.set(null);
     this.serviceId.set(id);
 

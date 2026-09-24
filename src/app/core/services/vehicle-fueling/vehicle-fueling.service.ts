@@ -6,6 +6,7 @@ import {
   VehicleFuelingFilterDto,
   VehicleFuelingForEditDto,
   VehicleFuelingForEditWithoutVehicleDto,
+  VehicleFuelingInfoItem,
   VehicleFuelingListItemDto,
 } from '../../models/vehicle-fueling.model';
 import { MessageResponse } from '../../models/message-response.model';
@@ -59,6 +60,10 @@ export class VehicleFuelingService extends BaseService {
     return this.apiService.get<PageResponse<VehicleFuelingListItemDto>>(`vehicle-fuelings/list`, {
       params,
     });
+  }
+
+  getById(id: string): Observable<VehicleFuelingInfoItem> {
+    return this.apiService.get<VehicleFuelingInfoItem>(`vehicle-fuelings/${id}`);
   }
 
   getForEdit(id: string): Observable<VehicleFuelingForEditDto> {

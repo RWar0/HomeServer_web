@@ -11,6 +11,18 @@ export interface ParametersCheckListItem {
   aquariumName: string;
 }
 
+export interface ParametersCheckInfoItem {
+  id: string;
+  ph?: number;
+  kh?: number;
+  gh?: number;
+  no3?: number;
+  no2?: number;
+  temperature?: number;
+  measuredAt: Date;
+  aquariumName: string;
+}
+
 export interface CreateEditParametersCheckDto {
   aquariumId: string;
   ph?: number | null;
