@@ -1,0 +1,29 @@
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">Aktualne akwaria</h2>
+  <div class="ms-auto flex gap-2 align-center items-center">
+    <button
+      *appHasAnyRole="[RolesEnum.Moderator, RolesEnum.Admin]"
+      hlmBtn
+      variant="success"
+      hlmTooltip="Dodaj nowe akwarium"
+      class="flex items-center justify-center"
+      (click)="createEditDialogCmp.openCreate()"
+    >
+      <ng-icon name="lucidePlus" />
+    </button>
+    <refresh-list-button [isRefreshing]="aquariums.isLoading()" (refresh)="refreshAquariums()" />
+  </div>
+</header>
+
+<section class="grid lg:grid-cols-2 gap-3 p-2 items-stretch">
+  @for (aquarium of aquariums.value(); track $index) {
+    <aquarium-card
+      (refreshList)="refreshAquariums()"
+      (editAquarium)="createEditDialogCmp.openEdit($event)"
+      [aquarium]="aquarium"
+      class="h-full"
+    />
+  }
+</section>
+
+<aquarium-create-edit-dialog #createEditDialogCmp (refreshList)="refreshAquariums()" />

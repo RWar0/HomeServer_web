@@ -45,14 +45,12 @@
             ></error-label>
           </hlm-field>
           <hlm-field orientation="horizontal" class="flex w-full items-center justify-center">
-            <button
-              hlmBtn
-              type="submit"
-              [disabled]="loginForm.invalid && loginForm.touched"
-              class="px-8 self-center mt-auto"
-            >
-              Zaloguj
-            </button>
+            <submit-button
+              buttonType="submit"
+              buttonText="Zaloguj"
+              [isSubmitting]="isSubmitting()"
+              [isDisabled]="(loginForm.invalid && loginForm.touched) || isSubmitting()"
+            />
           </hlm-field>
         </hlm-field-group>
       </form>

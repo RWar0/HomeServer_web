@@ -1,0 +1,30 @@
+<section class="rounded-xl border border-slate-200 bg-white shadow-sm">
+  <div class="flex items-center gap-2.5 px-5 py-4">
+    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+      <ng-icon name="lucideHistory" />
+    </div>
+
+    <h2 class="font-semibold text-slate-900">Ostatnia aktywność</h2>
+  </div>
+  @if (isLoading()) {
+    <div class="flex items-center justify-center py-8.5">
+      <hlm-spinner class="text-3xl text-primary" />
+    </div>
+  } @else {
+    @if (!activities()) {
+      <div class="w-full py-6">
+        <h5 class="text-center text-sm text-slate-600">Błąd pobierania ostatniej aktywności</h5>
+      </div>
+    } @else if (activities()?.length === 0) {
+      <div class="w-full py-6">
+        <h5 class="text-center text-sm text-slate-600">Brak ostatniej aktywności</h5>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 gap-2 px-4 pb-4 sm:grid-cols-2 xl:grid-cols-4">
+        @for (activity of activities(); track activity.id) {
+          <dashboard-recent-activity-card [activity]="activity" />
+        }
+      </div>
+    }
+  }
+</section>

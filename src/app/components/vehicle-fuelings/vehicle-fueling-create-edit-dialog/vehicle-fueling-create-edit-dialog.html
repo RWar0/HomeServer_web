@@ -1,0 +1,83 @@
+<hlm-dialog>
+  <ng-content></ng-content>
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    @if (isLoadingData()) {
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>{{ fuelingId() ? 'Edytuj' : 'Dodaj' }} tankowanie</h3>
+        <p hlmDialogDescription>{{ fuelingId() ? 'Edytuj' : 'Wprowadź' }} dane tankowania</p>
+      </hlm-dialog-header>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+      <hlm-dialog-footer>
+        <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+        <button hlmBtn disabled variant="success">
+          {{ fuelingId() ? 'Zapisz zmiany' : 'Utwórz' }}
+        </button>
+      </hlm-dialog-footer>
+    } @else {
+      <form [formGroup]="fuelingForm" (ngSubmit)="submitForm()">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>{{ fuelingId() ? 'Edytuj' : 'Dodaj' }} tankowanie</h3>
+          <p hlmDialogDescription>{{ fuelingId() ? 'Edytuj' : 'Wprowadź' }} dane tankowania</p>
+        </hlm-dialog-header>
+        <hlm-field-group>
+          <hlm-field>
+            <label hlmFieldLabel>Pojazd</label>
+            <form-select
+              [items]="vehiclesForSelect"
+              [value]="fuelingForm.controls.vehicleId.value"
+              [isLoading]="isLoadingVehicles()"
+              id="vehicleId"
+              (onSelection)="vehicleIdSelection($event)"
+            />
+            <error-label
+              [isDisabled]="
+                fuelingForm.controls.vehicleId.invalid && fuelingForm.controls.vehicleId.touched
+              "
+              message="Wybór pojazdu jest wymagany!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="date">Data tankowania</label>
+            <input hlmInput id="date" formControlName="date" type="date" />
+            <error-label
+              [isDisabled]="fuelingForm.controls.date.invalid && fuelingForm.controls.date.touched"
+              message="Data tankowania jest wymagana!"
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel>Ilość (litry)</label>
+            <input hlmInput type="number" formControlName="quantity" />
+            <error-label
+              [isDisabled]="
+                fuelingForm.controls.quantity.invalid && fuelingForm.controls.quantity.touched
+              "
+              message="Ilość paliwa jest wymagana i musi być większa od 0!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel>Koszt</label>
+            <input hlmInput type="number" formControlName="cost" />
+            <error-label
+              [isDisabled]="fuelingForm.controls.cost.invalid && fuelingForm.controls.cost.touched"
+              message="Koszt nie może być ujemny!"
+            ></error-label>
+          </hlm-field>
+        </hlm-field-group>
+        <hlm-dialog-footer>
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <submit-button
+            [buttonText]="fuelingId() ? 'Zapisz zmiany' : 'Utwórz'"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="(fuelingForm.invalid && fuelingForm.touched) || isSubmitting()"
+            variant="success"
+          />
+        </hlm-dialog-footer>
+      </form>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

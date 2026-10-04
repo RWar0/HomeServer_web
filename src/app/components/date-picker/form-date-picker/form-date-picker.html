@@ -1,0 +1,17 @@
+<hlm-field>
+  <hlm-date-picker
+    captionLayout="dropdown"
+    [date]="value() ?? undefined"
+    [max]="maxDate() ?? undefined"
+    [defaultFocusedDate]="defaultFocusedDate()"
+    [formatDate]="formatDate"
+    (dateChange)="onSelection.emit($event)"
+  >
+    <hlm-date-picker-input
+      inputId="{{ inputId() }}"
+      [placeholder]="(placeholder() ?? '') + (placeholder() ? ' (dd.mm.yyyy)' : 'dd.mm.yyyy')"
+      [parseDate]="parseDate"
+      [formatInputDate]="formatInputDate"
+    />
+  </hlm-date-picker>
+</hlm-field>

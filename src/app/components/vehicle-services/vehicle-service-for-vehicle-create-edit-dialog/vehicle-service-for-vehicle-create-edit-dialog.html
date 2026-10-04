@@ -1,0 +1,148 @@
+<hlm-dialog>
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-lg! lg:max-w-xl! xl:max-w-3xl! max-h-[90vh]"
+  >
+    @if (isLoadingData()) {
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>{{ serviceId() ? 'Edytuj' : 'Dodaj' }} serwis</h3>
+        <p hlmDialogDescription>{{ serviceId() ? 'Edytuj' : 'Wprowadź' }} dane serwisu</p>
+      </hlm-dialog-header>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+      <hlm-dialog-footer>
+        <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+        <button hlmBtn disabled variant="success">Zapisz</button>
+      </hlm-dialog-footer>
+    } @else {
+      <form [formGroup]="serviceForm" (ngSubmit)="submitForm()" class="flex flex-col max-h-[85vh]">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>{{ serviceId() ? 'Edytuj' : 'Dodaj' }} serwis</h3>
+          <p hlmDialogDescription>{{ serviceId() ? 'Edytuj' : 'Wprowadź' }} dane serwisu</p>
+        </hlm-dialog-header>
+
+        <ng-scrollbar hlm appearance="compact" class="flex-1 overflow-y-auto px-1">
+          <hlm-field-group class="py-4">
+            <hlm-field>
+              <label hlmFieldLabel>Tytuł serwisu</label>
+              <input hlmInput formControlName="title" placeholder="np. Wymiana oleju" />
+              <error-label
+                [isDisabled]="
+                  serviceForm.controls.title.invalid && serviceForm.controls.title.touched
+                "
+                message="Tytuł jest wymagany!"
+              />
+            </hlm-field>
+            <hlm-field>
+              <label hlmFieldLabel>Data serwisu</label>
+              <input hlmInput type="date" formControlName="date" />
+              <error-label
+                [isDisabled]="
+                  serviceForm.controls.date.invalid && serviceForm.controls.date.touched
+                "
+                message="Data jest wymagana!"
+              />
+            </hlm-field>
+            <hlm-field>
+              <label hlmFieldLabel>Przebieg (km)</label>
+              <input hlmInput type="number" min="0" formControlName="mileage" />
+              <error-label
+                [isDisabled]="
+                  serviceForm.controls.mileage.invalid && serviceForm.controls.mileage.touched
+                "
+                message="Przebieg nie może być ujemny!"
+              />
+            </hlm-field>
+            <hlm-field>
+              <label hlmFieldLabel>Koszt</label>
+              <input hlmInput type="number" min="0" formControlName="cost" />
+              <error-label
+                [isDisabled]="
+                  serviceForm.controls.cost.invalid && serviceForm.controls.cost.touched
+                "
+                message="Koszt nie może być ujemny!"
+              />
+            </hlm-field>
+
+            <div class="mt-6">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <h4 class="font-medium">Pozycje serwisu</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Dodaj części, usługi lub inne koszty związane z serwisem.
+                  </p>
+                </div>
+
+                <button hlmBtn type="button" variant="outline" size="sm" (click)="addItem()">
+                  + Dodaj pozycję
+                </button>
+              </div>
+
+              <div formArrayName="items" class="space-y-3">
+                @for (item of itemsFormArray.controls; track $index) {
+                  <div [formGroupName]="$index" class="rounded-lg border p-4">
+                    <div class="flex items-start gap-3">
+                      <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <hlm-field>
+                          <label hlmFieldLabel>Tytuł</label>
+                          <input
+                            hlmInput
+                            formControlName="title"
+                            placeholder="np. Olej silnikowy"
+                          />
+                        </hlm-field>
+
+                        <hlm-field>
+                          <label hlmFieldLabel>Koszt</label>
+                          <input hlmInput type="number" formControlName="cost" placeholder="0.00" />
+                        </hlm-field>
+
+                        <hlm-field class="md:col-span-2">
+                          <label hlmFieldLabel>Opis</label>
+                          <input
+                            hlmInput
+                            formControlName="description"
+                            placeholder="Opcjonalny opis"
+                          />
+                        </hlm-field>
+                      </div>
+
+                      <button
+                        hlmBtn
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        (click)="removeItem($index)"
+                      >
+                        <ng-icon name="lucideTrash2" class="text-red-500 text-lg" />
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              @if (itemsFormArray.length === 0) {
+                <div
+                  class="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground"
+                >
+                  Brak pozycji serwisu
+                </div>
+              }
+            </div>
+          </hlm-field-group>
+        </ng-scrollbar>
+
+        <hlm-dialog-footer class="mt-2">
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <submit-button
+            [buttonText]="serviceId() ? 'Zapisz zmiany' : 'Utwórz'"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="(serviceForm.invalid && serviceForm.touched) || isSubmitting()"
+            variant="success"
+          />
+        </hlm-dialog-footer>
+      </form>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

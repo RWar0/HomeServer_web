@@ -1,0 +1,114 @@
+<hlm-dialog>
+  <ng-content></ng-content>
+
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    @if (isLoadingData()) {
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>{{ customEventId() ? 'Edytuj' : 'Utwórz' }} wydarzenie</h3>
+        <p hlmDialogDescription>{{ customEventId() ? 'Edytuj' : 'Wprowadź' }} dane wydarzenia</p>
+      </hlm-dialog-header>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+      <hlm-dialog-footer>
+        <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+        <button hlmBtn disabled class="self-center mt-auto" variant="success">
+          {{ customEventId() ? 'Zapisz zmiany' : 'Utwórz' }}
+          @if (isSubmitting()) {
+            <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
+          }
+        </button>
+      </hlm-dialog-footer>
+    } @else {
+      <form [formGroup]="customEventForm" (ngSubmit)="submitForm()">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>{{ customEventId() ? 'Edytuj' : 'Utwórz' }} wydarzenie</h3>
+          <p hlmDialogDescription>{{ customEventId() ? 'Edytuj' : 'Wprowadź' }} dane wydarzenia</p>
+        </hlm-dialog-header>
+        <hlm-field-group>
+          <hlm-field>
+            <label hlmFieldLabel for="title">Nazwa*</label>
+            <input hlmInput id="title" formControlName="title" />
+            <error-label
+              [isDisabled]="
+                customEventForm.controls.title.invalid && customEventForm.controls.title.touched
+              "
+              message="Nazwa jest wymagana!"
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel>Kategoria*</label>
+            <form-select
+              [items]="categoriesSelectOption()"
+              [value]="customEventForm.controls.category.value"
+              [isLoading]="false"
+              id="category"
+              (onSelection)="selectCategory($event)"
+            />
+            <error-label
+              [isDisabled]="
+                customEventForm.controls.category.invalid &&
+                customEventForm.controls.category.touched
+              "
+              message="Kategoria jest wymagana!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="description">Opis</label>
+            <textarea hlmInput id="description" formControlName="description"></textarea>
+            <error-label
+              [isDisabled]="
+                customEventForm.controls.description.invalid &&
+                customEventForm.controls.description.touched
+              "
+              message="Opis jest za długi! Maksymalna długość to 250 znaków!"
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel>Miejsce</label>
+            <input hlmInput id="location" formControlName="location" />
+            <error-label
+              [isDisabled]="
+                customEventForm.controls.location.invalid &&
+                customEventForm.controls.location.touched
+              "
+              message="Akwarium jest wymagane!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="date">Data wydarzenia*</label>
+            <input hlmInput id="date" formControlName="date" type="date" />
+            <error-label
+              [isDisabled]="
+                customEventForm.controls.date.invalid && customEventForm.controls.date.touched
+              "
+              message="Data wydarzenia jest wymagana!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="time">Godzina wydarzenia</label>
+            <input hlmInput id="time" formControlName="time" type="time" />
+            <error-label
+              [isDisabled]="
+                customEventForm.controls.time.invalid && customEventForm.controls.time.touched
+              "
+              message="Godzina wydarzenia jest niepoprawna!"
+            ></error-label>
+          </hlm-field>
+        </hlm-field-group>
+        <hlm-dialog-footer>
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <submit-button
+            [buttonText]="customEventId() ? 'Zapisz zmiany' : 'Utwórz'"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="(customEventForm.invalid && customEventForm.touched) || isSubmitting()"
+            variant="success"
+          />
+        </hlm-dialog-footer>
+      </form>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

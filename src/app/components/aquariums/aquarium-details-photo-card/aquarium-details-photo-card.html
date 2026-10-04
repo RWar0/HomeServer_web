@@ -1,0 +1,94 @@
+<div
+  class="rounded-lg border bg-white shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow relative md:aspect-square md:max-h-99"
+>
+  <div class="relative w-full aspect-square md:h-full bg-gray-50 flex items-center justify-center">
+    @if (photoData().imageUrl) {
+      <img
+        [src]="photoData().imageUrl"
+        [alt]="photoData().id"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+    } @else {
+      <img
+        src="/image_no_photo_added.png"
+        [alt]="photoData().id"
+        class="absolute inset-0 w-full h-full scale-50"
+      />
+      <div class="absolute top-8">
+        <span class="text-lg text-red-500 font-medium italic">Problem z pobraniem zdjęcia</span>
+      </div>
+    }
+    <!-- Overlay for large screens (md and up) -->
+    <div
+      class="hidden md:flex absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity items-center justify-center group space-x-3"
+    >
+      <button
+        hlmTooltip="Zobacz zdjęcie"
+        class="bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors flex"
+        (click)="redirectToView()"
+      >
+        <ng-icon name="lucideEye" />
+      </button>
+      <button
+        hlmTooltip="Pobierz zdjęcie"
+        class="bg-primary/40 backdrop-blur-sm text-white p-2 rounded-full hover:bg-primary/70 transition-colors flex"
+        (click)="downloadImage()"
+      >
+        <ng-icon name="lucideDownload" />
+      </button>
+      <button
+        *appHasAnyRole="[RolesEnum.Admin, RolesEnum.Moderator]"
+        hlmTooltip="Usuń zdjęcie"
+        class="bg-red-500/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-red-500/50 transition-colors flex"
+        (click)="deleteDialogCmp.open()"
+      >
+        <ng-icon name="lucideTrash2" />
+      </button>
+      <div class="absolute inset-x-0 bottom-0 p-2 flex flex-col bg-gray-300/80 backdrop-blur-sm">
+        <labeled-field label="Dodano" [value]="photoData().createdAt | date: 'short'" />
+        <labeled-field label="Autor" [value]="photoData().createdBy" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Details block for mobile (< md) -->
+  <div class="p-3 flex md:hidden flex-col gap-2 grow border-t">
+    <div class="flex justify-between items-center">
+      <span class="font-semibold text-sm truncate">Szczegóły</span>
+      <button hlmBtn variant="outline" [hlmDropdownMenuTrigger]="photoMenu" align="end">
+        Opcje
+      </button>
+
+      <ng-template #photoMenu>
+        <hlm-dropdown-menu>
+          <hlm-dropdown-menu-group>
+            <button hlmDropdownMenuItem variant="primary" (click)="downloadImage()">
+              <ng-icon name="lucideDownload" />Pobierz
+            </button>
+          </hlm-dropdown-menu-group>
+          <hlm-dropdown-menu-group *appHasAnyRole="[RolesEnum.Admin, RolesEnum.Moderator]">
+            <hlm-dropdown-menu-separator />
+            <button hlmDropdownMenuItem variant="destructive" (click)="deleteDialogCmp.open()">
+              <ng-icon name="lucideTrash2" />Usuń
+            </button>
+          </hlm-dropdown-menu-group>
+        </hlm-dropdown-menu>
+      </ng-template>
+    </div>
+
+    <div class="flex flex-col mt-auto">
+      <labeled-field
+        label="Dodano"
+        [value]="photoData().createdAt | date: 'short'"
+        labelColorClass="text-muted-foreground"
+      />
+      <labeled-field
+        label="Autor"
+        [value]="photoData().createdBy"
+        labelColorClass="text-muted-foreground"
+      />
+    </div>
+  </div>
+</div>
+
+<delete-confirm-dialog #deleteDialogCmp (onConfirm)="deleteImage()" elementName="Zdjęcie" />

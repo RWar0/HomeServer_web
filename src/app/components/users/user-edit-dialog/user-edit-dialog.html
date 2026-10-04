@@ -1,0 +1,89 @@
+<hlm-dialog>
+  <ng-content></ng-content>
+
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    @if (isLoadingData()) {
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>Edytuj użytkownika</h3>
+        <p hlmDialogDescription>Edytuj dane użytkownika</p>
+      </hlm-dialog-header>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+      <hlm-dialog-footer>
+        <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+        <button hlmBtn disabled class="self-center mt-auto" variant="success">
+          Zapisz zmiany
+          @if (isSubmitting()) {
+            <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
+          }
+        </button>
+      </hlm-dialog-footer>
+    } @else {
+      <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>Edytuj użytkownika</h3>
+          <p hlmDialogDescription>Edytuj dane użytkownika</p>
+        </hlm-dialog-header>
+        <hlm-field-group>
+          <hlm-field>
+            <label hlmFieldLabel for="name">Imię i nazwisko</label>
+            <input hlmInput id="name" formControlName="name" autocomplete="off" />
+            <error-label
+              [isDisabled]="userForm.controls.name.invalid && userForm.controls.name.touched"
+              message="Imię i nazwisko jest wymagane!"
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="username">Login</label>
+            <input hlmInput id="username" formControlName="username" autocomplete="off" />
+            <error-label
+              [isDisabled]="
+                userForm.controls.username.invalid && userForm.controls.username.touched
+              "
+              message="Login jest wymagany!"
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="email">Email</label>
+            <input hlmInput id="email" formControlName="email" autocomplete="off" />
+            <error-label
+              [isDisabled]="userForm.controls.email.invalid && userForm.controls.email.touched"
+              [message]="
+                userForm.controls.email.errors?.['email']
+                  ? 'Proszę podać poprawny email!'
+                  : 'Email jest wymagany!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel>Rola</label>
+            <form-select
+              [items]="rolesSelectOption()"
+              [value]="userForm.controls.role.value"
+              [isLoading]="false"
+              id="role"
+              (onSelection)="selectRole($event)"
+            />
+            <error-label
+              [isDisabled]="userForm.controls.role.invalid && userForm.controls.role.touched"
+              [message]="'Rola jest wymagana!'"
+            />
+          </hlm-field>
+        </hlm-field-group>
+        <hlm-dialog-footer>
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <submit-button
+            buttonText="Zapisz zmiany"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="(userForm.invalid && userForm.touched) || isSubmitting()"
+            variant="success"
+          />
+        </hlm-dialog-footer>
+      </form>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

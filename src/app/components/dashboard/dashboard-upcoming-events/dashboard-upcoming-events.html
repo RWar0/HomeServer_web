@@ -1,0 +1,110 @@
+<section class="h-full rounded-xl border border-slate-200 bg-white shadow-sm">
+  <div class="flex items-center justify-between px-5 py-4">
+    <div class="flex items-center gap-2.5">
+      <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-500">
+        <ng-icon name="lucideCalendarDays" />
+      </div>
+
+      <h2 class="font-semibold text-slate-900">Najbliższe wydarzenia</h2>
+    </div>
+
+    <a routerLink="/calendar" class="text-xs font-medium text-blue-600 hover:text-blue-700">
+      Kalendarz
+      <ng-icon name="lucideArrowRight" class="ml-1 inline-block" />
+    </a>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex items-center justify-center py-30">
+      <hlm-spinner class="text-3xl text-primary" />
+    </div>
+  } @else {
+    <div class="px-5 pb-4">
+      @if (!groupedEvents()) {
+        <div class="text-center px-3 py-15 sm:py-20 text-sm text-slate-500">
+          <div class="mb-2 flex justify-center opacity-70">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
+              <ng-icon name="lucideCircleX" class="text-xl text-red-400" />
+            </div>
+          </div>
+          <h5 class="font-medium text-slate-600">Wystąpił błąd podczas ładowania danych</h5>
+          <p class="text-sm text-slate-400">Spróbuj ponownie później.</p>
+        </div>
+      } @else if (groupedEvents()?.length === 0) {
+        <div class="text-center px-3 py-15 sm:py-20 text-sm text-slate-500">
+          <div class="mb-2 flex justify-center opacity-70">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-50">
+              <ng-icon name="lucideCheckCircle" class="text-xl text-green-400" />
+            </div>
+          </div>
+          <h5 class="font-medium text-slate-600">Brak nadchodzących wydarzeń</h5>
+          <p class="mb-3 text-sm text-slate-400">Sprawdź swój kalendarz, aby dodać nowe.</p>
+          <button
+            hlmBtn
+            variant="outline"
+            size="xs"
+            routerLink="/calendar"
+            [queryParams]="{ addEvent: 'true' }"
+          >
+            <ng-icon name="lucidePlus" />
+            Dodaj wydarzenie
+          </button>
+        </div>
+      } @else {
+        @for (group of groupedEvents(); track group.dateKey; let first = $first) {
+          <div class="relative pb-5 last:pb-0" [class.pt-1]="first">
+            <!-- timeline -->
+            <div class="absolute bottom-0 left-1.25 top-7 w-px bg-slate-200 last:hidden"></div>
+
+            <div class="relative flex gap-3">
+              <div
+                class="z-10 mt-1 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-white ring-1 ring-slate-200"
+              ></div>
+
+              <div class="min-w-0 flex-1">
+                <div class="mb-2 text-[11px] font-semibold text-slate-500">
+                  {{ group.dayName }}
+                </div>
+
+                <div class="flex flex-col gap-3">
+                  @for (event of group.events; track event.id) {
+                    <div
+                      class="flex items-start gap-2 group cursor-pointer"
+                      routerLink="/calendar"
+                      [queryParams]="{ open_date: event.date }"
+                    >
+                      <div
+                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                        [class]="getEventCategoryIconColorClass(event.category)"
+                      >
+                        <ng-icon [name]="getIconForCategory(event)" class="text-sm" />
+                      </div>
+
+                      <div class="min-w-0 flex-1">
+                        <div
+                          class="text-xs transition font-medium text-slate-700 group-hover:translate-x-0.5 group-hover:text-primary/80"
+                        >
+                          {{ translateEventCategory(event.category) }}
+                        </div>
+
+                        <div class="mt-0.5 text-[11px] text-slate-400">
+                          {{ event.title }}
+                        </div>
+                      </div>
+
+                      @if (event.time) {
+                        <span class="text-[11px] font-medium text-slate-400">
+                          {{ event.time }}
+                        </span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  }
+</section>

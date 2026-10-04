@@ -1,0 +1,93 @@
+<section class="rounded-xl border border-slate-200 bg-white shadow-sm h-full">
+  <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+    <div class="flex items-center gap-2.5">
+      <div class="flex h-8 w-8 items-center justify-center rounded-full bg-red-50 text-red-500">
+        <ng-icon name="lucideCircleAlert" class="text-lg" />
+      </div>
+
+      <h2 class="font-semibold text-slate-900">Wymaga uwagi</h2>
+    </div>
+
+    <a
+      routerLink="/calendar"
+      class="text-xs font-medium text-blue-600 transition hover:text-blue-700"
+    >
+      Zobacz cały kalendarz
+      <ng-icon name="lucideArrowRight" class="ml-1 inline-block" />
+    </a>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex items-center justify-center py-30">
+      <hlm-spinner class="text-3xl text-primary" />
+    </div>
+  } @else {
+    <div class="divide-y divide-slate-100">
+      @if (!items()) {
+        <div class="text-center px-3 pt-15 pb-20 text-sm text-slate-500">
+          <div class="mb-2 flex justify-center opacity-70">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
+              <ng-icon name="lucideCircleX" class="text-xl text-red-400" />
+            </div>
+          </div>
+          <h5 class="font-medium text-slate-600">Wystąpił błąd podczas ładowania danych</h5>
+          <p class="text-sm text-slate-400">Spróbuj ponownie później.</p>
+        </div>
+      } @else if (items()?.length === 0) {
+        <div class="text-center px-3 pt-15 pb-20 text-sm text-slate-500">
+          <div class="mb-2 flex justify-center opacity-70">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-50">
+              <ng-icon name="lucideCheckCircle" class="text-xl text-green-400" />
+            </div>
+          </div>
+          <h5 class="font-medium text-slate-600">Brak wydarzeń, które wymagają uwagi</h5>
+          <p class="text-sm text-slate-400">Wszystko jest na czas.</p>
+        </div>
+      } @else {
+        @for (item of items(); track item.id) {
+          <button
+            routerLink="/calendar"
+            [queryParams]="{ open_date: item.date }"
+            class="group flex flex-col sm:flex-row w-full items-center gap-3 px-5 py-3 text-left transition hover:bg-slate-50 cursor-pointer"
+          >
+            <div
+              class="rounded-full px-2.5 py-1 text-[11px] font-semibold inline-flex items-center justify-center gap-1 w-28 shrink-0"
+              [class]="getStatusClass(item)"
+            >
+              <ng-icon [name]="getStatusIcon(item)" />
+              <span>{{ getStatusLabel(item) }}</span>
+            </div>
+
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center">
+              <ng-icon [name]="getIconForCategory(item)" class="text-xl" />
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-sm font-semibold text-slate-800">
+                {{ translateCategory(item.category) }}
+              </div>
+
+              <div class="mt-0.5 truncate text-xs text-slate-400">
+                {{ item.title }}
+              </div>
+            </div>
+
+            <div
+              class="hidden text-right text-xs font-medium sm:block"
+              [class.text-slate-500]="getStatus(item) !== calendarStatusEnum.OVERDUE"
+              [class.text-red-500]="getStatus(item) === calendarStatusEnum.OVERDUE"
+            >
+              {{ getDateLabel(item) }}
+            </div>
+            <div class="hidden sm:block">
+              <ng-icon
+                name="lucideChevronRight"
+                class="text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-slate-500"
+              />
+            </div>
+          </button>
+        }
+      }
+    </div>
+  }
+</section>

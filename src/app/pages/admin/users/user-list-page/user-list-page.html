@@ -1,0 +1,66 @@
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">Użytkownicy</h2>
+  <div class="ms-auto flex gap-2 align-center items-center">
+    <button
+      hlmBtn
+      variant="success"
+      hlmTooltip="Dodaj użytkownika"
+      class="flex items-center justify-center"
+      (click)="createDialogCmp.open()"
+    >
+      <ng-icon name="lucidePlus" />
+    </button>
+    <refresh-list-button (onRefresh)="refreshList()" [isRefreshing]="false" />
+  </div>
+</header>
+<div class="p-2 mt-2">
+  <data-table
+    [records]="userRecords"
+    [columns]="userColumns"
+    [paginationStore]="paginationStore"
+    [rowActions]="actionsMenu"
+  />
+
+  <ng-template #actionsMenu let-row>
+    <div hlmDropdownMenu class="w-48">
+      <button hlmDropdownMenuItem (click)="editDialogCmp.open(row.id)" variant="secondary">
+        <ng-icon name="lucideNotebookPen" />
+        Edytuj
+      </button>
+
+      <button hlmDropdownMenuItem (click)="passwordDialogCmp.open(row.id)" variant="primary">
+        <ng-icon name="lucideKeyRound" />
+        Zmień hasło
+      </button>
+      @if (currentUserName !== row.name) {
+        <hlm-dropdown-menu-separator />
+
+        <button
+          hlmDropdownMenuItem
+          (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, `&quot;${row.name}&quot;`)"
+          variant="destructive"
+        >
+          <ng-icon name="lucideTrash2" />
+          Usuń
+        </button>
+      }
+    </div>
+  </ng-template>
+
+  <div class="mt-3"></div>
+  <pagination
+    [paginationState]="paginationStore.state()"
+    (pageChange)="paginationStore.setPage($event)"
+    (pageSizeChange)="paginationStore.setPageSize($event)"
+  />
+</div>
+
+<delete-confirm-dialog
+  #deleteDialogCmp
+  elementName="Użytkownika"
+  (onConfirm)="onDelete($event || '')"
+/>
+
+<user-create-dialog #createDialogCmp (refreshList)="refreshList()" />
+<user-edit-dialog #editDialogCmp (refreshList)="refreshList()" />
+<user-edit-password-dialog #passwordDialogCmp />

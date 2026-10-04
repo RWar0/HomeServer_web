@@ -1,0 +1,24 @@
+<hlm-alert-dialog #deleteDialog="hlmAlertDialog">
+  <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx" class="max-w-[90vw]!">
+    <hlm-alert-dialog-header>
+      <hlm-alert-dialog-media
+        class="bg-red-50 text-red-600 border border-red-200 shadow-sm shadow-red-200"
+      >
+        <ng-icon name="lucideTrash2" />
+      </hlm-alert-dialog-media>
+      <h2 hlmAlertDialogTitle>Potwierdzenie usuwania</h2>
+      <div class="">
+        <p hlmAlertDialogDescription>
+          Czy jesteś pewny, że chcesz usunąć
+          <strong>{{ elementName() }} {{ elementNameAddition() || '' }}</strong
+          >?.
+        </p>
+        <p hlmAlertDialogDescription>Tej operacji nie można cofnąć.</p>
+      </div>
+    </hlm-alert-dialog-header>
+    <hlm-alert-dialog-footer>
+      <button hlmAlertDialogCancel>Anuluj</button>
+      <button hlmAlertDialogAction variant="destructive" (click)="confirmDelete()">Usuń</button>
+    </hlm-alert-dialog-footer>
+  </hlm-alert-dialog-content>
+</hlm-alert-dialog>

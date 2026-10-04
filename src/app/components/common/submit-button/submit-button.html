@@ -1,0 +1,15 @@
+<button
+  hlmBtn
+  [type]="buttonType()"
+  [disabled]="isDisabled()"
+  class="ps-8 self-center mt-auto w-full"
+  [variant]="variant()"
+  [class.pe-8]="!isSubmitting()"
+  [class.pe-[10px]]="isSubmitting()"
+  (click)="click()"
+>
+  {{ buttonText() }}
+  @if (isSubmitting()) {
+    <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
+  }
+</button>

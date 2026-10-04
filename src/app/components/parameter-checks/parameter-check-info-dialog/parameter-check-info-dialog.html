@@ -1,0 +1,41 @@
+<hlm-dialog>
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Pomiar parametrów</h3>
+      <p hlmDialogDescription>Szczegóły dotyczące pomiaru parametrów.</p>
+    </hlm-dialog-header>
+
+    @if (isLoadingData()) {
+      <div class="flex items-center justify-center h-60">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+    } @else {
+      <div class="flex flex-col gap-1">
+        <labeled-field
+          label="Akwarium"
+          [value]="parameterCheck?.aquariumName"
+          class="border-b py-1"
+        />
+        <labeled-field
+          label="Data"
+          [value]="parameterCheck?.measuredAt | date: 'dd.MM.yyyy'"
+          class="border-b py-1"
+        />
+        <labeled-field label="pH" [value]="parameterCheck?.ph" class="border-b py-1" />
+        <labeled-field label="KH" [value]="parameterCheck?.kh" class="border-b py-1" />
+        <labeled-field label="GH" [value]="parameterCheck?.gh" class="border-b py-1" />
+        <labeled-field label="NO3" [value]="parameterCheck?.no3" class="border-b py-1" />
+        <labeled-field label="NO2" [value]="parameterCheck?.no2" class="border-b py-1" />
+        <labeled-field
+          label="Temperatura"
+          [value]="parameterCheck?.temperature"
+          unit="°C"
+          class="border-b py-1"
+        />
+      </div>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

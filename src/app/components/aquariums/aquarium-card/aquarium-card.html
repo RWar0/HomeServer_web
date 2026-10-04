@@ -1,0 +1,100 @@
+<hlm-card class="shadow-md hover:shadow-lg h-full flex flex-col">
+  <hlm-card-header class="-mb-3">
+    <h3 hlmCardTitle class="text-2xl text-secondary-darker text-shadow-sm text-shadow-violet-200">
+      Akwarium - {{ aquarium().name }}
+    </h3>
+    <div hlmCardAction>
+      <button hlmBtn variant="outline" [hlmDropdownMenuTrigger]="aquariumMenu" align="end">
+        Opcje
+        <ng-icon name="lucideEllipsisVertical" />
+      </button>
+
+      <ng-template #aquariumMenu>
+        <hlm-dropdown-menu>
+          <hlm-dropdown-menu-group>
+            <button hlmDropdownMenuItem [routerLink]="aquarium().id" variant="primary">
+              <ng-icon name="lucideNotebookText" />
+              Szczegóły
+            </button>
+            <button hlmDropdownMenuItem (click)="uploadPhotoDialog.openDialog()" variant="success">
+              <ng-icon name="lucideImagePlus" />
+              Dodaj zdjęcie
+            </button>
+            <button
+              *appHasAnyRole="[RolesEnum.Moderator, RolesEnum.Admin]"
+              hlmDropdownMenuItem
+              (click)="editAquarium.emit(aquarium().id)"
+              variant="secondary"
+            >
+              <ng-icon name="lucideNotebookPen" />
+              Edytuj
+            </button>
+          </hlm-dropdown-menu-group>
+          <hlm-dropdown-menu-group *appHasAnyRole="[RolesEnum.Admin]">
+            <hlm-dropdown-menu-separator />
+            <button hlmDropdownMenuItem variant="destructive" (click)="deleteDialogCmp.open()">
+              <ng-icon name="lucideTrash2" />
+              Usuń
+            </button>
+          </hlm-dropdown-menu-group>
+        </hlm-dropdown-menu>
+      </ng-template>
+    </div>
+    <p hlmCardDescription>
+      Pojemność: <strong>{{ aquarium().volume }}L</strong>
+    </p>
+  </hlm-card-header>
+  <div hlmCardContent class="grid xl:grid-cols-5 gap-3 flex-1">
+    @if (aquarium().lastPhotoId && imagePreview()) {
+      <img
+        [src]="imagePreview()"
+        alt="Zdjecie akwarium {{ aquarium().name }}"
+        class="xl:col-span-3 rounded-lg max-h-100 h-full self-center mx-auto my-5 object-cover aspect-video shadow"
+      />
+    } @else {
+      <img
+        src="/image_no_photo_added.png"
+        alt="Brak zdjęcia dla akwarium {{ aquarium().name }}"
+        class="xl:col-span-3 rounded-lg max-h-40 self-center mx-auto my-5 object-contain aspect-video"
+      />
+    }
+    <div class="bg-gray-50 rounded-lg px-2 py-2 xl:pt-0 xl:col-span-2 h-full shadow">
+      <h3 class="font-medium text-lg -mb-3 mt-1">Informacje</h3>
+      <hlm-separator />
+      <h4 class="font-medium">Woda</h4>
+      <labeled-field
+        label="Podmieniana"
+        [value]="
+          aquarium().lastWaterChange
+            ? (aquarium().lastWaterChange | date: 'shortDate')
+            : 'brak informacji'
+        "
+        labelColorClass="text-gray-600"
+      />
+      <hlm-separator />
+      <h4 class="font-medium">Parametry</h4>
+      <labeled-field
+        label="Sprawdzane"
+        [value]="
+          aquarium().lastParametersCheck
+            ? (aquarium().lastParametersCheck | date: 'shortDate')
+            : 'brak informacji'
+        "
+        labelColorClass="text-gray-600"
+      />
+    </div>
+  </div>
+</hlm-card>
+
+<delete-confirm-dialog
+  #deleteDialogCmp
+  (onConfirm)="deleteAquarium()"
+  [elementName]="'Akwarium ' + '\'' + aquarium().name + '\''"
+/>
+
+<aquarium-upload-photo-dialog
+  #uploadPhotoDialog
+  [aquariumId]="aquarium().id"
+  [aquariumName]="aquarium().name"
+  (refreshList)="refreshList.emit()"
+/>

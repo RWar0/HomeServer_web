@@ -1,0 +1,158 @@
+<hlm-dialog>
+  <ng-content></ng-content>
+
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    @if (isLoadingData()) {
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>
+          {{ parameterCheckId() ? 'Edytuj' : 'Utwórz' }} sprawdzenie parametrów
+        </h3>
+        <p hlmDialogDescription>
+          {{ parameterCheckId() ? 'Edytuj' : 'Wprowadź' }} dane sprawdzenia parametrów
+        </p>
+      </hlm-dialog-header>
+      <div class="flex items-center justify-center h-50">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+      <hlm-dialog-footer>
+        <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+        <button hlmBtn disabled class="self-center mt-auto" variant="success">
+          {{ parameterCheckId() ? 'Zapisz zmiany' : 'Utwórz' }}
+          @if (isSubmitting()) {
+            <hlm-spinner class="text-base md:text-lg"></hlm-spinner>
+          }
+        </button>
+      </hlm-dialog-footer>
+    } @else {
+      <form [formGroup]="parameterCheckForm" (ngSubmit)="submitForm()">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>
+            {{ parameterCheckId() ? 'Edytuj' : 'Utwórz' }} sprawdzenie parametrów
+          </h3>
+          <p hlmDialogDescription>
+            {{ parameterCheckId() ? 'Edytuj' : 'Wprowadź' }} dane sprawdzenia parametrów
+          </p>
+        </hlm-dialog-header>
+        <hlm-field-group>
+          <hlm-field>
+            <label hlmFieldLabel for="measuredAt">Data pomiaru</label>
+            <input hlmInput id="measuredAt" formControlName="measuredAt" type="date" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.measuredAt.invalid &&
+                parameterCheckForm.controls.measuredAt.touched
+              "
+              message="Data podmiany wody jest wymagana!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="pH">pH</label>
+            <input hlmInput id="pH" type="number" formControlName="pH" min="0" max="14" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.pH.invalid && parameterCheckForm.controls.pH.touched
+              "
+              [message]="
+                parameterCheckForm.controls.pH.errors?.['min']
+                  ? 'pH musi być dodatnie!'
+                  : 'pH nie może przekraczać 14!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="kH">kH</label>
+            <input hlmInput id="kH" type="number" formControlName="kH" min="0" max="30" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.kH.invalid && parameterCheckForm.controls.kH.touched
+              "
+              [message]="
+                parameterCheckForm.controls.kH.errors?.['min']
+                  ? 'kH musi być dodatnie!'
+                  : 'kH nie może przekraczać 30!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="gH">GH</label>
+            <input hlmInput id="gH" type="number" formControlName="gH" min="0" max="50" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.gH.invalid && parameterCheckForm.controls.gH.touched
+              "
+              [message]="
+                parameterCheckForm.controls.gH.errors?.['min']
+                  ? 'GH musi być dodatnie!'
+                  : 'GH nie może przekraczać 50!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="nO3">NO3</label>
+            <input hlmInput id="nO3" type="number" formControlName="nO3" min="0" max="1000" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.nO3.invalid && parameterCheckForm.controls.nO3.touched
+              "
+              [message]="
+                parameterCheckForm.controls.nO3.errors?.['min']
+                  ? 'NO3 musi być dodatnie!'
+                  : 'NO3 nie może przekraczać 1000!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="nO2">NO2</label>
+            <input hlmInput id="nO2" type="number" formControlName="nO2" min="0" max="100" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.nO2.invalid && parameterCheckForm.controls.nO2.touched
+              "
+              [message]="
+                parameterCheckForm.controls.nO2.errors?.['min']
+                  ? 'NO2 musi być dodatnie!'
+                  : 'NO2 nie może przekraczać 100!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="temperature">Temperatura (°C)</label>
+            <input
+              hlmInput
+              id="temperature"
+              type="number"
+              formControlName="temperature"
+              min="0"
+              max="100"
+            />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.temperature.invalid &&
+                parameterCheckForm.controls.temperature.touched
+              "
+              [message]="
+                parameterCheckForm.controls.temperature.errors?.['min']
+                  ? 'Temperatura musi być dodatnia!'
+                  : 'Temperatura nie może przekraczać 100°C!'
+              "
+            />
+          </hlm-field>
+        </hlm-field-group>
+        <hlm-dialog-footer>
+          <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+          <submit-button
+            [buttonText]="parameterCheckId() ? 'Zapisz zmiany' : 'Utwórz'"
+            [isSubmitting]="isSubmitting()"
+            [isDisabled]="
+              (parameterCheckForm.invalid && parameterCheckForm.touched) || isSubmitting()
+            "
+            variant="success"
+          />
+        </hlm-dialog-footer>
+      </form>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

@@ -1,0 +1,68 @@
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">Pojazdy</h2>
+  <div class="ms-auto flex gap-2 align-center items-center">
+    <button
+      hlmBtn
+      variant="success"
+      hlmTooltip="Dodaj pojazd"
+      class="flex items-center justify-center"
+      (click)="createEditDialogCmp.openCreate()"
+    >
+      <ng-icon name="lucidePlus" />
+    </button>
+    <refresh-list-button
+      (onRefresh)="refreshList()"
+      [isRefreshing]="vehiclesList.status() === 'loading'"
+    />
+  </div>
+</header>
+<div class="p-2 mt-2">
+  <data-table
+    [records]="vehiclesRecords"
+    [columns]="vehicleColumns"
+    [paginationStore]="paginationStore"
+    [rowActions]="actionsMenu"
+  />
+
+  <ng-template #actionsMenu let-row>
+    <div hlmDropdownMenu class="w-48">
+      <button hlmDropdownMenuItem [routerLink]="[row.id, 'fuelings']" variant="primary">
+        <ng-icon name="lucideNotebookText" />
+        Szczegóły
+      </button>
+      <button
+        hlmDropdownMenuItem
+        (click)="createEditDialogCmp.openEdit(row.id)"
+        variant="secondary"
+      >
+        <ng-icon name="lucideNotebookPen" />
+        Edytuj
+      </button>
+      <hlm-dropdown-menu-separator />
+      <button
+        hlmDropdownMenuItem
+        (click)="
+          deleteDialogCmp.openWithIdAndNameAddition(
+            row.id,
+            ` &quot;${row.brand} ${row.model}&quot;`
+          )
+        "
+        variant="destructive"
+      >
+        <ng-icon name="lucideTrash2" />
+        Usuń
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="mt-3"></div>
+  <pagination
+    [paginationState]="paginationStore.state()"
+    (pageChange)="paginationStore.setPage($event)"
+    (pageSizeChange)="paginationStore.setPageSize($event)"
+  />
+</div>
+
+<delete-confirm-dialog #deleteDialogCmp elementName="Pojazd" (onConfirm)="onDelete($event || '')" />
+
+<vehicle-create-edit-dialog #createEditDialogCmp (refreshList)="refreshList()" />

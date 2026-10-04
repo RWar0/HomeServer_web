@@ -1,5 +1,3 @@
-import { CurrentUser } from './user.model';
-
 export interface LoginCredentials {
   login: string;
   password: string;

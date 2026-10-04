@@ -1,0 +1,38 @@
+<div
+  [routerLink]="route()"
+  class="flex items-start h-full group w-full rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+  [class.cursor-pointer]="!!route()"
+>
+  <div
+    class="flex flex-col h-10 w-10 items-center justify-center rounded-full"
+    [class]="getBgColorClass()"
+  >
+    <ng-icon [name]="icon()" class="text-xl" [class]="getColorClass()" />
+  </div>
+
+  <div class="ms-2.5 mt-2.5 min-w-0">
+    <div class="text-sm font-medium text-slate-500">
+      <span>{{ label() }}</span>
+    </div>
+
+    <div class="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+      @if (isLoading()) {
+        <hlm-spinner class="text-2xl text-primary" />
+      } @else {
+        <span>{{ value() ?? '-' }}</span>
+      }
+    </div>
+
+    <div class="mt-1 text-xs text-slate-400">
+      @if (!isLoading() && description()) {
+        <span class="truncate block">{{ description() }}</span>
+      }
+    </div>
+  </div>
+  @if (route()) {
+    <ng-icon
+      name="lucideChevronRight"
+      class="mt-2.5 ms-auto text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-slate-500"
+    />
+  }
+</div>

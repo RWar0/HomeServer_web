@@ -1,0 +1,101 @@
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">Serwisy Pojazdów</h2>
+  <div class="ms-auto flex gap-2 align-center items-center">
+    <button
+      hlmBtn
+      variant="success"
+      hlmTooltip="Dodaj serwis"
+      class="flex items-center justify-center"
+      (click)="createEditDialogCmp.openCreate()"
+    >
+      <ng-icon name="lucidePlus" />
+    </button>
+    <refresh-list-button
+      (onRefresh)="refreshList()"
+      [isRefreshing]="servicesList.status() === 'loading'"
+    />
+  </div>
+</header>
+
+<div class="bg-white px-2 py-2 flex items-center flex-wrap gap-2">
+  <span class="text-muted-foreground">Filtry</span>
+  <filter-search-input
+    fieldName="title"
+    [value]="this.filters().title"
+    placeholder="Szukaj po tytule..."
+    (onValueChange)="setFilter('title', $event)"
+  />
+  <span class="text-muted-foreground ms-2">Daty</span>
+  <form-date-picker
+    placeholder="Od"
+    [value]="this.filters().fromDate"
+    (onSelection)="setFilter('fromDate', $event ?? null)"
+    inputId="serviceFromDate"
+  />
+  <span class="text-muted-foreground"> - </span>
+  <form-date-picker
+    placeholder="Do"
+    [value]="this.filters().toDate"
+    (onSelection)="setFilter('toDate', $event ?? null)"
+    inputId="serviceToDate"
+  />
+
+  <button
+    hlmBtn
+    variant="secondary"
+    (click)="clearAllFilters()"
+    class="ms-auto flex items-center justify-center"
+  >
+    <ng-icon name="lucideFilterX" class="text-white" />
+  </button>
+</div>
+
+<div class="p-2 mt-2">
+  <data-table
+    [records]="servicesRecords"
+    [columns]="serviceColumns"
+    [paginationStore]="paginationStore"
+    [rowActions]="actionsMenu"
+  />
+
+  <ng-template #actionsMenu let-row>
+    <div hlmDropdownMenu class="w-48">
+      <button hlmDropdownMenuItem (click)="infoDialogCmp.open(row.id)" variant="primary">
+        <ng-icon name="lucideInfo" />
+        Szczegóły
+      </button>
+      <button
+        hlmDropdownMenuItem
+        (click)="createEditDialogCmp.openEdit(row.id)"
+        variant="secondary"
+      >
+        <ng-icon name="lucideNotebookPen" />
+        Edytuj
+      </button>
+      <hlm-dropdown-menu-separator />
+      <button
+        hlmDropdownMenuItem
+        (click)="deleteDialogCmp.openWithIdAndNameAddition(row.id, ` - ${row.title}`)"
+        variant="destructive"
+      >
+        <ng-icon name="lucideTrash2" />
+        Usuń
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="mt-3"></div>
+  <pagination
+    [paginationState]="paginationStore.state()"
+    (pageChange)="paginationStore.setPage($event)"
+    (pageSizeChange)="paginationStore.setPageSize($event)"
+  />
+</div>
+
+<delete-confirm-dialog #deleteDialogCmp elementName="Serwis" (onConfirm)="onDelete($event || '')" />
+<vehicle-service-for-vehicle-create-edit-dialog
+  #createEditDialogCmp
+  (refreshList)="refreshList()"
+  [vehicleId]="vehicleId()"
+/>
+<vehicle-service-info-dialog #infoDialogCmp />

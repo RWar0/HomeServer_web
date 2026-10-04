@@ -1,0 +1,104 @@
+import { Component, computed, inject, signal } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCalendar,
+  lucideChevronRight,
+  lucideFish,
+  lucideFuel,
+  lucideHouse,
+  lucideList,
+  lucideLockKeyholeOpen,
+  lucideTestTube2,
+  lucideUsers,
+  lucideWrench,
+} from '@ng-icons/lucide';
+import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { SidebarUser } from '../sidebar-user/sidebar-user';
+import { SidebarSection } from '../../../core/types/sidebar.type';
+import { SIDEBAR_ITEMS } from '../../../constants/sidebar-items';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
+import { tablerBucket, tablerCar } from '@ng-icons/tabler-icons';
+import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
+
+@Component({
+  selector: 'app-sidebar',
+  imports: [
+    HlmSidebarImports,
+    HlmCollapsibleImports,
+    NgIcon,
+    RouterLink,
+    SidebarUser,
+    RouterLinkActive,
+  ],
+  templateUrl: './app-sidebar.html',
+  styleUrl: './app-sidebar.css',
+  viewProviders: [
+    provideIcons({
+      lucideHouse,
+      lucideCalendar,
+      lucideUsers,
+      lucideLockKeyholeOpen,
+      lucideChevronRight,
+      lucideFish,
+      lucideList,
+      tablerBucket,
+      lucideTestTube2,
+      tablerCar,
+      lucideFuel,
+      lucideWrench,
+    }),
+  ],
+})
+export class Sidebar {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly sidebarService = inject(HlmSidebarService);
+  protected readonly activeCollapsible = signal<string | null>(null);
+
+  constructor() {
+    // On initial, set active collapsible if sub-page is active
+    setTimeout(() => {
+      this.checkActiveRoute(this.router.url);
+    });
+  }
+
+  private checkActiveRoute(url: string) {
+    const activeItem = SIDEBAR_ITEMS.flatMap((section) => section.items || []).find(
+      (item) => item.subItems && (url === item.url || url.startsWith(`${item.url}/`)),
+    );
+
+    if (activeItem && this.activeCollapsible() !== activeItem.title) {
+      this.activeCollapsible.set(activeItem.title);
+    }
+  }
+
+  protected toggleCollapsible(title: string, expanded: boolean) {
+    if (expanded) {
+      this.activeCollapsible.set(title);
+    } else if (this.activeCollapsible() === title) {
+      this.activeCollapsible.set(null);
+    }
+  }
+
+  /** Zamyka sidebar na mobile po wybraniu opcji nawigacyjnej. */
+  protected closeMobileIfNeeded() {
+    this.sidebarService.setOpenMobile(false);
+  }
+
+  protected readonly _sections = computed<SidebarSection[]>(() => {
+    const user = this.authService.user();
+    if (!user) {
+      return [];
+    }
+
+    return SIDEBAR_ITEMS.filter((section) => {
+      if (!section.roles) {
+        return true;
+      }
+
+      return section.roles.some((role) => user.role === role);
+    });
+  });
+}

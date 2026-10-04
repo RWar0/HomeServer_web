@@ -1,0 +1,22 @@
+<hlm-dialog>
+  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-sm md:max-w-md w-112.5">
+    <hlm-dialog-header class="mb-2">
+      <h3 hlmDialogTitle>Dodaj zdjęcie do akwarium {{ aquariumName() }}</h3>
+    </hlm-dialog-header>
+    <file-import-dragdrop
+      fileTypeName="zdjęcie"
+      acceptFormats="image/jpg,image/jpeg,image/png"
+      (selectedFile)="selectedPhoto.set($event)"
+    />
+    <hlm-dialog-footer>
+      <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
+      <submit-button
+        buttonText="Dodaj zdjęcie"
+        [isSubmitting]="isSubmitting()"
+        [isDisabled]="!selectedPhoto() || isSubmitting()"
+        variant="success"
+        (click)="uploadPhoto()"
+      />
+    </hlm-dialog-footer>
+  </hlm-dialog-content>
+</hlm-dialog>

@@ -6,6 +6,17 @@
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
 /* You can add global styles to this file, and also import other style files */
 
+@theme {
+  --color-secondary-darker: var(--secondary-darker);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-foreground-dark: var(--info-foreground-dark);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+}
+
 :root {
   color-scheme: light;
 
@@ -20,11 +31,12 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(41.124% 0.09339 243.378);
+  --primary: oklch(51.739% 0.12948 245.478);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(47.209% 0.1339 313.956);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --secondary: oklch(53.501% 0.22736 312.117);
+  --secondary-foreground: oklch(83.991% 0.00554 16.319);
+  --secondary-darker: oklch(46.802% 0.1566 314.943);
+  --muted: oklch(0.98 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -32,14 +44,19 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.99 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-border: oklch(0.91 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --info: oklch(91.476% 0.13694 195.069);
+  --info-foreground: oklch(49.92% 0.08536 192.669);
+  --info-foreground-dark: oklch(41.931% 0.07198 192.152);
+  --success: oklch(87.256% 0.25824 142.979);
+  --success-foreground: oklch(46.745% 0.15716 141.994);
 }
 
 :root.dark {
