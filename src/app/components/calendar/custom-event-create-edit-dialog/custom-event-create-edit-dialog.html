@@ -7,8 +7,8 @@
   >
     @if (isLoadingData()) {
       <hlm-dialog-header>
-        <h3 hlmDialogTitle>{{ customEventId() ? 'Edytuj' : 'Utwórz' }} podmianę wody</h3>
-        <p hlmDialogDescription>{{ customEventId() ? 'Edytuj' : 'Wprowadź' }} dane podmiany wody</p>
+        <h3 hlmDialogTitle>{{ customEventId() ? 'Edytuj' : 'Utwórz' }} wydarzenie</h3>
+        <p hlmDialogDescription>{{ customEventId() ? 'Edytuj' : 'Wprowadź' }} dane wydarzenia</p>
       </hlm-dialog-header>
       <div class="flex items-center justify-center h-50">
         <hlm-spinner class="text-3xl text-primary" />
@@ -25,10 +25,8 @@
     } @else {
       <form [formGroup]="customEventForm" (ngSubmit)="submitForm()">
         <hlm-dialog-header>
-          <h3 hlmDialogTitle>{{ customEventId() ? 'Edytuj' : 'Utwórz' }} podmianę wody</h3>
-          <p hlmDialogDescription>
-            {{ customEventId() ? 'Edytuj' : 'Wprowadź' }} dane podmiany wody
-          </p>
+          <h3 hlmDialogTitle>{{ customEventId() ? 'Edytuj' : 'Utwórz' }} wydarzenie</h3>
+          <p hlmDialogDescription>{{ customEventId() ? 'Edytuj' : 'Wprowadź' }} dane wydarzenia</p>
         </hlm-dialog-header>
         <hlm-field-group>
           <hlm-field>

@@ -1,0 +1,31 @@
+<div
+  routerLink="/calendar"
+  [queryParams]="{ open_date: activity().date }"
+  class="flex items-start group gap-3 rounded-lg border border-slate-100 p-3 transition hover:-translate-y-0.5 hover:shadow-sm cursor-pointer"
+>
+  <div
+    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+    [class]="getEventCategoryIconColorClass(activity().category)"
+  >
+    <ng-icon [name]="getIconForCategory(activity())" />
+  </div>
+
+  <div class="flex min-w-0 grow flex-col">
+    <div class="truncate text-xs font-semibold text-slate-700">
+      {{ translateEventCategory(activity().category) }}
+    </div>
+
+    <div class="mt-0.5 truncate text-[11px] text-slate-500">
+      {{ activity().title }}
+    </div>
+
+    <div class="mt-1 text-[10px] text-slate-400">
+      {{ getDateLabel(activity().date) }}
+    </div>
+  </div>
+
+  <ng-icon
+    name="lucideChevronRight"
+    class="ms-auto text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-slate-500"
+  />
+</div>

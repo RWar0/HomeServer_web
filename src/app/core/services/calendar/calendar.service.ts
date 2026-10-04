@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../common/base.service';
-import { forkJoin, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CalendarEvent, CreateEditCalendarEvent } from '../../models/calendar-event.model';
 import { MessageResponse } from '../../models/message-response.model';
 import { DateFilterDto } from '../../models/common-filters.model';

@@ -1,4 +1,6 @@
 import { CalendarStatusEnum } from '../enums/calendar-status.enum';
+import { CalendarEvent } from '../models/calendar-event.model';
+import { isDateLessThanDate } from './date-utils';
 
 export const translateCalendarStatus = (status: CalendarStatusEnum) => {
   switch (status) {
@@ -42,4 +44,31 @@ export const getCalendarEventIconBgColorClass = (status: CalendarStatusEnum) => 
     case CalendarStatusEnum.OVERDUE:
       return 'bg-red-50';
   }
+};
+
+export const getEventStatus = (event: CalendarEvent): CalendarStatusEnum => {
+  if (event.completionDate) {
+    return CalendarStatusEnum.COMPLETED;
+  }
+
+  if (new Date(event.date) < new Date()) {
+    return CalendarStatusEnum.OVERDUE;
+  }
+
+  return CalendarStatusEnum.WAITING;
+};
+
+export const getEventStatusByDate = (
+  date: Date,
+  completionDate?: Date | string,
+): CalendarStatusEnum => {
+  if (completionDate) {
+    return CalendarStatusEnum.COMPLETED;
+  }
+
+  if (isDateLessThanDate(date, new Date())) {
+    return CalendarStatusEnum.OVERDUE;
+  }
+
+  return CalendarStatusEnum.WAITING;
 };

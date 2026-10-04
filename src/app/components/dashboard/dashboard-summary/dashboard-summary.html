@@ -1,0 +1,43 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-5 h-full">
+  <dashboard-stats-card
+    icon="lucideCalendar"
+    color="blue"
+    label="Dzisiaj"
+    [value]="summaryData()?.todayEventsCount ?? null"
+    [isLoading]="isLoading()"
+    description="zadania do wykonania"
+    route="/calendar"
+  />
+  <dashboard-stats-card
+    icon="lucideInfo"
+    color="red"
+    label="Zaległe"
+    [value]="summaryData()?.overdueEventsCount ?? null"
+    [isLoading]="isLoading()"
+    description="wymaga działania"
+  />
+  <dashboard-stats-card
+    icon="lucideClock"
+    color="purple"
+    label="Najbliższe"
+    [value]="
+      summaryData()
+        ? summaryData()!.remainingDaysToNextEvent
+          ? summaryData()!.remainingDaysToNextEvent +
+            (summaryData()!.remainingDaysToNextEvent === 1 ? ' dzień' : ' dni')
+          : '-'
+        : null
+    "
+    [isLoading]="isLoading()"
+    [description]="summaryData() ? (summaryData()!.remainingEventTitle ?? '') : null"
+  />
+  <dashboard-stats-card
+    icon="lucideCheckCircle"
+    color="green"
+    label="Wykonane dziś"
+    [value]="summaryData()?.todayCompletedEventsCount ?? null"
+    [isLoading]="isLoading()"
+    description="zadań"
+    route="/calendar"
+  />
+</div>

@@ -1,3 +1,41 @@
-<div>
-  <p>dashboard-page works!</p>
-</div>
+<article class="m-5 pb-5">
+  <section>
+    <h2 class="text-3xl font-bold tracking-[-0.01rem]">
+      {{ today().getHours() > 17 || today().getHours() < 4 ? 'Dobry wieczór' : 'Dzień dobry' }},
+      {{ userName() }}!
+    </h2>
+    <p class="text-sm text-gray-600 ms-0.5 mt-1">
+      <span class="capitalize">{{ today() | date: 'EEEE' }}</span
+      >,
+      {{ today() | date: 'd MMMM yyyy' }}
+    </p>
+  </section>
+  <section>
+    <dashboard-summary
+      [summaryData]="summaryData"
+      [isLoading]="summaryDataResource.status() === 'loading'"
+    />
+  </section>
+
+  <section class="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_450px] h-full">
+    <dashboard-attention-list
+      [items]="attentionListItems"
+      [isLoading]="attentionListItemsResource.status() === 'loading'"
+    />
+    <dashboard-upcoming-events
+      [events]="upcomingEvents"
+      [isLoading]="upcomingEventsResource.status() === 'loading'"
+    />
+  </section>
+
+  <section class="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_450px] h-full">
+    <dashboard-recent-activities
+      [activities]="recentActivities"
+      [isLoading]="recentActivitiesResource.status() === 'loading'"
+    />
+    <dashboard-status
+      [statusData]="statusData()"
+      [isLoading]="summaryDataResource.status() === 'loading'"
+    />
+  </section>
+</article>

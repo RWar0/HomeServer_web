@@ -1,4 +1,4 @@
-import { Component, computed, inject, resource, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, resource, signal, viewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
@@ -48,6 +48,7 @@ import {
   getCalendarEventIconBgColorClass,
   getCalendarEventIconStatusColorClass,
   getCalendarEventStatusIcon,
+  getEventStatus,
   translateCalendarStatus,
 } from '../../core/helpers/category-event-status';
 import { HlmSpinner } from '@spartan-ng/helm/spinner';
@@ -55,7 +56,12 @@ import {
   existsCalendarEventSubCategory,
   getRedirectPathForCalendarEventSubcategory,
 } from '../../core/helpers/calendar-event-subcategory';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {
+  getEventCategoryIcon,
+  getEventCategoryIconColorClass,
+} from '../../core/helpers/category-event-icon';
+import { getOpenDialogAndRemoveQueryParam } from '../../core/helpers/get-open-dialog-and-remove-query-param';
 
 @Component({
   selector: 'app-calendar-page',
@@ -103,10 +109,16 @@ import { RouterLink } from '@angular/router';
   ],
 })
 export class CalendarPage {
+  // Injects
   private readonly calendarService = inject(CalendarService);
   private readonly datePipe = inject(DatePipe);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
+  // View childs
   readonly eventDialog = viewChild.required(CalendarEventDialog);
 
+  // Access to methods
   protected readonly CalendarEventCategory = CalendarEventCategory;
   protected readonly translateEventCategory = translateEventCategory;
   protected readonly CalendarEventCategoryEntries = Object.entries(CalendarEventCategory).map(
@@ -149,6 +161,45 @@ export class CalendarPage {
         setter: (value) => this.setFilter('toDate', value ? new Date(value) : null),
         formatter: (filters) => filters?.toISOString().split('T')[0],
       },
+    });
+
+    effect(() => {
+      getOpenDialogAndRemoveQueryParam(this.route, this.router, 'addEvent', () =>
+        this.eventDialog()?.openCreate(),
+      );
+    });
+
+    effect(() => {
+      const queryParam = this.route.snapshot.queryParamMap.get('open_date');
+
+      if (queryParam) {
+        // Set selected date and apply filters
+        const dateObj = new Date(queryParam);
+
+        // Calculate filters based on year and month
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth();
+
+        const fromDate = new Date(year, month, 2);
+        const toDate = new Date(year, month + 1, 1);
+
+        // Set filters
+        this.setFilter('fromDate', fromDate);
+        this.setFilter('toDate', toDate);
+
+        // Set active date
+        this.activeDate.set(dateObj);
+        this.selectedDate.set(dateObj);
+
+        // Remove query param from URL
+        setTimeout(() => {
+          this.router.navigate([], {
+            queryParams: { open_date: null },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+          });
+        });
+      }
     });
   }
 
@@ -356,15 +407,7 @@ export class CalendarPage {
 
   // Statuses for calendar event
   protected getEventStatus(event: CalendarEvent): CalendarStatusEnum {
-    if (event.completionDate) {
-      return CalendarStatusEnum.COMPLETED;
-    }
-
-    if (new Date(event.date) < new Date()) {
-      return CalendarStatusEnum.OVERDUE;
-    }
-
-    return CalendarStatusEnum.WAITING;
+    return getEventStatus(event);
   }
 
   // Classes (colors, styles, etc) for event categories
@@ -378,43 +421,11 @@ export class CalendarPage {
   );
 
   protected getIconForCategory(category: CalendarEventCategory): string {
-    switch (category) {
-      case CalendarEventCategory.Aquarium: {
-        return 'lucideFish';
-      }
-      case CalendarEventCategory.Vehicle: {
-        return 'tablerCar';
-      }
-      case CalendarEventCategory.Home: {
-        return 'lucideHome';
-      }
-      case CalendarEventCategory.Personal: {
-        return 'lucideUser';
-      }
-      case CalendarEventCategory.Other: {
-        return 'lucideCalendar';
-      }
-    }
+    return getEventCategoryIcon(category);
   }
 
   protected getClassesForEventCategory(category: CalendarEventCategory): string {
-    switch (category) {
-      case CalendarEventCategory.Aquarium: {
-        return 'bg-cyan-50 text-cyan-800 border-cyan-100';
-      }
-      case CalendarEventCategory.Vehicle: {
-        return 'bg-orange-50 text-orange-800 border-orange-100';
-      }
-      case CalendarEventCategory.Home: {
-        return 'bg-blue-50 text-blue-800 border-blue-100';
-      }
-      case CalendarEventCategory.Personal: {
-        return 'bg-red-50 text-red-800 border-red-100';
-      }
-      case CalendarEventCategory.Other: {
-        return 'bg-purple-50 text-purple-800 border-purple-100';
-      }
-    }
+    return getEventCategoryIconColorClass(category);
   }
 
   protected getColorForEventDot(category: CalendarEventCategory): string {
