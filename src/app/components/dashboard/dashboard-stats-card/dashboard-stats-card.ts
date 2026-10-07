@@ -22,6 +22,7 @@ export class DashboardStatsCard {
   public readonly color = input<DashboardCardColor>('blue');
 
   public readonly route = input<string | null>(null);
+  public readonly queryParam = input<Record<string, string> | null>(null);
 
   protected getColorClass(): string {
     const colors: Record<DashboardCardColor, string> = {
