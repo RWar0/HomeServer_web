@@ -2,13 +2,18 @@
   class="rounded-lg border bg-white shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow relative md:aspect-square md:max-h-99"
 >
   <div class="relative w-full aspect-square md:h-full bg-gray-50 flex items-center justify-center">
-    @if (photoData().imageUrl) {
+    @if (imageBlobResource.value()) {
+      @if (isImageLoading()) {
+        <hlm-spinner class="text-2xl text-primary z-10" />
+      }
       <img
-        [src]="photoData().imageUrl"
+        [src]="imageBlobResource.value()"
         [alt]="photoData().id"
-        class="absolute inset-0 w-full h-full object-cover"
+        (load)="isImageLoading.set(false)"
+        [class.opacity-0]="isImageLoading()"
+        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
       />
-    } @else {
+    } @else if (imageBlobResource.error()) {
       <img
         src="/image_no_photo_added.png"
         [alt]="photoData().id"
@@ -17,6 +22,8 @@
       <div class="absolute top-8">
         <span class="text-lg text-red-500 font-medium italic">Problem z pobraniem zdjęcia</span>
       </div>
+    } @else {
+      <hlm-spinner class="text-2xl text-primary z-10" />
     }
     <!-- Overlay for large screens (md and up) -->
     <div

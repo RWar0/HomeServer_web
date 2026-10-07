@@ -45,12 +45,25 @@
     </p>
   </hlm-card-header>
   <div hlmCardContent class="grid xl:grid-cols-5 gap-3 flex-1">
-    @if (aquarium().lastPhotoId && imagePreview()) {
-      <img
-        [src]="imagePreview()"
-        alt="Zdjecie akwarium {{ aquarium().name }}"
-        class="xl:col-span-3 rounded-lg max-h-100 h-full self-center mx-auto my-5 object-cover aspect-video shadow"
-      />
+    @if (aquarium().lastPhotoId) {
+      <div class="relative xl:col-span-3 rounded-lg w-full max-h-100 h-full self-center mx-auto my-5 aspect-video shadow bg-gray-50 flex items-center justify-center overflow-hidden">
+        @if (imagePreview() === null) {
+          <hlm-spinner class="text-3xl text-primary absolute z-10" />
+        } @else if (imagePreview() === '') {
+          <span class="text-red-500 font-medium italic">Problem z pobraniem zdjęcia</span>
+        } @else {
+          @if (isImageLoading()) {
+            <hlm-spinner class="text-3xl text-primary absolute z-10" />
+          }
+          <img
+            [src]="imagePreview()"
+            alt="Zdjecie akwarium {{ aquarium().name }}"
+            (load)="isImageLoading.set(false)"
+            [class.opacity-0]="isImageLoading()"
+            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+          />
+        }
+      </div>
     } @else {
       <img
         src="/image_no_photo_added.png"

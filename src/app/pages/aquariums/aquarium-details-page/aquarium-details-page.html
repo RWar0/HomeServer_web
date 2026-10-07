@@ -32,11 +32,26 @@
   @if (aquarium.value()?.lastPhotoId) {
     <div class="p-2.5 bg-white rounded-md shadow-md lg:col-span-2">
       <h2 class="text-primary text-2xl font-bold">Ostatnie zdjęcie</h2>
-      <img
-        [src]="imagePreview()"
-        alt="Zdjecie akwarium {{ aquarium.value()?.name }}"
-        class="rounded-lg w-full max-h-125 self-center mx-auto mt-4 mb-2 object-contain aspect-video shadow"
-      />
+      <div
+        class="relative w-full aspect-video max-h-125 bg-gray-50 flex items-center justify-center rounded-lg shadow mt-4 mb-2 overflow-hidden"
+      >
+        @if (imagePreview() === null) {
+          <hlm-spinner class="text-3xl text-primary absolute z-10" />
+        } @else if (imagePreview() === '') {
+          <span class="text-red-500 font-medium italic">Problem z pobraniem zdjęcia</span>
+        } @else {
+          @if (isImageLoading()) {
+            <hlm-spinner class="text-3xl text-primary absolute z-10" />
+          }
+          <img
+            [src]="imagePreview()"
+            [alt]="`Zdjecie akwarium ${aquarium.value()?.name}`"
+            (load)="isImageLoading.set(false)"
+            [class.opacity-0]="isImageLoading()"
+            class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
+          />
+        }
+      </div>
     </div>
   }
 </div>
