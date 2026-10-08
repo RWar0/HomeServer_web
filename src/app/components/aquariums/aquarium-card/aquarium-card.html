@@ -89,8 +89,8 @@
       <labeled-field
         label="Sprawdzane"
         [value]="
-          aquarium().lastParametersCheck
-            ? (aquarium().lastParametersCheck | date: 'shortDate')
+          aquarium().lastParameterCheck
+            ? (aquarium().lastParameterCheck | date: 'shortDate')
             : 'brak informacji'
         "
         labelColorClass="text-gray-600"

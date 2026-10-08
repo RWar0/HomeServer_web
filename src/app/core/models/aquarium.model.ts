@@ -4,7 +4,7 @@ export interface AquariumListItem {
   volume: number;
   lastPhotoId?: string;
   lastWaterChange?: Date;
-  lastParametersCheck?: Date;
+  lastParameterCheck?: Date;
 }
 
 export interface CreateEditAquariumDto {

@@ -288,10 +288,31 @@
                       variant="outline"
                       type="button"
                       class="text-slate-400 hover:text-green-600 transition-colors hover:bg-slate-200/60"
-                      (click)="completeCustomEvent(event.id)"
+                      (click)="
+                        markAsDoneDialog.openWithIdAndNameAddition(
+                          event.id,
+                          ` &quot;${event.title}&quot; z dnia ${formatEventDate(event.date)}`
+                        )
+                      "
                       hlmTooltip="Oznacz jako zrobione"
                     >
                       <ng-icon name="lucideCheck" strokeWidth="2.5" class="text-sm" />
+                    </button>
+                  } @else {
+                    <button
+                      hlmBtn
+                      variant="outline"
+                      type="button"
+                      class="text-slate-400 hover:text-amber-600 transition-colors hover:bg-slate-200/60"
+                      (click)="
+                        markAsNotDoneDialog.openWithIdAndNameAddition(
+                          event.id,
+                          ` &quot;${event.title}&quot; z dnia ${formatEventDate(event.date)}, zakończonego ${formatEventDate(event.completionDate!)}`
+                        )
+                      "
+                      hlmTooltip="Anuluj zakończenie"
+                    >
+                      <ng-icon name="lucideUndo2" strokeWidth="2.5" class="text-sm" />
                     </button>
                   }
 
@@ -452,6 +473,28 @@
 
 <!-- Event Add Dialog -->
 <custom-event-create-edit-dialog #createEditDialogCmp (refreshList)="refreshList()" />
+
+<!-- Confirm completion -->
+<confirm-dialog
+  #markAsDoneDialog
+  variant="success"
+  icon="lucideCheck"
+  title="Potwierdzenie zakończenia"
+  subtitle="oznaczyć jako zakończone"
+  buttonText="Zakończ"
+  elementName="Wydarzenie"
+  (onConfirm)="completeCustomEvent($event || '')"
+/>
+<confirm-dialog
+  #markAsNotDoneDialog
+  variant="warning"
+  icon="lucideUndo2"
+  title="Anulowanie zakończenia"
+  subtitle="cofnąć oznaczenie jako zakończone"
+  buttonText="Cofnij zakończenie"
+  elementName="Wydarzenie"
+  (onConfirm)="undoCompletionCustomEvent($event || '')"
+/>
 
 <!-- Confirm deletion -->
 <delete-confirm-dialog

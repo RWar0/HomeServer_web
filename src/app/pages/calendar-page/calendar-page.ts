@@ -27,6 +27,7 @@ import {
   lucideCheck,
   lucideCalendarCheck,
   lucideInfo,
+  lucideUndo2,
 } from '@ng-icons/lucide';
 import { tablerCar } from '@ng-icons/tabler-icons';
 import { CalendarService } from '../../core/services/calendar/calendar.service';
@@ -62,6 +63,7 @@ import {
   getEventCategoryIconColorClass,
 } from '../../core/helpers/category-event-icon';
 import { getOpenDialogAndRemoveQueryParam } from '../../core/helpers/get-open-dialog-and-remove-query-param';
+import { ConfirmDialog } from '../../components/common/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-calendar-page',
@@ -75,6 +77,7 @@ import { getOpenDialogAndRemoveQueryParam } from '../../core/helpers/get-open-di
     DeleteConfirmDialog,
     HlmSpinner,
     RouterLink,
+    ConfirmDialog,
   ],
   templateUrl: './calendar-page.html',
   styleUrl: './calendar-page.css',
@@ -105,6 +108,7 @@ import { getOpenDialogAndRemoveQueryParam } from '../../core/helpers/get-open-di
       lucideHome,
       lucideUser,
       lucideInfo,
+      lucideUndo2,
     }),
   ],
 })
@@ -385,6 +389,16 @@ export class CalendarPage {
 
   completeCustomEvent(eventId: string) {
     this.calendarService.markAsDone(eventId).subscribe({
+      next: (res) => {
+        toast.success(res.message);
+        this.refreshList();
+      },
+      error: (err) => displayApiError(err),
+    });
+  }
+
+  undoCompletionCustomEvent(eventId: string) {
+    this.calendarService.markAsNotDone(eventId).subscribe({
       next: (res) => {
         toast.success(res.message);
         this.refreshList();

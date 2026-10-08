@@ -1,0 +1,38 @@
+<hlm-alert-dialog #completeDialog="hlmAlertDialog">
+  <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx" class="max-w-[90vw]!">
+    <hlm-alert-dialog-header>
+      <hlm-alert-dialog-media
+        class="border shadow-sm"
+        [class.border-green-200]="variant() === 'success'"
+        [class.shadow-green-200]="variant() === 'success'"
+        [class.bg-green-50]="variant() === 'success'"
+        [class.text-green-600]="variant() === 'success'"
+        [class.border-amber-200]="variant() === 'warning'"
+        [class.shadow-amber-200]="variant() === 'warning'"
+        [class.bg-amber-200]="variant() === 'warning'"
+        [class.text-amber-700]="variant() === 'warning'"
+      >
+        <ng-icon [name]="icon()" />
+      </hlm-alert-dialog-media>
+      <h2 hlmAlertDialogTitle>{{ title() }}</h2>
+      <div class="">
+        <p hlmAlertDialogDescription>
+          Czy jesteś pewny, że chcesz {{ subtitle() }}
+          <strong>{{ elementName() }} {{ elementNameAddition() || '' }}</strong
+          >?
+        </p>
+      </div>
+    </hlm-alert-dialog-header>
+    <hlm-alert-dialog-footer>
+      <button hlmAlertDialogCancel>Anuluj</button>
+      <button
+        hlmBtn
+        [variant]="variant()"
+        class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2"
+        (click)="confirmComplete()"
+      >
+        <span>{{ buttonText() }}</span>
+      </button>
+    </hlm-alert-dialog-footer>
+  </hlm-alert-dialog-content>
+</hlm-alert-dialog>

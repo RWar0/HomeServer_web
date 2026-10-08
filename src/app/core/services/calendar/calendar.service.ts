@@ -44,6 +44,10 @@ export class CalendarService extends BaseService {
     return this.apiService.patch<MessageResponse>(`custom-events/${id}/mark-done`);
   }
 
+  markAsNotDone(id: string): Observable<MessageResponse> {
+    return this.apiService.patch<MessageResponse>(`custom-events/${id}/mark-not-done`);
+  }
+
   deleteEvent(id: string): Observable<MessageResponse> {
     return this.apiService.delete<MessageResponse>(`custom-events/${id}`);
   }
