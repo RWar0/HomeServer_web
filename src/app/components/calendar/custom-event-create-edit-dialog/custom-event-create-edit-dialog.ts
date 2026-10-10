@@ -90,7 +90,7 @@ export class CalendarEventDialog {
     date: ['', Validators.required],
     time: [null as string | null],
     location: [null as string | null, Validators.maxLength(150)],
-    description: [null as string | null, Validators.maxLength(250)],
+    description: [null as string | null, Validators.maxLength(1024)],
   });
 
   protected selectCategory(value: string | null) {

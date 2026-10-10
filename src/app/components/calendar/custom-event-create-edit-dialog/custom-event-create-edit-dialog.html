@@ -58,13 +58,18 @@
           </hlm-field>
           <hlm-field>
             <label hlmFieldLabel for="description">Opis</label>
-            <textarea hlmInput id="description" formControlName="description"></textarea>
+            <textarea
+              hlmInput
+              id="description"
+              formControlName="description"
+              class="min-h-8 h-24 max-h-80"
+            ></textarea>
             <error-label
               [isDisabled]="
                 customEventForm.controls.description.invalid &&
                 customEventForm.controls.description.touched
               "
-              message="Opis jest za długi! Maksymalna długość to 250 znaków!"
+              message="Opis jest za długi! Maksymalna długość to 1024 znaki!"
             />
           </hlm-field>
           <hlm-field>
@@ -78,26 +83,28 @@
               message="Akwarium jest wymagane!"
             ></error-label>
           </hlm-field>
-          <hlm-field>
-            <label hlmFieldLabel for="date">Data wydarzenia*</label>
-            <input hlmInput id="date" formControlName="date" type="date" />
-            <error-label
-              [isDisabled]="
-                customEventForm.controls.date.invalid && customEventForm.controls.date.touched
-              "
-              message="Data wydarzenia jest wymagana!"
-            ></error-label>
-          </hlm-field>
-          <hlm-field>
-            <label hlmFieldLabel for="time">Godzina wydarzenia</label>
-            <input hlmInput id="time" formControlName="time" type="time" />
-            <error-label
-              [isDisabled]="
-                customEventForm.controls.time.invalid && customEventForm.controls.time.touched
-              "
-              message="Godzina wydarzenia jest niepoprawna!"
-            ></error-label>
-          </hlm-field>
+          <div class="grid grid-cols-2 gap-4">
+            <hlm-field>
+              <label hlmFieldLabel for="date">Data wydarzenia*</label>
+              <input hlmInput id="date" formControlName="date" type="date" />
+              <error-label
+                [isDisabled]="
+                  customEventForm.controls.date.invalid && customEventForm.controls.date.touched
+                "
+                message="Data wydarzenia jest wymagana!"
+              ></error-label>
+            </hlm-field>
+            <hlm-field>
+              <label hlmFieldLabel for="time">Godzina wydarzenia</label>
+              <input hlmInput id="time" formControlName="time" type="time" />
+              <error-label
+                [isDisabled]="
+                  customEventForm.controls.time.invalid && customEventForm.controls.time.touched
+                "
+                message="Godzina wydarzenia jest niepoprawna!"
+              ></error-label>
+            </hlm-field>
+          </div>
         </hlm-field-group>
         <hlm-dialog-footer>
           <button hlmBtn variant="outline" hlmDialogClose>Anuluj</button>
