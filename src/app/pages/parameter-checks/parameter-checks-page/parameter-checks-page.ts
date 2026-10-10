@@ -105,8 +105,14 @@ export class ParameterChecksPage {
         if (!value) {
           return '—';
         }
-        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '—';
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
       },
+    },
+    {
+      key: 'measuredTime',
+      label: 'Godzina pomiaru',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'aquariumName',
@@ -136,6 +142,25 @@ export class ParameterChecksPage {
     {
       key: 'no2',
       label: 'NO2',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'nh3',
+      label: 'NH3',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'po4',
+      label: 'PO4',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'fe',
+      label: 'Fe',
+      isVisible: false,
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {

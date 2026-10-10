@@ -75,34 +75,59 @@ export class AquariumParameterChecksPage {
       },
     },
     {
+      key: 'measuredTime',
+      label: 'Godzina pomiaru',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
       key: 'ph',
       label: 'pH',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'kh',
       label: 'KH',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'gh',
       label: 'GH',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'no3',
       label: 'NO3',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'no2',
       label: 'NO2',
-      format: (value) => (value != null ? `${value}` : '-'),
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'nh3',
+      label: 'NH3',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'po4',
+      label: 'PO4',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'fe',
+      label: 'Fe',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'temperature',
-      label: 'Temp. (°C)',
-      format: (value) => (value != null ? `${value}` : '-'),
+      label: 'Temperatura (°C)',
+      format: (value) => (value != null ? value.toString() : '-'),
     },
   ];
 

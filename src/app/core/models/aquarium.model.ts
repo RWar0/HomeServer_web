@@ -46,6 +46,10 @@ export interface AquariumParameterCheckListItem {
   gh?: number | null;
   no3?: number | null;
   no2?: number | null;
+  nh3?: number | null;
+  po4?: number | null;
+  fe?: number | null;
   temperature?: number | null;
   measuredAt: Date;
+  measuredTime?: string | null;
 }

@@ -36,7 +36,7 @@
             {{ parameterCheckId() ? 'Edytuj' : 'Wprowadź' }} dane sprawdzenia parametrów
           </p>
         </hlm-dialog-header>
-        <hlm-field-group>
+        <hlm-field-group class="grid grid-cols-2">
           <hlm-field>
             <label hlmFieldLabel for="measuredAt">Data pomiaru</label>
             <input hlmInput id="measuredAt" formControlName="measuredAt" type="date" />
@@ -46,6 +46,17 @@
                 parameterCheckForm.controls.measuredAt.touched
               "
               message="Data podmiany wody jest wymagana!"
+            ></error-label>
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="measuredTime">Godzina pomiaru</label>
+            <input hlmInput id="measuredTime" formControlName="measuredTime" type="time" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.measuredTime.invalid &&
+                parameterCheckForm.controls.measuredTime.touched
+              "
+              message="Godzina pomiaru jest nieprawidłowa!"
             ></error-label>
           </hlm-field>
           <hlm-field>
@@ -115,6 +126,48 @@
                 parameterCheckForm.controls.nO2.errors?.['min']
                   ? 'NO2 musi być dodatnie!'
                   : 'NO2 nie może przekraczać 100!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="nH3">NH3</label>
+            <input hlmInput id="nH3" type="number" formControlName="nH3" min="0" max="20" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.nH3.invalid && parameterCheckForm.controls.nH3.touched
+              "
+              [message]="
+                parameterCheckForm.controls.nH3.errors?.['min']
+                  ? 'NH3 musi być dodatnie!'
+                  : 'NH3 nie może przekraczać 20!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="pO4">PO4</label>
+            <input hlmInput id="pO4" type="number" formControlName="pO4" min="0" max="10" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.pO4.invalid && parameterCheckForm.controls.pO4.touched
+              "
+              [message]="
+                parameterCheckForm.controls.pO4.errors?.['min']
+                  ? 'PO4 musi być dodatnie!'
+                  : 'PO4 nie może przekraczać 10!'
+              "
+            />
+          </hlm-field>
+          <hlm-field>
+            <label hlmFieldLabel for="fE">FE</label>
+            <input hlmInput id="fE" type="number" formControlName="fE" min="0" max="10" />
+            <error-label
+              [isDisabled]="
+                parameterCheckForm.controls.fE.invalid && parameterCheckForm.controls.fE.touched
+              "
+              [message]="
+                parameterCheckForm.controls.fE.errors?.['min']
+                  ? 'FE musi być dodatnie!'
+                  : 'FE nie może przekraczać 10!'
               "
             />
           </hlm-field>

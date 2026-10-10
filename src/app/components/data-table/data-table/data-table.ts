@@ -23,7 +23,7 @@ import { SortDirectionEnum } from '../../../core/enums/sort-direction.enum';
 import { TableColumn } from '../../../core/models/data-table.model';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
-import { HlmButton } from "@spartan-ng/helm/button";
+import { HlmButton } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'data-table',
@@ -77,12 +77,10 @@ export class DataTable<T extends object> {
   protected readonly sortDirection = computed(() => this.paginationStore().sortDirection());
 
   /**
-   * Stores columns manually hidden by the user.
-   *
-   * `hidden` from TableColumn is not stored here because it represents
-   * a permanently hidden column.
+   * Stores explicit user overrides for column visibility.
+   * Key: column key, Value: true (visible), false (hidden)
    */
-  private readonly userHiddenColumns = signal<Set<string>>(new Set());
+  private readonly userVisibilityOverrides = signal<Map<string, boolean>>(new Map());
 
   /**
    * Columns that can be controlled through Column Visibility.
@@ -97,19 +95,20 @@ export class DataTable<T extends object> {
    * Currently visible columns.
    *
    * `hidden` always takes precedence.
+   * `userVisibilityOverrides` defines the current user selection.
    * `isVisible` defines the initial visibility.
-   * `userHiddenColumns` defines the current user selection.
    */
   protected readonly visibleColumns = computed(() => {
-    const userHidden = this.userHiddenColumns();
+    const overrides = this.userVisibilityOverrides();
 
     return this.columns().filter((column) => {
       if (column.hidden) {
         return false;
       }
 
-      if (userHidden.has(column.key)) {
-        return false;
+      const override = overrides.get(column.key);
+      if (override !== undefined) {
+        return override;
       }
 
       return column.isVisible !== false;
@@ -135,24 +134,23 @@ export class DataTable<T extends object> {
     if (!column || column.hidden) {
       return;
     }
+    
+    const isCurrentlyVisible = this.isColumnVisible(key);
 
-    this.userHiddenColumns.update((current) => {
-      const next = new Set(current);
+    this.userVisibilityOverrides.update((current) => {
+      const next = new Map(current);
 
-      if (next.has(key)) {
-        next.delete(key);
-        return next;
+      if (isCurrentlyVisible) {
+        const visibleConfigurableColumns = this.configurableColumns().filter(
+          (c) => c.key !== key && this.isColumnVisible(c.key),
+        );
+
+        if (visibleConfigurableColumns.length === 0) {
+          return current;
+        }
       }
 
-      const visibleConfigurableColumns = this.configurableColumns().filter(
-        (column) => !next.has(column.key) && column.isVisible !== false,
-      );
-
-      if (visibleConfigurableColumns.length <= 1) {
-        return current;
-      }
-
-      next.add(key);
+      next.set(key, !isCurrentlyVisible);
 
       return next;
     });
@@ -162,7 +160,13 @@ export class DataTable<T extends object> {
    * Makes all configurable columns visible.
    */
   protected showAllColumns(): void {
-    this.userHiddenColumns.set(new Set());
+    this.userVisibilityOverrides.update((current) => {
+      const next = new Map(current);
+      for (const col of this.configurableColumns()) {
+        next.set(col.key, true);
+      }
+      return next;
+    });
   }
 
   // Sorting
