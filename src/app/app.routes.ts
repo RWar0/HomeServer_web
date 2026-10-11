@@ -22,6 +22,7 @@ import { VehicleDetailsLayout } from './layouts/vehicle-details-layout/vehicle-d
 import { VehicleFuelingsListPage } from './pages/vehicles/vehicle-fuelings-list-page/vehicle-fuelings-list-page';
 import { VehicleServiceListPage } from './pages/vehicle-services/vehicle-service-list-page/vehicle-service-list-page';
 import { VehicleServicesListPage } from './pages/vehicles/vehicle-services-list-page/vehicle-services-list-page';
+import { CalculatorCo2Page } from './pages/calculators/calculator-co2-page/calculator-co2-page';
 
 export const routes: Routes = [
   {
@@ -56,6 +57,10 @@ export const routes: Routes = [
           {
             path: 'parameter-checks',
             component: ParameterChecksPage,
+          },
+          {
+            path: 'co2-calculator',
+            component: CalculatorCo2Page,
           },
         ],
       },

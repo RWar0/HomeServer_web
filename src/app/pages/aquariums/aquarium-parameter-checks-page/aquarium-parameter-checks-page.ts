@@ -16,10 +16,17 @@ import { Pagination } from '../../../components/common/pagination/pagination';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
-import { lucideInfo, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideBubbles,
+  lucideInfo,
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 import { AquariumParameterCheckCreateEditDialog } from '../../../components/aquariums/aquarium-parameter-check-create-edit-dialog/aquarium-parameter-check-create-edit-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { ParameterCheckInfoDialog } from '../../../components/parameter-checks/parameter-check-info-dialog/parameter-check-info-dialog';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-aquarium-parameter-checks-page',
@@ -33,13 +40,14 @@ import { ParameterCheckInfoDialog } from '../../../components/parameter-checks/p
     HlmButtonImports,
     AquariumParameterCheckCreateEditDialog,
     ParameterCheckInfoDialog,
+    RouterLink,
   ],
   templateUrl: './aquarium-parameter-checks-page.html',
   styleUrl: './aquarium-parameter-checks-page.css',
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucideNotebookPen, lucidePlus, lucideTrash2, lucideInfo }),
+    provideIcons({ lucideNotebookPen, lucidePlus, lucideTrash2, lucideInfo, lucideBubbles }),
   ],
 })
 export class AquariumParameterChecksPage {

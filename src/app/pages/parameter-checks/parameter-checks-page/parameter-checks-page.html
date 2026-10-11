@@ -71,6 +71,18 @@
         <ng-icon name="lucideNotebookPen" />
         Edytuj
       </button>
+      @if (row.ph && row.kh) {
+        <hlm-dropdown-menu-separator />
+        <button
+          routerLink="/aquariums/co2-calculator"
+          [queryParams]="{ ph: row.ph, kh: row.kh }"
+          hlmDropdownMenuItem
+          variant="success"
+        >
+          <ng-icon name="lucideBubbles" />
+          Kalkulator CO2
+        </button>
+      }
       <hlm-dropdown-menu-separator />
       <button
         hlmDropdownMenuItem

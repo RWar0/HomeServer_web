@@ -34,6 +34,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
             url: 'parameter-checks',
             icon: 'lucideTestTube2',
           },
+          {
+            title: 'Kalkulator CO2',
+            url: 'co2-calculator',
+            icon: 'lucideBubbles',
+          },
         ],
       },
       {

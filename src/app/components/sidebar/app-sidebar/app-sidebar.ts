@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideBubbles,
   lucideCalendar,
   lucideChevronRight,
   lucideFish,
@@ -48,6 +49,7 @@ import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
       tablerCar,
       lucideFuel,
       lucideWrench,
+      lucideBubbles,
     }),
   ],
 })
