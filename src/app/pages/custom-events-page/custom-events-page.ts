@@ -179,11 +179,13 @@ export class CustomEventsPage {
     {
       key: 'location',
       label: 'Lokalizacja',
+      truncate: true,
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'description',
       label: 'Opis',
+      truncate: true,
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {

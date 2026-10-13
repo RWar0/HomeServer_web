@@ -41,7 +41,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'w-full block',
+    class: 'w-full block min-w-0',
   },
 })
 export class DataTable<T extends object> {
@@ -134,7 +134,7 @@ export class DataTable<T extends object> {
     if (!column || column.hidden) {
       return;
     }
-    
+
     const isCurrentlyVisible = this.isColumnVisible(key);
 
     this.userVisibilityOverrides.update((current) => {
@@ -214,6 +214,12 @@ export class DataTable<T extends object> {
     }
 
     return String(raw);
+  }
+
+  protected getTruncateClass(col: TableColumn<T>): string {
+    return typeof col.truncate === 'string'
+      ? col.truncate
+      : 'max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl';
   }
 
   // Selection

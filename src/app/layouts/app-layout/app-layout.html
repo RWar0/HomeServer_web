@@ -1,5 +1,5 @@
 <app-sidebar>
-  <main hlmSidebarInset class="w-screen h-screen flex flex-col">
+  <main hlmSidebarInset class="min-w-0 flex-1 h-screen flex flex-col overflow-hidden">
     <header
       class="md:hidden bg-primary/10 py-2.5 border-b border-b-primary/20 flex flex-row items-center"
     >
@@ -7,7 +7,7 @@
         <span class="sr-only">Toggle sidebar</span>
       </button>
     </header>
-    <div class="bg-muted h-full">
+    <div class="bg-muted h-full overflow-y-auto min-w-0">
       <router-outlet />
     </div>
   </main>

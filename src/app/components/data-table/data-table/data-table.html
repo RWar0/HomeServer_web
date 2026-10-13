@@ -65,9 +65,9 @@
           <th
             hlmTableHead
             [class]="
-              col.sortable
+              (col.sortable
                 ? 'cursor-pointer select-none transition-colors duration-150 hover:bg-primary/8 hover:text-primary'
-                : ''
+                : '') + (col.headerClass ? ' ' + col.headerClass : '')
             "
             [class.text-primary]="col.sortable && isActiveSortColumn(col.key)"
             [class.font-semibold]="col.sortable && isActiveSortColumn(col.key)"
@@ -126,8 +126,25 @@
           }
 
           @for (col of visibleColumns(); track col.key) {
-            <td hlmTableCell>
-              {{ getCellValue(row, col) }}
+            <td hlmTableCell [class]="col.cellClass">
+              @if (col.truncate) {
+                <span
+                  class="block truncate"
+                  [class]="getTruncateClass(col)"
+                  [title]="getCellValue(row, col)"
+                >
+                  {{ getCellValue(row, col) }}
+                </span>
+              } @else if (col.wrap) {
+                <span
+                  class="block whitespace-normal wrap-break-word"
+                  [class]="col.cellClass ?? 'max-w-xs'"
+                >
+                  {{ getCellValue(row, col) }}
+                </span>
+              } @else {
+                {{ getCellValue(row, col) }}
+              }
             </td>
           }
 
