@@ -15,6 +15,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
         icon: 'lucideCalendar',
       },
       {
+        title: 'Wydarzenia',
+        url: '/custom-events',
+        icon: 'tablerCalendarEvent',
+      },
+      {
         title: 'Akwaria',
         url: '/aquariums',
         icon: 'lucideFish',
@@ -33,6 +38,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
             title: 'Parametry wody',
             url: 'parameter-checks',
             icon: 'lucideTestTube2',
+          },
+          {
+            title: 'Kalkulator CO2',
+            url: 'co2-calculator',
+            icon: 'lucideBubbles',
           },
         ],
       },

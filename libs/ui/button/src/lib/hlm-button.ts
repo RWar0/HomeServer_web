@@ -23,6 +23,7 @@ export const buttonVariants = cva(
         info: 'bg-info border-info-foreground/60 text-info-foreground hover:bg-info/70 hover:text-info-foreground-dark',
         success:
           'bg-success border-success-foreground/60 text-success-foreground hover:bg-success/70',
+        warning: 'bg-amber-200 border-amber-200/60 text-black hover:bg-amber-300/80',
       },
       size: {
         default:

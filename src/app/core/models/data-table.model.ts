@@ -25,6 +25,23 @@ export interface TableColumn<T> {
   /** When true is not visible in the list - can be changed in Column Visibility. */
   isVisible?: boolean;
 
+  /** Optional custom CSS class for the cell (td) */
+  cellClass?: string;
+
+  /** Optional custom CSS class for the header (th) */
+  headerClass?: string;
+
+  /**
+   * Truncate text with ellipsis (...) and show full text in a tooltip on hover.
+   * Can be boolean (defaults to 'max-w-xs') or a string with custom Tailwind max-w class (e.g. 'max-w-sm').
+   */
+  truncate?: boolean | string;
+
+  /**
+   * If true, enables wrapping (whitespace-normal break-words).
+   */
+  wrap?: boolean;
+
   /** Optional custom cell renderer – a function that formats the raw value.
    *
    * @example

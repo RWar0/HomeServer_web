@@ -10,10 +10,6 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root',
 })
 export class CalendarService extends BaseService {
-  createEvent(event: CreateEditCalendarEvent): Observable<MessageResponse> {
-    return this.apiService.post<MessageResponse>('custom-events', event);
-  }
-
   getAll(filters?: DateFilterDto): Observable<CalendarEvent[]> {
     let params: HttpParams = new HttpParams();
     if (filters) {
@@ -26,25 +22,5 @@ export class CalendarService extends BaseService {
     }
 
     return this.apiService.get<CalendarEvent[]>('calendar', { params });
-  }
-
-  getCustomEventForEdit(id: string): Observable<CreateEditCalendarEvent> {
-    return this.apiService.get<CreateEditCalendarEvent>(`custom-events/${id}`);
-  }
-
-  getCustomEventById(id: string): Observable<CalendarEvent> {
-    return this.apiService.get<CalendarEvent>(`custom-events/${id}`);
-  }
-
-  updateEvent(id: string, event: CreateEditCalendarEvent): Observable<MessageResponse> {
-    return this.apiService.put<MessageResponse>(`custom-events/${id}`, event);
-  }
-
-  markAsDone(id: string): Observable<MessageResponse> {
-    return this.apiService.patch<MessageResponse>(`custom-events/${id}/mark-done`);
-  }
-
-  deleteEvent(id: string): Observable<MessageResponse> {
-    return this.apiService.delete<MessageResponse>(`custom-events/${id}`);
   }
 }

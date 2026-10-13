@@ -6,7 +6,6 @@ import { HlmFieldImports } from '@spartan-ng/helm/field';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { toast } from '@spartan-ng/brain/sonner';
-import { CalendarService } from '../../../core/services/calendar/calendar.service';
 import { SubmitButton } from '../../common/submit-button/submit-button';
 import { CalendarEventCategory } from '../../../core/enums/calendar-event-category.enum';
 import { CreateEditCalendarEvent } from '../../../core/models/calendar-event.model';
@@ -18,6 +17,7 @@ import { ErrorLabel } from '../../common/error-label/error-label';
 import { SelectOption } from '../../../core/models/select.model';
 import { translateEventCategory } from '../../../core/helpers/calendar-event-category-translator';
 import { FormSelect } from '../../select/form-select/form-select';
+import { CustomEventService } from '../../../core/services/custom-event/custom-event.service';
 
 @Component({
   selector: 'custom-event-create-edit-dialog',
@@ -39,7 +39,7 @@ import { FormSelect } from '../../select/form-select/form-select';
 export class CalendarEventDialog {
   // Injects
   private readonly fb = inject(NonNullableFormBuilder);
-  private readonly calendarService = inject(CalendarService);
+  private readonly customEventService = inject(CustomEventService);
 
   // Outputs
   readonly refreshList = output<void>();
@@ -66,8 +66,8 @@ export class CalendarEventDialog {
       }
 
       this.isLoadingData.set(true);
-      this.calendarService
-        .getCustomEventForEdit(this.customEventId()!)
+      this.customEventService
+        .getForEdit(this.customEventId()!)
         .pipe(
           finalize(() => {
             this.isLoadingData.set(false);
@@ -90,7 +90,7 @@ export class CalendarEventDialog {
     date: ['', Validators.required],
     time: [null as string | null],
     location: [null as string | null, Validators.maxLength(150)],
-    description: [null as string | null, Validators.maxLength(250)],
+    description: [null as string | null, Validators.maxLength(1024)],
   });
 
   protected selectCategory(value: string | null) {
@@ -130,8 +130,8 @@ export class CalendarEventDialog {
   }
 
   private editCustomEvent(customEvent: CreateEditCalendarEvent): void {
-    this.calendarService
-      .updateEvent(this.customEventId()!, customEvent)
+    this.customEventService
+      .update(this.customEventId()!, customEvent)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => {
@@ -144,8 +144,8 @@ export class CalendarEventDialog {
   }
 
   private createCustomEvent(customEvent: CreateEditCalendarEvent): void {
-    this.calendarService
-      .createEvent(customEvent)
+    this.customEventService
+      .create(customEvent)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => {

@@ -27,9 +27,9 @@ export class HlmDropdownMenuItem {
 
   public readonly disabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
 
-  public readonly variant = input<'default' | 'destructive' | 'primary' | 'secondary' | 'success'>(
-    'default',
-  );
+  public readonly variant = input<
+    'default' | 'destructive' | 'primary' | 'secondary' | 'success' | 'amber'
+  >('default');
 
   public readonly inset = input<boolean, BooleanInput>(false, {
     transform: booleanAttribute,
@@ -79,6 +79,15 @@ export class HlmDropdownMenuItem {
       data-[variant=success]:hover:text-success-foreground 
       data-[variant=success]:focus:text-success-foreground 
       data-[variant=success]:*:[ng-icon]:text-success-foreground 
+      
+      data-[variant=amber]:text-amber-600 
+      data-[variant=amber]:hover:bg-amber/5
+      data-[variant=amber]:focus:bg-amber/5
+      dark:data-[variant=amber]:hover:bg-amber/20 
+      dark:data-[variant=amber]:focus:bg-amber/20 
+      data-[variant=amber]:hover:text-amber-700 
+      data-[variant=amber]:focus:text-amber-700 
+      data-[variant=amber]:*:[ng-icon]:text-amber-700 
       
       data-[variant=default]:hover:**:text-accent-foreground 
       data-[variant=default]:focus:**:text-accent-foreground

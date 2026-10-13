@@ -31,6 +31,7 @@ import { FormSelect } from '../../../components/select/form-select/form-select';
 import { FormDatePicker } from '../../../components/date-picker/form-date-picker/form-date-picker';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideBubbles,
   lucideFilterX,
   lucideInfo,
   lucideNotebookPen,
@@ -44,7 +45,7 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { ParameterCheckInfoDialog } from '../../../components/parameter-checks/parameter-check-info-dialog/parameter-check-info-dialog';
 import { getOpenDialogAndRemoveQueryParam } from '../../../core/helpers/get-open-dialog-and-remove-query-param';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-parameters-check-page',
@@ -61,13 +62,14 @@ import { ActivatedRoute, Router } from '@angular/router';
     ParameterCheckCreateEditDialog,
     DeleteConfirmDialog,
     ParameterCheckInfoDialog,
-  ],
+    RouterLink
+],
   templateUrl: './parameter-checks-page.html',
   styleUrl: './parameter-checks-page.css',
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucideFilterX, lucidePlus, lucideNotebookPen, lucideTrash2, lucideInfo }),
+    provideIcons({ lucideFilterX, lucidePlus, lucideNotebookPen, lucideTrash2, lucideInfo, lucideBubbles }),
   ],
 })
 export class ParameterChecksPage {
@@ -105,8 +107,14 @@ export class ParameterChecksPage {
         if (!value) {
           return '—';
         }
-        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '—';
+        return this.datePipe.transform(value as string | Date, 'dd.MM.yyyy') || '-';
       },
+    },
+    {
+      key: 'measuredTime',
+      label: 'Godzina pomiaru',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'aquariumName',
@@ -136,6 +144,25 @@ export class ParameterChecksPage {
     {
       key: 'no2',
       label: 'NO2',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'nh3',
+      label: 'NH3',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'po4',
+      label: 'PO4',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'fe',
+      label: 'Fe',
+      isVisible: false,
       format: (value) => (value != null ? value.toString() : '-'),
     },
     {

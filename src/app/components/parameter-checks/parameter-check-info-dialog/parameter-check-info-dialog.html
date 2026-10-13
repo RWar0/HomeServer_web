@@ -24,11 +24,19 @@
           [value]="parameterCheck?.measuredAt | date: 'dd.MM.yyyy'"
           class="border-b py-1"
         />
+        <labeled-field
+          label="Godzina"
+          [value]="parameterCheck?.measuredTime"
+          class="border-b py-1"
+        />
         <labeled-field label="pH" [value]="parameterCheck?.ph" class="border-b py-1" />
         <labeled-field label="KH" [value]="parameterCheck?.kh" class="border-b py-1" />
         <labeled-field label="GH" [value]="parameterCheck?.gh" class="border-b py-1" />
         <labeled-field label="NO3" [value]="parameterCheck?.no3" class="border-b py-1" />
         <labeled-field label="NO2" [value]="parameterCheck?.no2" class="border-b py-1" />
+        <labeled-field label="NH3" [value]="parameterCheck?.nh3" class="border-b py-1" />
+        <labeled-field label="PO4" [value]="parameterCheck?.po4" class="border-b py-1" />
+        <labeled-field label="FE" [value]="parameterCheck?.fe" class="border-b py-1" />
         <labeled-field
           label="Temperatura"
           [value]="parameterCheck?.temperature"

@@ -49,12 +49,16 @@ export class AquariumParameterCheckCreateEditDialog {
 
   protected readonly parameterCheckForm = this.fb.group({
     measuredAt: ['', Validators.required],
+    measuredTime: [null as string | null],
     temperature: [null as number | null, [Validators.min(0), Validators.max(100)]],
     pH: [null as number | null, [Validators.min(0), Validators.max(14)]],
     kH: [null as number | null, [Validators.min(0), Validators.max(30)]],
     gH: [null as number | null, [Validators.min(0), Validators.max(50)]],
     nO3: [null as number | null, [Validators.min(0), Validators.max(1000)]],
     nO2: [null as number | null, [Validators.min(0), Validators.max(100)]],
+    nH3: [null as number | null, [Validators.min(0), Validators.max(20)]],
+    pO4: [null as number | null, [Validators.min(0), Validators.max(10)]],
+    fE: [null as number | null, [Validators.min(0), Validators.max(10)]],
   });
 
   constructor() {
@@ -78,11 +82,15 @@ export class AquariumParameterCheckCreateEditDialog {
           next: (res) => {
             this.parameterCheckForm.patchValue({
               measuredAt: res.measuredAt,
+              measuredTime: res.measuredTime,
               pH: res.ph,
               kH: res.kh,
               gH: res.gh,
               nO3: res.no3,
               nO2: res.no2,
+              nH3: res.nh3,
+              pO4: res.po4,
+              fE: res.fe,
               temperature: res.temperature,
             });
           },
@@ -109,10 +117,15 @@ export class AquariumParameterCheckCreateEditDialog {
       formData.gH,
       formData.nO3,
       formData.nO2,
+      formData.nH3,
+      formData.pO4,
+      formData.fE,
       formData.temperature,
     ].some((v) => v);
     if (!hasAny) {
-      toast.warning('Podaj co najmniej jeden parametr (pH, kH, GH, NO3, NO2 lub temperaturę).');
+      toast.warning(
+        'Podaj co najmniej jeden parametr (pH, kH, GH, NO3, NO2, NH3, PO4, FE lub temperaturę).',
+      );
       return;
     }
 
@@ -122,8 +135,12 @@ export class AquariumParameterCheckCreateEditDialog {
       kh: formData.kH,
       no3: formData.nO3,
       no2: formData.nO2,
+      nh3: formData.nH3,
+      po4: formData.pO4,
+      fe: formData.fE,
       temperature: formData.temperature,
       measuredAt: formData.measuredAt,
+      measuredTime: formData.measuredTime,
     };
 
     this.isSubmitting.set(true);

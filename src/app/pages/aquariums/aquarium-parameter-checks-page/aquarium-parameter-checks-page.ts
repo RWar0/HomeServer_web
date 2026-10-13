@@ -16,10 +16,17 @@ import { Pagination } from '../../../components/common/pagination/pagination';
 import { DeleteConfirmDialog } from '../../../components/common/delete-confirm-dialog/delete-confirm-dialog';
 import { RefreshListButton } from '../../../components/common/refresh-list-button/refresh-list-button';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
-import { lucideInfo, lucideNotebookPen, lucidePlus, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideBubbles,
+  lucideInfo,
+  lucideNotebookPen,
+  lucidePlus,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 import { AquariumParameterCheckCreateEditDialog } from '../../../components/aquariums/aquarium-parameter-check-create-edit-dialog/aquarium-parameter-check-create-edit-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { ParameterCheckInfoDialog } from '../../../components/parameter-checks/parameter-check-info-dialog/parameter-check-info-dialog';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-aquarium-parameter-checks-page',
@@ -33,13 +40,14 @@ import { ParameterCheckInfoDialog } from '../../../components/parameter-checks/p
     HlmButtonImports,
     AquariumParameterCheckCreateEditDialog,
     ParameterCheckInfoDialog,
+    RouterLink,
   ],
   templateUrl: './aquarium-parameter-checks-page.html',
   styleUrl: './aquarium-parameter-checks-page.css',
   providers: [
     PaginationStore,
     DatePipe,
-    provideIcons({ lucideNotebookPen, lucidePlus, lucideTrash2, lucideInfo }),
+    provideIcons({ lucideNotebookPen, lucidePlus, lucideTrash2, lucideInfo, lucideBubbles }),
   ],
 })
 export class AquariumParameterChecksPage {
@@ -75,34 +83,59 @@ export class AquariumParameterChecksPage {
       },
     },
     {
+      key: 'measuredTime',
+      label: 'Godzina pomiaru',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
       key: 'ph',
       label: 'pH',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'kh',
       label: 'KH',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'gh',
       label: 'GH',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'no3',
       label: 'NO3',
-      format: (value) => (value != null ? `${value}` : '-'),
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'no2',
       label: 'NO2',
-      format: (value) => (value != null ? `${value}` : '-'),
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'nh3',
+      label: 'NH3',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'po4',
+      label: 'PO4',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
+    },
+    {
+      key: 'fe',
+      label: 'Fe',
+      isVisible: false,
+      format: (value) => (value != null ? value.toString() : '-'),
     },
     {
       key: 'temperature',
-      label: 'Temp. (°C)',
-      format: (value) => (value != null ? `${value}` : '-'),
+      label: 'Temperatura (°C)',
+      format: (value) => (value != null ? value.toString() : '-'),
     },
   ];
 

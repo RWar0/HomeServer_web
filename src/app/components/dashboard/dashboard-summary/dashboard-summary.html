@@ -30,6 +30,8 @@
     "
     [isLoading]="isLoading()"
     [description]="summaryData() ? (summaryData()!.remainingEventTitle ?? '') : null"
+    route="/calendar"
+    [queryParam]="getQueryParamToNextEvent()"
   />
   <dashboard-stats-card
     icon="lucideCheckCircle"

@@ -31,7 +31,8 @@ export class FormDatePicker {
   public defaultFocusedDate = input<Date>(DateTime.now().toJSDate());
 
   /** Format dates as `dd.MM.yyyy` (e.g. `01.07.2026`). */
-  protected formatDate = (date: Date): string => DateTime.fromJSDate(date).toFormat('dd MMM yyyy');
+  protected formatDate = (date: Date): string =>
+    DateTime.fromJSDate(date).setLocale('pl').toFormat('dd MMM yyyy');
   protected formatInputDate = (date: Date): string =>
     DateTime.fromJSDate(date).toFormat('dd.MM.yyyy');
 

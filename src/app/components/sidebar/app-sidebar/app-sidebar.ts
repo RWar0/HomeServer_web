@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideBubbles,
   lucideCalendar,
   lucideChevronRight,
   lucideFish,
@@ -19,7 +20,7 @@ import { SidebarSection } from '../../../core/types/sidebar.type';
 import { SIDEBAR_ITEMS } from '../../../constants/sidebar-items';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
-import { tablerBucket, tablerCar } from '@ng-icons/tabler-icons';
+import { tablerBucket, tablerCalendarEvent, tablerCar } from '@ng-icons/tabler-icons';
 import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
 
 @Component({
@@ -48,6 +49,8 @@ import { HlmSidebarService } from '@spartan-ng/helm/sidebar';
       tablerCar,
       lucideFuel,
       lucideWrench,
+      lucideBubbles,
+      tablerCalendarEvent,
     }),
   ],
 })

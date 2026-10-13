@@ -13,7 +13,7 @@
   </pagination>
 
   <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-2">
-    @for (photo of photosResponse.value(); track photo.id) {
+    @for (photo of photosMetadataResponse.value()?.data; track photo.id) {
       <aquarium-details-photo-card [photoData]="photo" (deletePhoto)="deletePhoto($event)" />
     } @empty {
       <p

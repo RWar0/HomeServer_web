@@ -1,0 +1,99 @@
+<header class="py-2 ps-5 pe-3 bg-white border-b border-b-gray-300 flex">
+  <h2 class="font-bold text-2xl text-primary">Kalkulator CO2</h2>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-3">
+  <div
+    class="col-span-1 lg:col-span-1 rounded-xl border border-slate-200 bg-white shadow-sm h-full p-3"
+  >
+    <h3 class="text-lg font-semibold text-slate-800">Wartości CO2</h3>
+    <div class="h-full space-y-2">
+      @for (range of rangesList; track range) {
+        <div class="flex items-end gap-3">
+          <h4 class="mt-2 text-md">
+            {{ range.max ? range.min + ' - ' + range.max : '> ' + range.min }} mg/l
+          </h4>
+          <span
+            class="text-xs font-semibold text-{{ range.textColor }} border border-{{
+              range.textColor
+            }} px-2 py-1 rounded-lg bg-{{ range.bgColor }}"
+          >
+            @if (range.isOptimal) {
+              <ng-icon name="lucideStar" class="text-amber-400 [&>svg]:fill-amber-400" />
+            }
+            {{ range.message }}</span
+          >
+        </div>
+      }
+    </div>
+  </div>
+  <div
+    class="col-span-1 lg:col-span-2 rounded-xl border border-slate-200 bg-white shadow-sm h-full p-3"
+  >
+    <h3 class="text-lg font-semibold text-slate-800">Kalkulator</h3>
+    <form [formGroup]="calculatorForm" (ngSubmit)="submitForm()">
+      <hlm-field-group class="grid md:grid-cols-2">
+        <hlm-field>
+          <label hlmFieldLabel for="kh">KH (Twardość węglanowa)</label>
+          <input hlmInput id="kh" type="number" min="0" max="30" step="0.1" formControlName="kh" />
+          <error-label
+            [isDisabled]="calculatorForm.controls.kh.invalid && calculatorForm.controls.kh.touched"
+            [message]="
+              calculatorForm.controls.kh.errors?.['min']
+                ? 'KH musi być większe niż 0!'
+                : calculatorForm.controls.kh.errors?.['max']
+                  ? 'KH nie może być większe niż 30!'
+                  : 'KH jest wymagane!'
+            "
+          ></error-label>
+        </hlm-field>
+        <hlm-field>
+          <label hlmFieldLabel for="ph">pH</label>
+          <input hlmInput id="ph" type="number" min="0" max="14" step="0.1" formControlName="ph" />
+          <error-label
+            [isDisabled]="calculatorForm.controls.ph.invalid && calculatorForm.controls.ph.touched"
+            [message]="
+              calculatorForm.controls.ph.errors?.['min']
+                ? 'pH musi być większe niż 0!'
+                : calculatorForm.controls.ph.errors?.['max']
+                  ? 'pH nie może być większe niż 14!'
+                  : 'pH jest wymagane!'
+            "
+          ></error-label>
+        </hlm-field>
+      </hlm-field-group>
+      <div class="flex items-center justify-between gap-2 mt-7">
+        <submit-button
+          buttonText="Oblicz"
+          [isSubmitting]="isSubmitting()"
+          [isDisabled]="(calculatorForm.invalid && calculatorForm.touched) || isSubmitting()"
+          variant="success"
+        />
+        <button hlmBtn variant="outline" type="button" (click)="clearForm()">
+          <ng-icon name="lucideTrash" class="text-slate-500" />
+          Wyczyść
+        </button>
+      </div>
+      @if (calculatorResult() && !isSubmitting()) {
+        <div class="flex flex-wrap items-center mt-5 mb-2 gap-3">
+          <span class="text-md font-semibold text-slate-800">
+            Wartość CO2: {{ calculatorResult()?.co2 }} mg/l
+          </span>
+          @if (calculatedResultBadge()) {
+            <span
+              class="text-xs font-semibold text-{{
+                calculatedResultBadge()!.textColor
+              }} border border-{{ calculatedResultBadge()!.textColor }} px-2 py-1 rounded-lg bg-{{
+                calculatedResultBadge()!.bgColor
+              }}"
+            >
+              @if (calculatedResultBadge()!.isOptimal) {
+                <ng-icon name="lucideStar" class="text-amber-400 [&>svg]:fill-amber-400" />
+              }
+              {{ calculatedResultBadge()!.message }}</span
+            >
+          }
+        </div>
+      }
+    </form>
+  </div>
+</section>

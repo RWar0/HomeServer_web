@@ -5,8 +5,12 @@ export interface ParametersCheckListItem {
   gh?: number;
   no3?: number;
   no2?: number;
+  nh3?: number;
+  po4?: number;
+  fe?: number;
   temperature?: number;
   measuredAt: Date;
+  measuredTime?: string;
   aquariumId: string;
   aquariumName: string;
 }
@@ -18,8 +22,12 @@ export interface ParametersCheckInfoItem {
   gh?: number;
   no3?: number;
   no2?: number;
+  nh3?: number;
+  po4?: number;
+  fe?: number;
   temperature?: number;
   measuredAt: Date;
+  measuredTime?: string;
   aquariumName: string;
 }
 
@@ -30,8 +38,12 @@ export interface CreateEditParametersCheckDto {
   gh?: number | null;
   no3?: number | null;
   no2?: number | null;
+  nh3?: number | null;
+  po4?: number | null;
+  fe?: number | null;
   temperature?: number | null;
   measuredAt: string;
+  measuredTime?: string | null;
 }
 
 export interface CreateEditParametersCheckForAquariumDto {
@@ -40,8 +52,12 @@ export interface CreateEditParametersCheckForAquariumDto {
   gh?: number | null;
   no3?: number | null;
   no2?: number | null;
+  nh3?: number | null;
+  po4?: number | null;
+  fe?: number | null;
   temperature?: number | null;
   measuredAt: string;
+  measuredTime?: string | null;
 }
 
 export interface ParametersCheckListFiltersDto {

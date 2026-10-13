@@ -1,0 +1,35 @@
+<hlm-dialog>
+  <hlm-dialog-content
+    *hlmDialogPortal="let ctx"
+    class="w-[95vw]! max-w-none! md:max-w-md! lg:max-w-md! xl:max-w-md! max-h-[90vh]"
+  >
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Wydarzenie</h3>
+      <p hlmDialogDescription>Szczegóły dotyczące wydarzenia.</p>
+    </hlm-dialog-header>
+
+    @if (isLoadingData()) {
+      <div class="flex items-center justify-center h-20">
+        <hlm-spinner class="text-3xl text-primary" />
+      </div>
+    } @else {
+      <div class="flex flex-col gap-1">
+        <labeled-field label="Tytuł" [value]="customEvent?.title" />
+        <labeled-field
+          label="Kategoria"
+          [value]="translateEventCategory(customEvent?.category ?? '')"
+        />
+        <labeled-field label="Opis" [value]="customEvent?.description" />
+        <labeled-field label="Data" [value]="customEvent?.date | date: 'dd.MM.yyyy'" />
+        <labeled-field label="Godzina" [value]="customEvent?.time" />
+        @if (customEvent && customEvent.completionDate) {
+          <h4 class="text-primary text-sm font-medium pt-4">Szczegóły wykonania</h4>
+          <labeled-field
+            label="Data realizacji"
+            [value]="customEvent.completionDate | date: 'dd.MM.yyyy'"
+          />
+        }
+      </div>
+    }
+  </hlm-dialog-content>
+</hlm-dialog>

@@ -40,7 +40,6 @@ import { emptyPaginatedResponse } from '../../../constants/empty-pagination-stat
 })
 export class AquariumPhotosPage {
   private readonly aquariumService = inject(AquariumService);
-  private readonly filesService = inject(FilesService);
   private readonly appRef = inject(ApplicationRef);
 
   protected readonly paginationStore = inject(PaginationStore);
@@ -72,41 +71,6 @@ export class AquariumPhotosPage {
           }),
         ),
       ),
-  });
-
-  protected readonly photosResponse: ResourceRef<AquariumPhotoWithMetadata[]> = resource({
-    params: () => this.photosMetadataResponse.value(),
-    loader: async ({ params }) => {
-      if (!params || !params.data || params.data.length === 0) {
-        return [];
-      }
-
-      const blobs = await firstValueFrom(
-        forkJoin(
-          params.data.map((photo) =>
-            this.filesService.getImageById(photo.id).pipe(
-              catchError((imageFetchErr) => {
-                displayApiError(imageFetchErr);
-                return of(null);
-              }),
-            ),
-          ),
-        ).pipe(
-          catchError((err) => {
-            displayApiError(err);
-            this.appRef.tick();
-            return of([]);
-          }),
-        ),
-      );
-
-      return params.data.map((photo, index) => ({
-        ...photo,
-        imageUrl: blobs[index] ? URL.createObjectURL(blobs[index]) : null,
-      }));
-    },
-
-    defaultValue: [],
   });
 
   protected deletePhoto(photoId: string) {

@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmSeparatorImports } from '@spartan-ng/helm/separator';
 import { DatePipe } from '@angular/common';
@@ -40,6 +41,7 @@ import { LabeledField } from '../../common/labeled-field/labeled-field';
     HasRoleDirective,
     AquariumUploadPhotoDialog,
     LabeledField,
+    HlmSpinnerImports,
   ],
   templateUrl: './aquarium-card.html',
   styleUrl: './aquarium-card.css',
@@ -61,6 +63,7 @@ export class AquariumCard {
   readonly refreshList = output<void>();
 
   protected readonly imagePreview = signal<string | null>(null);
+  protected readonly isImageLoading = signal(true);
 
   protected readonly detailsLink = computed(() => `details/${this.aquarium().id}`);
   protected RolesEnum = RolesEnum;
@@ -69,12 +72,14 @@ export class AquariumCard {
     effect(() => {
       const photoId = this.aquarium().lastPhotoId;
       if (photoId) {
+        this.imagePreview.set(null);
+        this.isImageLoading.set(true);
         this.filesService.getImageById(photoId).subscribe({
           next: (blob) => {
             this.imagePreview.set(URL.createObjectURL(blob));
           },
           error: (err) => {
-            this.imagePreview.set(null);
+            this.imagePreview.set('');
             displayApiError(err);
           },
         });

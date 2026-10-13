@@ -11,4 +11,34 @@ import { DashboardSummaryData } from '../../../core/models/dashboard.model';
 export class DashboardSummary {
   public readonly summaryData = input.required<DashboardSummaryData | null>();
   public readonly isLoading = input.required<boolean>();
+
+  // Helpers
+  protected getQueryParamToNextEvent(): Record<string, string> | null {
+    const date = this.getDateToNextEvent();
+
+    if (!date) {
+      return null;
+    }
+
+    return { open_date: date };
+  }
+
+  private getDateToNextEvent(): string | undefined {
+    const data = this.summaryData();
+    if (!data) {
+      return undefined;
+    }
+
+    if (!data.remainingDaysToNextEvent) {
+      return undefined;
+    }
+
+    const dayDiff = data.remainingDaysToNextEvent;
+
+    // Calculate the date
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + dayDiff);
+
+    return targetDate.toISOString().split('T')[0];
+  }
 }

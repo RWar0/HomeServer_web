@@ -11,7 +11,10 @@
     >
       <ng-icon name="lucidePlus" />
     </button>
-    <refresh-list-button [isRefreshing]="aquariums.isLoading()" (refresh)="refreshAquariums()" />
+    <refresh-list-button
+      (onRefresh)="refreshAquariums()"
+      [isRefreshing]="aquariums.status() === 'loading'"
+    />
   </div>
 </header>
 
