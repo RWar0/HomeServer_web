@@ -44,7 +44,7 @@ export class CalculatorCo2Page {
     isOptimal: boolean,
   ][] = [
     [0, 5, 'Zbyt niski poziom', 'red-500', 'red-50', false],
-    [6, 10, 'Niski poziom', 'yellow-500', 'yellow-50', false],
+    [5, 10, 'Niski poziom', 'yellow-500', 'yellow-50', false],
     [10, 20, 'Dobry poziom', 'green-500', 'green-50', false],
     [20, 30, 'Optymalny poziom', 'emerald-600', 'emerald-50', true],
     [30, 35, 'Wysoki poziom', 'yellow-500', 'yellow-50', false],

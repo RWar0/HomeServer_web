@@ -64,6 +64,7 @@ import {
 } from '../../core/helpers/category-event-icon';
 import { getOpenDialogAndRemoveQueryParam } from '../../core/helpers/get-open-dialog-and-remove-query-param';
 import { ConfirmDialog } from '../../components/common/confirm-dialog/confirm-dialog';
+import { CustomEventService } from '../../core/services/custom-event/custom-event.service';
 
 @Component({
   selector: 'app-calendar-page',
@@ -115,6 +116,7 @@ import { ConfirmDialog } from '../../components/common/confirm-dialog/confirm-di
 export class CalendarPage {
   // Injects
   private readonly calendarService = inject(CalendarService);
+  private readonly customEventService = inject(CustomEventService);
   private readonly datePipe = inject(DatePipe);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -336,17 +338,17 @@ export class CalendarPage {
   }
 
   // Actions
-  prevMonth(): void {
+  protected prevMonth(): void {
     this.activeDate.update((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
     this.updateMonthFilters(this.activeDate());
   }
 
-  nextMonth(): void {
+  protected nextMonth(): void {
     this.activeDate.update((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
     this.updateMonthFilters(this.activeDate());
   }
 
-  goToToday(): void {
+  protected goToToday(): void {
     const today = new Date();
 
     if (today.getMonth() !== this.activeDate().getMonth()) {
@@ -357,7 +359,7 @@ export class CalendarPage {
     this.selectedDate.set(today);
   }
 
-  selectCell(cell: CalendarDayCell): void {
+  protected selectCell(cell: CalendarDayCell): void {
     if (cell.isCurrentMonth) {
       this.selectedDate.set(cell.date);
       return;
@@ -373,12 +375,12 @@ export class CalendarPage {
     this.updateMonthFilters(cell.date);
   }
 
-  setCategoryFilter(category: null | CalendarEventCategory): void {
+  protected setCategoryFilter(category: null | CalendarEventCategory): void {
     this.selectedCategory.set(category);
   }
 
-  onDelete(eventId: string): void {
-    this.calendarService.deleteEvent(eventId).subscribe({
+  protected onDelete(eventId: string): void {
+    this.customEventService.delete(eventId).subscribe({
       next: (res) => {
         toast.success(res.message);
         this.refreshList();
@@ -387,8 +389,8 @@ export class CalendarPage {
     });
   }
 
-  completeCustomEvent(eventId: string) {
-    this.calendarService.markAsDone(eventId).subscribe({
+  protected completeCustomEvent(eventId: string) {
+    this.customEventService.markAsDone(eventId).subscribe({
       next: (res) => {
         toast.success(res.message);
         this.refreshList();
@@ -397,8 +399,8 @@ export class CalendarPage {
     });
   }
 
-  undoCompletionCustomEvent(eventId: string) {
-    this.calendarService.markAsNotDone(eventId).subscribe({
+  protected undoCompletionCustomEvent(eventId: string) {
+    this.customEventService.markAsNotDone(eventId).subscribe({
       next: (res) => {
         toast.success(res.message);
         this.refreshList();
@@ -407,7 +409,7 @@ export class CalendarPage {
     });
   }
 
-  formatEventDate(dateVal: Date | string): string {
+  protected formatEventDate(dateVal: Date | string): string {
     return this.datePipe.transform(dateVal, 'dd.MM.yyyy') ?? '';
   }
 

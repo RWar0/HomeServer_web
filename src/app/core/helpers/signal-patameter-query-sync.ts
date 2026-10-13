@@ -89,7 +89,8 @@ export function syncQueryParams<TFilters extends object>(
       if (fieldConfig.formatter) {
         urlValue = fieldConfig.formatter(fieldValue) ?? null;
       } else {
-        urlValue = fieldValue != null ? String(fieldValue) : null;
+        urlValue =
+          fieldValue != null && String(fieldValue).trim() !== '' ? String(fieldValue) : null;
       }
 
       // If equals default – remove from URL

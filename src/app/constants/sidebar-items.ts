@@ -15,6 +15,11 @@ export const SIDEBAR_ITEMS: SidebarSection[] = [
         icon: 'lucideCalendar',
       },
       {
+        title: 'Wydarzenia',
+        url: '/custom-events',
+        icon: 'tablerCalendarEvent',
+      },
+      {
         title: 'Akwaria',
         url: '/aquariums',
         icon: 'lucideFish',

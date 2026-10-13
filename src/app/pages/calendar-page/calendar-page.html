@@ -298,7 +298,9 @@
                     >
                       <ng-icon name="lucideCheck" strokeWidth="2.5" class="text-sm" />
                     </button>
-                  } @else {
+                  }
+                  <!-- Mark as not done button -->
+                  @else {
                     <button
                       hlmBtn
                       variant="outline"
@@ -376,8 +378,13 @@
                     </button>
                   </div>
                 } @else {
-                  <h4 class="font-bold text-slate-900 text-sm leading-snug md:flex-1">
-                    {{ event.title }}
+                  <h4
+                    class="font-bold text-slate-900 text-sm leading-snug md:flex-"
+                    hlmTooltip="Szczegóły wydarzenia"
+                  >
+                    <a routerLink="/custom-events" [queryParams]="{ show_id: event.id }">
+                      {{ event.title }}
+                    </a>
                   </h4>
                 }
 
